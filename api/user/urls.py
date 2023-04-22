@@ -20,6 +20,5 @@ urlpatterns = [
     path('auth/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('logout-all/', views.LogoutAllView.as_view(), name='logoutall'),
-    path('reset-password/', views.ResetPasswordView.as_view(), name='resetpassword'),
     path('', include(router.urls))
 ]

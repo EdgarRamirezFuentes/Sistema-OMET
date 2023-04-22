@@ -42,16 +42,16 @@ class MaintenanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Maintenance
-        fields = ('id', 'project', 'user')
+        fields = ('id', 'project', 'maintainer',)
 
 
 class MaintenanceDataSerializer(serializers.ModelSerializer):
     project = ProjectMinimalSerializer()
-    user = UserMinimalSerializer()
+    maintainer = UserMinimalSerializer()
 
     class Meta:
         model = Maintenance
-        fields = ('id', 'project', 'user')
+        fields = ('id', 'project', 'maintainer')
 
 
 class ProjectModelSerializer(serializers.ModelSerializer):

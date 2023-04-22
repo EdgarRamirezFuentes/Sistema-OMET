@@ -36,20 +36,33 @@ from rest_framework import (
 )
 
 
-class ActiveProjectViewSet(viewsets.ModelViewSet):
+class ProjectViewSet(viewsets.ModelViewSet):
     """Viewset for active projects"""
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
-    queryset = Project.objects.filter(is_active=True)
+    queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
     def list(self, request, *args, **kwargs):
-        """List the all the active projects"""
+        """List the all the projects filtered by name, is_active, and customer"""
         try:
+            name = request.query_params.get('name', None)
+            is_active = request.query_params.get('is_active', None)
+            customer = request.query_params.get('customer', None)
+
+            queryset = self.queryset
+
+            if name:
+                queryset = queryset.filter(name=name)
+
+            if is_active:
+                queryset = queryset.filter(is_active=is_active)
+
+            if customer:
+                queryset = queryset.filter(customer=int(customer))
+
             serializer = ProjectDataSerializer(self.queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -76,57 +89,11 @@ class ActiveProjectViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
-
-class InactiveProjectViewSet(mixins.ListModelMixin,
-                             mixins.RetrieveModelMixin,
-                             mixins.DestroyModelMixin,
-                             viewsets.GenericViewSet):
-    """Viewset for inactive projects"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
-    queryset = Project.objects.filter(is_active=False)
-    serializer_class = ProjectSerializer
-
-    def list(self, request, *args, **kwargs):
-        """List the all the active projects"""
-        try:
-            serializer = ProjectDataSerializer(self.queryset, many=True)
-            return response.Response(serializer.data, status=status.HTTP_200_OK)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-    def retrieve(self, request, *args, **kwargs):
-        """Retrieve an active project"""
-        try:
-            instance = self.get_object()
-            serializer = ProjectDataSerializer(instance)
-            return response.Response(serializer.data, status=status.HTTP_200_OK)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-    def destroy(self, request, *args, **kwargs):
-        """Set the project as active"""
-        try:
-            instance = self.get_object()
-            instance.is_active = True
-            instance.save()
-            return response.Response(status=status.HTTP_204_NO_CONTENT)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-
 class MaintenanceViewSet(mixins.CreateModelMixin,
                          mixins.ListModelMixin,
                          mixins.RetrieveModelMixin,
                          mixins.DestroyModelMixin,
                          viewsets.GenericViewSet):
-    #TODO Create the group for maintenance permissions
     """Viewset for maintenance"""
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
@@ -134,8 +101,19 @@ class MaintenanceViewSet(mixins.CreateModelMixin,
     serializer_class = MaintenanceSerializer
 
     def list(self, request, *args, **kwargs):
-        """List the projects that the user is a maintainer"""
+        """List all the maintenance filtered by project and maintainer"""
         try:
+            project = request.query_params.get('project', None)
+            maintainer = request.query_params.get('maintainer', None)
+
+            queryset = self.queryset
+
+            if project:
+                queryset = queryset.filter(project__name=int(project))
+
+            if maintainer:
+                queryset = queryset.filter(maintainer=int(maintainer))
+
             serializer = MaintenanceDataSerializer(self.queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
@@ -144,21 +122,11 @@ class MaintenanceViewSet(mixins.CreateModelMixin,
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserMaintenanceListView(generics.ListAPIView):
-    """List the projects that the user is a maintainer"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
-    queryset = Maintenance.objects.all()
-    serializer_class = MaintenanceSerializer
-    look_up_field = 'user'
-    lookup_url_kwarg = 'id'
-
-
-class ActiveProjectModelViewSet(viewsets.ModelViewSet):
-    """Viewset for active project models"""
+class ProjectModelViewSet(viewsets.ModelViewSet):
+    """Viewset for project models"""
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated, isActiveUser)
-    queryset = ProjectModel.objects.filter(is_active=True)
+    queryset = ProjectModel.objects.all()
     serializer_class = ProjectModelSerializer
 
     def list(self, request, *args, **kwargs):
@@ -195,95 +163,18 @@ class ActiveProjectModelViewSet(viewsets.ModelViewSet):
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class InactiveProjectModelViewSet(mixins.ListModelMixin,
-                                  mixins.RetrieveModelMixin,
-                                  mixins.DestroyModelMixin,
-                                  viewsets.GenericViewSet):
-        """Viewset for inactive project models"""
-        authentication_classes = (TokenAuthentication,)
-        permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
-        queryset = ProjectModel.objects.filter(is_active=False)
-        serializer_class = ProjectModelSerializer
-
-        def list(self, request, *args, **kwargs):
-            """List the all the inactive project models"""
-            try:
-                serializer = ProjectModelDataSerializer(self.queryset, many=True)
-                return response.Response(serializer.data, status=status.HTTP_200_OK)
-            except (ObjectDoesNotExist, Http404):
-                return response.Response(status=status.HTTP_404_NOT_FOUND)
-            except Exception as e:
-                return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-        def retrieve(self, request, *args, **kwargs):
-            """Retrieve a project model"""
-            try:
-                instance = self.get_object()
-                serializer = ProjectModelDataSerializer(instance)
-                return response.Response(serializer.data, status=status.HTTP_200_OK)
-            except (ObjectDoesNotExist, Http404):
-                return response.Response(status=status.HTTP_404_NOT_FOUND)
-            except Exception as e:
-                return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-        def destroy(self, request, *args, **kwargs):
-            """Set the project model as active"""
-            try:
-                instance = self.get_object()
-                instance.is_active = True
-                instance.save()
-                return response.Response(status=status.HTTP_204_NO_CONTENT)
-            except (ObjectDoesNotExist, Http404):
-                return response.Response(status=status.HTTP_404_NOT_FOUND)
-            except Exception as e:
-                return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class ActiveModelFieldViewSet(viewsets.ModelViewSet):
+class ModelFieldViewSet(viewsets.ModelViewSet):
     """Viewset for model fields"""
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated, isActiveUser)
-    queryset = ModelField.objects.filter(is_active=True)
+    queryset = ModelField.objects.all()
     serializer_class = ModelFieldSerializer
 
     def list(self, request, *args, **kwargs):
-        """List the all the active model fields"""
+        """List the all the model fields"""
         try:
             serializer = ModelFieldDataSerializer(self.queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class InactiveModelFieldViewSet(mixins.ListModelMixin,
-                                mixins.RetrieveModelMixin,
-                                mixins.DestroyModelMixin,
-                                viewsets.GenericViewSet):
-    """Viewset for model fields"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
-    queryset = ModelField.objects.filter(is_active=False)
-    serializer_class = ModelFieldSerializer
-
-    def list(self, request, *args, **kwargs):
-        """List the all the inactive model fields"""
-        try:
-            serializer = ModelFieldDataSerializer(self.queryset, many=True)
-            return response.Response(serializer.data, status=status.HTTP_200_OK)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-    def destroy(self, request, *args, **kwargs):
-        """Set the model field as active"""
-        try:
-            instance = self.get_object()
-            instance.is_active = True
-            instance.save()
-            return response.Response(status=status.HTTP_204_NO_CONTENT)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:

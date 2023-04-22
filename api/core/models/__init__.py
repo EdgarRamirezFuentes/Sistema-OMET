@@ -1,9 +1,7 @@
 from .User import profile_image_file_path
-from .User import User as UserModel
+from .User import User as UserModel, Maintainer
 from .Customer import Customer
 from .Project import Project
-from .ResetPasswordToken import ResetPasswordToken
-from .VerificationToken import VerificationToken
 from .Maintenance import Maintenance
 from .ProjectModel import ProjectModel
 from .DataType import DataType

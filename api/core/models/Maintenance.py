@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Maintenance(models.Model):
-    user = models.ForeignKey('User', on_delete=models.CASCADE, null=False)
+    maintainer = models.ForeignKey('Maintainer', on_delete=models.CASCADE, null=False)
     project = models.ForeignKey('Project', on_delete=models.CASCADE, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -10,7 +10,7 @@ class Maintenance(models.Model):
         db_table = 'Maintenance'
         verbose_name = 'Maintenance'
         verbose_name_plural = 'Maintenances'
-        unique_together = ('user', 'project')
+        unique_together = ('maintainer', 'project')
 
     def __str__(self):
-        return f'{self.user.name} {self.user.last_name} - {self.project.name}'
+        return f'{self.maintainer.user.name} {self.maintainer.user.last_name} - {self.project.name}'

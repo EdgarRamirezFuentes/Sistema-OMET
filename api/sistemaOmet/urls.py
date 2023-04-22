@@ -21,5 +21,4 @@ urlpatterns = [
     path('api/v1/customer/', include('customer.urls')),
     path('api/v1/project/', include('project.urls')),
     path('api/v1/data-type/', include('dataType.urls')),
-    path('api/v1/field-configs/', include('fieldConfigs.urls')),
 ]

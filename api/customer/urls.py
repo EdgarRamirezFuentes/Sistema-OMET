@@ -6,8 +6,7 @@ app_name = 'customer'
 
 router = routers.SimpleRouter()
 
-router.register(r'inactive', views.InactiveCustomerViewSet, basename='inactive-customer')
-router.register(r'', views.ActiveCustomerViewSet, basename='active-customer')
+router.register(r'', views.CustomerViewSet, basename='customer')
 
 
 urlpatterns = [

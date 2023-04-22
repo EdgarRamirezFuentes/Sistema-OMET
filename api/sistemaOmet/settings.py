@@ -42,7 +42,7 @@ LOCAL_APPS = [
     'customer',
     'project',
     'dataType',
-    'fieldConfigs'
+    'fieldConfigs',
 ]
 
 THIRD_PARTY_APPS = [
@@ -103,7 +103,7 @@ WSGI_APPLICATION = 'sistemaOmet.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME'),
         'HOST': os.environ.get('DB_HOST'),
         'USER': os.environ.get('DB_USER'),
@@ -201,8 +201,8 @@ AUTH_USER_MODEL = 'core.User'
 
 
 ## Postgis needed libs
-GDAL_LIBRARY_PATH=glob('/usr/lib/libgdal.so*')[0]
-GEOS_LIBRARY_PATH=glob('/usr/lib/libgeos_c.so*')[0]
+#GDAL_LIBRARY_PATH=glob('/usr/lib/libgdal.so*')[0]
+#GEOS_LIBRARY_PATH=glob('/usr/lib/libgeos_c.so*')[0]
 
 
 # SMTP Mail service with decouple

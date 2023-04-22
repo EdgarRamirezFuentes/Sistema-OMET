@@ -2,7 +2,7 @@ version: '3.9'
 services:
   postgresql:
     container_name: sistema-omet-postgresql
-    image: 'postgis/postgis:14-3.3-alpine'
+    image: 'postgres:14.7-alpine'
     ports:
       - '5432:5432'
     environment:
@@ -52,6 +52,17 @@ services:
       - './web:/web'
     depends_on:
       - api
+  mongo:
+    container_name: sistema-omet-mongo
+    image: 'mongo:5.0.15-focal'
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=sistemaOmetAdmin
+      - MONGO_INITDB_ROOT_PASSWORD=vjcg7WxxjBgHPa4bMWhj7qVLNJX5Tx
+    volumes:
+      - 'dev-mongo-data:/data/db'
 volumes:
   dev-db-data:
   dev-static-data:
+  dev-mongo-data:

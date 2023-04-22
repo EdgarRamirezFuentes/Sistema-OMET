@@ -6,8 +6,7 @@ app_name = 'dataType'
 
 router = routers.SimpleRouter()
 
-router.register('inactive', views.InactiveDataTypeViewSet, basename='inactive-data-type')
-router.register('', views.ActiveDataTypeViewSet, basename='active-data-type')
+router.register('', views.DataTypeViewSet, basename='data-type')
 
 
 urlpatterns = [

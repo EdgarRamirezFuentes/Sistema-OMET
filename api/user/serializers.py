@@ -10,17 +10,29 @@ from django.contrib.auth import (
     authenticate,
 )
 
+from core.models.User import Maintainer
+
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
     class Meta:
         model = get_user_model()
-        fields = ('email', 'password', 'name', 'last_name', 'phone', 'is_superuser')
+        fields = ('email', 'password', 'name', 'first_last_name', 'second_last_name', 'phone', 'is_superuser')
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
     def create(self, validated_data):
         """Create and return a user with encrypted password."""
-        return get_user_model().objects.create_user(**validated_data)
+        with transaction.atomic():
+            try:
+                new_user = get_user_model().objects.create_user(**validated_data)
+                if not validated_data.get('is_superuser', False):
+                    # Creating its maintainer profile.
+                    Maintainer.objects.create(user=new_user)
+            except Exception as e:
+                msg = _('Unable to create user')
+                raise serializers.ValidationError(msg, code='')
+
+            return new_user
 
     def update(self, instance, validated_data):
         """Update and return user."""
@@ -58,15 +70,3 @@ class UserLoginSerializer(serializers.Serializer):
         msg = _('Unable to authenticate with provided credentials')
         raise serializers.ValidationError(msg, code='authorization')
 
-
-class ResetPasswordSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-
-    def validate(self, data):
-        """Validate the user information to reset their password."""
-        UserModel = get_user_model()
-        try:
-            user = UserModel.objects.get(email=data['email'])
-        except ObjectDoesNotExist:
-            msg = _('Unable to find user with provided email')
-            raise serializers.ValidationError(msg, code='authorization')
