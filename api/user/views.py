@@ -6,6 +6,7 @@ from django.contrib.auth import login
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import get_user_model
+import secrets
 
 from rest_framework.serializers import DateTimeField
 from rest_framework import (
@@ -15,6 +16,7 @@ from rest_framework import (
     response,
     viewsets,
     permissions,
+    views,
 )
 
 from knox.settings import knox_settings
@@ -33,6 +35,8 @@ from user.serializers import (
     UserSerializer,
     UserMinimalSerializer,
     UserLoginSerializer,
+    UserChangePasswordSerializer,
+    UserResetPasswordSerializer,
 )
 
 from core.tasks import send_reset_password_email
@@ -128,3 +132,52 @@ class LogoutView(KnoxLogoutView):
 class LogoutAllView(KnoxLogoutAllView):
     """Logout user from all devices."""
     pass
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    """Change a user's password."""
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserChangePasswordSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = self.get_object()
+        user.set_password(serializer.data.get('new_password'))
+        user.save()
+
+        return response.Response({
+            "message": "Password changed successfully.",
+            },
+            status=status.HTTP_200_OK)
+
+
+class ResetPasswordView(views.APIView):
+    """Reset a user's password."""
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAdminUser,)
+    serializer_class = UserResetPasswordSerializer
+
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user_id = serializer.data.get('id')
+        user = get_user_model().objects.get(id=user_id)
+        new_password = secrets.token_urlsafe(16)
+
+        user.set_password(new_password)
+        user.save()
+
+        send_reset_password_email.delay(user.name, user.first_last_name, user.email, new_password)
+
+        return response.Response({
+            "message": "Password reset successfully.",
+            },
+            status=status.HTTP_200_OK)

@@ -34,6 +34,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(email=email)
 
             if is_active:
+                is_active = True if is_active == 'true' else False
                 queryset = queryset.filter(is_active=is_active)
 
             serializer = self.get_serializer(queryset, many=True)
@@ -52,4 +53,3 @@ class CustomerViewSet(viewsets.ModelViewSet):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
-

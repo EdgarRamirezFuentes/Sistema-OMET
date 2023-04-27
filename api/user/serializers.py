@@ -50,7 +50,7 @@ class UserMinimalSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
     class Meta:
         model = get_user_model()
-        fields = ('id', 'name', 'last_name', 'is_superuser', 'is_active')
+        fields = ('id', 'name', 'first_last_name', 'second_last_name', 'is_superuser', 'is_active')
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -70,3 +70,49 @@ class UserLoginSerializer(serializers.Serializer):
         msg = _('Unable to authenticate with provided credentials')
         raise serializers.ValidationError(msg, code='authorization')
 
+
+class UserChangePasswordSerializer(serializers.Serializer):
+    """Serializer for the user change password object."""
+    old_password = serializers.CharField(
+        style={'input_type': 'password'},
+        trim_whitespace=False
+    )
+
+    new_password = serializers.CharField(
+        style={'input_type': 'password'},
+        trim_whitespace=False
+    )
+
+    confirm_password = serializers.CharField(
+        style={'input_type': 'password'},
+        trim_whitespace=False
+    )
+
+    def validate(self, data):
+        """Validate and authenticate the user."""
+        user = self.context['request'].user
+
+        if not user.check_password(data.get('old_password')):
+            msg = _('Current password is incorrect')
+            raise serializers.ValidationError(msg)
+
+        if data.get('new_password') != data.get('confirm_password'):
+            msg = _('Passwords do not match')
+            raise serializers.ValidationError(msg)
+
+        return data
+
+
+class UserResetPasswordSerializer(serializers.Serializer):
+    """Serializer for the user reset password object."""
+    id = serializers.IntegerField()
+
+    def validate(self, data):
+        """Validate and authenticate the user."""
+        try:
+            user = get_user_model().objects.get(pk=data.get('id'))
+        except ObjectDoesNotExist:
+            msg = _('User does not exist')
+            raise serializers.ValidationError(msg)
+
+        return user
