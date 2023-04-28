@@ -9,3 +9,4 @@ django-rest-knox
 celery
 django-celery-results
 django-celery-beat
+drf-extra-fields

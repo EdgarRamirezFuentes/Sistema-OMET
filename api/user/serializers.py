@@ -5,6 +5,7 @@ from django.utils.translation import gettext as _
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from rest_framework import serializers
+from drf_extra_fields.fields import Base64ImageField
 from django.contrib.auth import (
     get_user_model,
     authenticate,
@@ -15,9 +16,10 @@ from core.models.User import Maintainer
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
+    profile_image = Base64ImageField(required=False)
     class Meta:
         model = get_user_model()
-        fields = ('email', 'password', 'name', 'first_last_name', 'second_last_name', 'phone', 'is_superuser')
+        fields = ('rfc', 'email', 'password', 'name', 'first_last_name', 'second_last_name', 'phone', 'profile_image', 'is_superuser')
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
     def create(self, validated_data):
@@ -29,6 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
                     # Creating its maintainer profile.
                     Maintainer.objects.create(user=new_user)
             except Exception as e:
+                print(e)
                 msg = _('Unable to create user')
                 raise serializers.ValidationError(msg, code='')
 
@@ -48,9 +51,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserMinimalSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
+    profile_image = Base64ImageField(required=False)
     class Meta:
         model = get_user_model()
-        fields = ('id', 'name', 'first_last_name', 'second_last_name', 'is_superuser', 'is_active')
+        fields = ('id', 'name', 'first_last_name', 'second_last_name', 'profile_image', 'is_superuser', 'is_active')
 
 
 class UserLoginSerializer(serializers.Serializer):
