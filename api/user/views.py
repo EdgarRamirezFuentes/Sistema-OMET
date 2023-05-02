@@ -33,6 +33,7 @@ from core.schemes import KnoxTokenScheme
 
 from user.serializers import (
     UserSerializer,
+    UserProfileSerializer,
     UserMinimalSerializer,
     UserLoginSerializer,
     UserChangePasswordSerializer,
@@ -79,24 +80,26 @@ class UserViewSet(viewsets.ModelViewSet):
         """Retrieve a user by id."""
         try:
             instance = self.get_object()
-            serializer = UserMinimalSerializer(instance)
+            serializer = UserProfileSerializer(instance)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, *args, **kwargs):
-        """Set a user as active/inactive."""
+
+class ChangeUserStatusView(views.APIView):
+    """Change a user's status."""
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+
+    def post(self, request, *args, **kwargs):
         try:
-            instance = self.get_object()
+            user_id = kwargs.get('pk', None)
+            user = get_user_model().objects.get(id=user_id)
+            user.is_active = not user.is_active
+            user.save()
 
-            # Remove superuser status if user is being deactivated
-            if instance.is_active and instance.is_superuser:
-                instance.is_superuser = False
-
-            instance.is_active = not instance.is_active
-            instance.save()
             return response.Response(status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
@@ -110,7 +113,7 @@ class LoginView(KnoxLoginView):
     serializer_class = UserLoginSerializer
 
     def get_user_serializer_class(self):
-        return UserMinimalSerializer
+        return UserProfileSerializer
 
     def post(self, request, format=None):
         serializer = UserLoginSerializer(data=request.data)

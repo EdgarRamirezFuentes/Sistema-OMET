@@ -13,4 +13,4 @@ class Maintenance(models.Model):
         unique_together = ('maintainer', 'project')
 
     def __str__(self):
-        return f'{self.maintainer.user.name} {self.maintainer.user.last_name} - {self.project.name}'
+        return f'{self.maintainer.user.name} {self.maintainer.user.first_last_name} {self.maintainer.user.second_last_name} - {self.project.name}'

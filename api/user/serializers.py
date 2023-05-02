@@ -49,12 +49,19 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class UserMinimalSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
     profile_image = Base64ImageField(required=False)
     class Meta:
         model = get_user_model()
         fields = ('id', 'name', 'first_last_name', 'second_last_name', 'profile_image', 'is_superuser', 'is_active')
+
+
+class UserMinimalSerializer(serializers.ModelSerializer):
+    """Serializer for the user object."""
+    class Meta:
+        model = get_user_model()
+        fields = ('id', 'name', 'first_last_name', 'second_last_name')
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -120,3 +127,12 @@ class UserResetPasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError(msg)
 
         return user
+
+
+class MaintainerMinimalSerializer(serializers.ModelSerializer):
+    """Serializer for the Maintainer object."""
+    user = UserMinimalSerializer()
+
+    class Meta:
+        model = Maintainer
+        fields = ('user', )

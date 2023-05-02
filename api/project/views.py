@@ -3,9 +3,11 @@ from django.http import Http404
 
 from project.serializers import (
     ProjectSerializer,
+    ProjectMinimalSerializer,
     ProjectDataSerializer,
     MaintenanceSerializer,
     MaintenanceDataSerializer,
+    ProjectMaintainersSerializer,
     ProjectModelSerializer,
     ProjectModelDataSerializer,
     ProjectModelDataSerializer,
@@ -33,6 +35,7 @@ from rest_framework import (
     response,
     status,
     generics,
+    views,
 )
 
 
@@ -48,46 +51,116 @@ class ProjectViewSet(viewsets.ModelViewSet):
         try:
             name = request.query_params.get('name', None)
             is_active = request.query_params.get('is_active', None)
-            customer = request.query_params.get('customer', None)
+            customer_id = request.query_params.get('customer_id', None)
 
             queryset = self.queryset
 
             if name:
                 queryset = queryset.filter(name=name)
 
-            if is_active:
+            if is_active and is_active in ['true', 'false']:
+                is_active = True if is_active == 'true' else False
                 queryset = queryset.filter(is_active=is_active)
 
-            if customer:
-                queryset = queryset.filter(customer=int(customer))
+            if customer_id:
+                customer_id = int(customer_id)
+                queryset = queryset.filter(customer=customer_id)
 
-            serializer = ProjectDataSerializer(self.queryset, many=True)
+            serializer = ProjectMinimalSerializer(queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+        """Update the project"""
+        try:
+            instance = self.get_object()
+
+            # Making the customer field immutable.
+            if 'customer' in request.data:
+                request.data['customer'] = instance.customer.id
+
+            serializer = ProjectSerializer(instance, data=request.data)
+
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return response.Response(serializer.data, status=status.HTTP_200_OK)
+        except (ObjectDoesNotExist, Http404):
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request, *args, **kwargs):
+        """Partially update the project"""
+        try:
+            instance = self.get_object()
+
+            # Making the customer field immutable.
+            if 'customer' in request.data:
+                request.data['customer'] = instance.customer.id
+
+            serializer = ProjectSerializer(instance, data=request.data, partial=True)
+
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return response.Response(serializer.data, status=status.HTTP_200_OK)
+        except (ObjectDoesNotExist, Http404):
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, *args, **kwargs):
         """Retrieve an active project"""
         try:
+            response_data = {}
             instance = self.get_object()
             serializer = ProjectDataSerializer(instance)
-            return response.Response(serializer.data, status=status.HTTP_200_OK)
+            project_models = ProjectModel.objects.filter(project=instance)
+            project_models_serializer = ProjectModelDataSerializer(project_models, many=True)
+
+            # Gettng the project data
+            response_data['project'] = serializer.data
+
+            # Getting the models of the project
+            response_data['project_models'] = project_models_serializer.data
+
+            # Getting the maintainers of the project only if the user is admin
+            if request.user.is_superuser:
+                maintainers = Maintenance.objects.filter(project=instance)
+                maintainers_serializer = ProjectMaintainersSerializer(maintainers, many=True)
+                response_data['maintainers'] = maintainers_serializer.data
+
+            return response.Response(response_data, status=status.HTTP_200_OK)
+        except (ObjectDoesNotExist, Http404):
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print(e)
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChangeProjectStatusView(views.APIView):
+    """View for changing the status (is_active) of the project"""
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
+
+    def post(self, request, *args, **kwargs):
+        """Change the status of the project"""
+        try:
+            project_id = kwargs.get('pk', None)
+
+            if not project_id :
+                return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+            project = Project.objects.get(id=project_id)
+            project.is_active = not project.is_active
+            project.save()
+
+            return response.Response(status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, *args, **kwargs):
-        """Set the project as inactive"""
-        try:
-            instance = self.get_object()
-            instance.is_active = False
-            instance.save()
-            return response.Response(status=status.HTTP_204_NO_CONTENT)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
 class MaintenanceViewSet(mixins.CreateModelMixin,
                          mixins.ListModelMixin,
@@ -169,6 +242,18 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated, isActiveUser)
     queryset = ModelField.objects.all()
     serializer_class = ModelFieldSerializer
+
+    def create(self, request, *args, **kwargs):
+        """Create a list of model fields"""
+        try:
+            data = request.data
+            serializer = ModelFieldSerializer(data=data, many=True)
+            if serializer.is_valid():
+                serializer.save()
+                return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+            return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
         """List the all the model fields"""

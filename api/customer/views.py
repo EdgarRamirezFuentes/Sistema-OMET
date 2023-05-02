@@ -2,12 +2,18 @@ from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 from core.models import Customer
 from customer.serializers import CustomerSerializer
+from core.permissions import (
+    isActiveUser,
+    isMaintainer,
+)
+
 from knox.auth import TokenAuthentication
 from rest_framework import (
     viewsets,
     permissions,
     status,
     response,
+    views,
 )
 
 
@@ -33,7 +39,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
             if email:
                 queryset = queryset.filter(email=email)
 
-            if is_active:
+            if is_active and is_active in ['true', 'false']:
                 is_active = True if is_active == 'true' else False
                 queryset = queryset.filter(is_active=is_active)
 
@@ -42,13 +48,25 @@ class CustomerViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, *args, **kwargs):
-        """Set the customer status as active or inactive"""
+
+class ChangeCustomerStatus(views.APIView):
+    """Change customer status"""
+    authentication_classes = [TokenAuthentication, ]
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser]
+
+    def post(self, request, *args, **kwargs):
+        """Change customer status"""
         try:
-            instance = self.get_object()
-            instance.is_active = not instance.is_active
-            instance.save()
-            return response.Response(status=status.HTTP_204_NO_CONTENT)
+            customer_id = kwargs.get('pk', None)
+
+            if not customer_id :
+                return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+            customer = Customer.objects.get(id=customer_id)
+            customer.is_active = not customer.is_active
+            customer.save()
+
+            return response.Response(status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:

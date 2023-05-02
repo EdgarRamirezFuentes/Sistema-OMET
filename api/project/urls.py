@@ -13,5 +13,6 @@ router.register('models/fields/', views.ModelFieldViewSet, basename='model-field
 
 
 urlpatterns = [
+    path('change-status/<int:pk>/', views.ChangeProjectStatusView.as_view(), name='project-change-status'),
     path('', include(router.urls)),
 ]

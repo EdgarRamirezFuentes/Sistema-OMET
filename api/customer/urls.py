@@ -6,9 +6,10 @@ app_name = 'customer'
 
 router = routers.SimpleRouter()
 
-router.register(r'', views.CustomerViewSet, basename='customer')
+router.register('', views.CustomerViewSet, basename='customer')
 
 
 urlpatterns = [
+    path('change-status/<int:pk>/', views.ChangeCustomerStatus.as_view(), name='customer-change-status'),
     path('', include(router.urls)),
 ]
