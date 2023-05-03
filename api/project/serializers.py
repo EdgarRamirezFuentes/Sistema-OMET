@@ -1,5 +1,4 @@
 from user.serializers import (
-    MaintainerMinimalSerializer,
     UserMinimalSerializer,
 )
 
@@ -14,7 +13,6 @@ from core.models import (
     ProjectModel,
     ModelField,
     Maintenance,
-    Maintainer,
     DataType,
 )
 
@@ -52,18 +50,11 @@ class MaintenanceSerializer(serializers.ModelSerializer):
 
 class MaintenanceDataSerializer(serializers.ModelSerializer):
     project = ProjectMinimalSerializer()
-    maintainer = MaintainerMinimalSerializer()
+    maintainer = UserMinimalSerializer()
 
     class Meta:
         model = Maintenance
         fields = ('id', 'project', 'maintainer')
-
-class ProjectMaintainersSerializer(serializers.ModelSerializer):
-    maintainer = MaintainerMinimalSerializer()
-
-    class Meta:
-        model = Maintenance
-        fields = ('maintainer', )
 
 class ProjectModelSerializer(serializers.ModelSerializer):
 

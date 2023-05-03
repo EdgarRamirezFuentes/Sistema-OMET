@@ -1,14 +1,18 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
+from user.serializers import (
+    UserMinimalSerializer,
+)
+
 from project.serializers import (
     ProjectSerializer,
     ProjectMinimalSerializer,
     ProjectDataSerializer,
     MaintenanceSerializer,
     MaintenanceDataSerializer,
-    ProjectMaintainersSerializer,
     ProjectModelSerializer,
+    ProjectModelMinimalSerializer,
     ProjectModelDataSerializer,
     ProjectModelDataSerializer,
     ModelFieldSerializer,
@@ -115,8 +119,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
             response_data = {}
             instance = self.get_object()
             serializer = ProjectDataSerializer(instance)
-            project_models = ProjectModel.objects.filter(project=instance)
-            project_models_serializer = ProjectModelDataSerializer(project_models, many=True)
+            project_models = ProjectModel.objects.filter(project=instance, is_active=True)
+            project_models_serializer = ProjectModelMinimalSerializer(project_models, many=True)
 
             # Gettng the project data
             response_data['project'] = serializer.data
@@ -126,8 +130,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
             # Getting the maintainers of the project only if the user is admin
             if request.user.is_superuser:
-                maintainers = Maintenance.objects.filter(project=instance)
-                maintainers_serializer = ProjectMaintainersSerializer(maintainers, many=True)
+                maintainers = instance.maintainers.filter(is_active=True)
+                maintainers_serializer = UserMinimalSerializer(maintainers, many=True)
                 response_data['maintainers'] = maintainers_serializer.data
 
             return response.Response(response_data, status=status.HTTP_200_OK)

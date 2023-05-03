@@ -68,18 +68,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f'{self.id}. {self.name} {self.first_last_name} {self.second_last_name}'
-
-
-class Maintainer(models.Model):
-    """Maintainer in the system."""
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    projects = models.ManyToManyField('Project', through='Maintenance')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        db_table = 'Maintainer'
-        verbose_name = 'Maintainer'
-        verbose_name_plural = 'Maintainers'
-
-    def __str__(self):
-        return f'{self.user.name} {self.user.first_last_name} {self.user.second_last_name}'
