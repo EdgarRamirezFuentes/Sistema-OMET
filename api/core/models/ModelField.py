@@ -15,7 +15,8 @@ class ModelField(models.Model):
         db_table = 'ModelField'
         verbose_name = 'Model Field'
         verbose_name_plural = 'Model Fields'
-        unique_together = ('name', 'project_model')
+        unique_together = (('name', 'project_model'),
+                           ('order', 'project_model'))
 
     def __str__(self):
         return f'{self.id}. {self.name} - {self.project_model.project.name}'

@@ -1,9 +1,14 @@
 """
 Serializers for the user API View.
 """
-import re
 from django.utils.translation import gettext as _
 from django.core.exceptions import ObjectDoesNotExist
+from .utils import (
+    validate_password,
+    validate_name,
+    validate_rfc,
+    validate_phone,
+)
 from rest_framework import serializers
 from drf_extra_fields.fields import Base64ImageField
 from django.contrib.auth import (
@@ -11,47 +16,61 @@ from django.contrib.auth import (
     authenticate,
 )
 
-def validate_password(password):
-    """Validate password."""
-    if len(password) < 8:
-        raise serializers.ValidationError(
-            _('Password must be at least 8 characters long.')
-        )
-
-    if not re.search(r'[A-Z]', password):
-        raise serializers.ValidationError(
-            _('Password must contain at least one uppercase letter.')
-        )
-
-    if not re.search(r'[a-z]', password):
-        raise serializers.ValidationError(
-            _('Password must contain at least one lowercase letter.')
-        )
-
-    if not re.search(r'[0-9]', password):
-        raise serializers.ValidationError(
-            _('Password must contain at least one number.')
-        )
-
-    if not re.search(r'[!@#$%^&*]', password):
-        raise serializers.ValidationError(
-            _('Password must contain at least one special character (!@#$%^&*).')
-        )
-
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
     profile_image = Base64ImageField(required=False)
     class Meta:
         model = get_user_model()
-        fields = ('rfc', 'email', 'password', 'name', 'first_last_name', 'second_last_name', 'phone', 'profile_image', 'is_superuser')
+        fields = ('rfc', 'email', 'password', 'name',
+                  'first_last_name', 'second_last_name',
+                  'phone', 'profile_image', 'is_superuser')
         extra_kwargs = {'password': {'write_only': True, 'min_length': 8}}
 
     def validate(self, data):
         """Validate and authenticate the user."""
 
-        validate_password(data['password'])
+        if not validate_name(data['name']):
+            raise serializers.ValidationError(
+                _('Name must contain only letters.')
+            )
+
+        if not validate_name(data['first_last_name']):
+            raise serializers.ValidationError(
+                _('First last name must contain only letters.')
+            )
+
+        if not validate_name(data['second_last_name']):
+            raise serializers.ValidationError(
+                _('Second last name must contain only letters.')
+            )
+
+        if not validate_rfc(data['rfc']):
+            raise serializers.ValidationError(
+                _('RFC not valid.')
+            )
+
+        if not validate_password(data['password']):
+            raise serializers.ValidationError(
+                _('Password must be at least 8 characters long and contain at least one number' + \
+                    'one uppercase letter,and one lowercase letter, and one special character(@$_-!%*?&).')
+            )
+
+        if not validate_phone(data['phone']):
+            raise serializers.ValidationError(
+                _('Phone number not valid.')
+            )
+
         return data
+
+    def save(self, **kwargs):
+        """Create a new user."""
+        self.validated_data['name'] = self.validated_data['name'].lower()
+        self.validated_data['first_last_name'] = self.validated_data['first_last_name'].lower()
+        self.validated_data['second_last_name'] = self.validated_data['second_last_name'].lower()
+        self.validated_data['rfc'] = self.validated_data['rfc'].lower()
+        user = get_user_model().objects.create_user(**self.validated_data)
+        return user
 
     def update(self, instance, validated_data):
         """Update and return user."""

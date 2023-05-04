@@ -45,16 +45,17 @@ class MaintenanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Maintenance
-        fields = ('id', 'project', 'maintainer',)
+        fields = ('id', 'project', 'user',)
 
 
-class MaintenanceDataSerializer(serializers.ModelSerializer):
+class MaintenanceMinimalSerializer(serializers.ModelSerializer):
     project = ProjectMinimalSerializer()
-    maintainer = UserMinimalSerializer()
+    user = UserMinimalSerializer()
 
     class Meta:
         model = Maintenance
-        fields = ('id', 'project', 'maintainer')
+        fields = ('id', 'project', 'user')
+
 
 class ProjectModelSerializer(serializers.ModelSerializer):
 
@@ -77,14 +78,7 @@ class ProjectModelDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectModel
         fields = ('id', 'name', 'is_static',
-                  'project', 'created_at')
-
-
-class DataTypeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = DataType
-        fields = ('id', 'name')
+                  'project', 'is_active')
 
 
 class ModelFieldSerializer(serializers.ModelSerializer):
@@ -92,6 +86,7 @@ class ModelFieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = ModelField
         fields = ('id', 'name', 'data_type',
+                  'order', 'caption', 'is_required',
                   'project_model')
 
 

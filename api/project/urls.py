@@ -6,13 +6,14 @@ app_name = 'project'
 
 router = routers.SimpleRouter()
 
-router.register('', views.ProjectViewSet, basename='project')
 router.register('maintenance', views.MaintenanceViewSet, basename='maintenance')
 router.register('models', views.ProjectModelViewSet, basename='project-model')
-router.register('models/fields/', views.ModelFieldViewSet, basename='model-field')
+router.register('fields', views.ModelFieldViewSet, basename='model-field')
+router.register('', views.ProjectViewSet, basename='project')
 
 
 urlpatterns = [
     path('change-status/<int:pk>/', views.ChangeProjectStatusView.as_view(), name='project-change-status'),
+    path('models/change-status/<int:pk>/', views.ChangeProjectModelStatusView.as_view(), name='project-model-change-status'),
     path('', include(router.urls)),
 ]

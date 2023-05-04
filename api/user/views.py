@@ -19,7 +19,6 @@ from rest_framework import (
     views,
 )
 
-from knox.settings import knox_settings
 from knox.auth import TokenAuthentication
 from knox.views import (
     LoginView as KnoxLoginView,
@@ -92,6 +91,7 @@ class ChangeUserStatusView(views.APIView):
     """Change a user's status."""
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    serializer_class = UserSerializer
 
     def post(self, request, *args, **kwargs):
         try:
@@ -165,7 +165,6 @@ class ResetPasswordView(views.APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = UserResetPasswordSerializer
-
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)

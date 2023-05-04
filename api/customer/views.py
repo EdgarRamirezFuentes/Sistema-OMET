@@ -53,6 +53,7 @@ class ChangeCustomerStatus(views.APIView):
     """Change customer status"""
     authentication_classes = [TokenAuthentication, ]
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser]
+    serializer_class = CustomerSerializer
 
     def post(self, request, *args, **kwargs):
         """Change customer status"""
