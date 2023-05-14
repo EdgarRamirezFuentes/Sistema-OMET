@@ -3,12 +3,7 @@ from core.models import (
     ProjectModel,
     Maintenance,
     ModelField,
-    FileFieldConfig,
-    IntegerFieldConfig,
-    CharFieldConfig,
-    ForeignKeyFieldConfig,
-    FloatFieldConfig,
-    DateFieldConfig,
+    Maintenance
 )
 
 
@@ -20,18 +15,17 @@ class isMaintainer(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.is_superuser:
             return True
-        
-        if isinstance(obj, ProjectModel):
-            return Maintenance.objects.filter(project=obj.project, user=request.user).exists()
-        
-        if isinstance(obj, ModelField):
-            return Maintenance.objects.filter(project=obj.project_model.project, user=request.user).exists()
-        
-        if isinstance(obj, FileFieldConfig):
-            return Maintenance.objects.filter(project=obj.model_field.project_model.project, user=request.user).exists()
-        
-        if isinstance(obj, IntegerFieldConfig):
-            return Maintenance.objects.filter(project=obj.model_field.project_model.project, user=request.user).exists()
-        
 
-        return False
+        if object is ProjectModel:
+            return Maintenance.objects.filter(
+                project_model=obj,
+                user=request.user,
+                is_active=True
+            ).exists()
+
+        if object is ModelField:
+            return Maintenance.objects.filter(
+                project_model=obj.project_model,
+                user=request.user,
+                is_active=True
+            ).exists()
