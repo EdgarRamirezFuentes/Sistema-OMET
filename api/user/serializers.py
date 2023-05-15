@@ -75,6 +75,19 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """Update and return user."""
         password = validated_data.pop('password', None)
+
+        if self.validated_data['name']:
+            self.validated_data['name'] = self.validated_data['name'].lower()
+
+        if self.validated_data['first_last_name']:
+            self.validated_data['first_last_name'] = self.validated_data['first_last_name'].lower()
+
+        if self.validated_data['second_last_name']:
+            self.validated_data['second_last_name'] = self.validated_data['second_last_name'].lower()
+
+        if self.validated_data['rfc']:
+            self.validated_data['rfc'] = self.validated_data['rfc'].lower()
+
         user = super().update(instance, validated_data)
 
         if password:
@@ -90,7 +103,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     profile_image = Base64ImageField(required=False)
     class Meta:
         model = get_user_model()
-        fields = ('id', 'name', 'first_last_name', 'second_last_name', 'profile_image', 'is_superuser', 'is_active')
+        fields = ('id', 'name', 'first_last_name', 'second_last_name', 'profile_image', 'is_superuser', 'is_staff')
 
 
 class UserMinimalSerializer(serializers.ModelSerializer):
@@ -111,7 +124,7 @@ class UserLoginSerializer(serializers.Serializer):
         """Validate and authenticate the user."""
         user = authenticate(**data)
 
-        if user and user.is_active:
+        if user and user.is_staff:
             return user
 
         msg = _('Unable to authenticate with provided credentials')

@@ -1,12 +1,14 @@
 """
 Views for the user API.
 """
+import secrets
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.contrib.auth import login
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import get_user_model
-import secrets
+
 
 from rest_framework.serializers import DateTimeField
 from rest_framework import (
@@ -49,17 +51,17 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = get_user_model().objects.all()
 
     def list(self, request, *args, **kwargs):
-        """List all users filtered by is_active, email, and is_superuser."""
+        """List all users filtered by is_staff, email, and is_superuser."""
         try:
-            is_active = request.query_params.get('is_active', None)
+            is_staff = request.query_params.get('is_active', None)
             email = request.query_params.get('email', None)
             is_superuser = request.query_params.get('is_superuser', None)
 
             queryset = self.queryset
 
-            if is_active is not None:
-                is_active = False if is_active.lower().strip() != 'true' else True
-                queryset = queryset.filter(is_active=is_active)
+            if is_staff is not None:
+                is_staff = False if is_staff.lower().strip() != 'true' else True
+                queryset = queryset.filter(is_staff=is_staff)
 
             if email is not None:
                 queryset = queryset.filter(email=email)
@@ -97,7 +99,7 @@ class ChangeUserStatusView(views.APIView):
         try:
             user_id = kwargs.get('pk', None)
             user = get_user_model().objects.get(id=user_id)
-            user.is_active = not user.is_active
+            user.is_staff = not user.is_staff
             user.save()
 
             return response.Response(status=status.HTTP_200_OK)
@@ -119,6 +121,7 @@ class LoginView(KnoxLoginView):
         serializer = UserLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
+
         login(request, user)
         user.last_login = timezone.now()
         user.save()
