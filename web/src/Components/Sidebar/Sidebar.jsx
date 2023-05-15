@@ -10,7 +10,8 @@ function classNames(...classes) {
 }
 
 function SideBar({ user }) {
-
+    const session = JSON.parse(localStorage.getItem('session'));
+    user = session.user;
     const history = useNavigate();
     const location = useLocation();
 
@@ -28,10 +29,10 @@ function SideBar({ user }) {
             name: 'Clientes',
             icon: UserGroupIcon,
             current: true,
-            paths: ['/clients/create', '/clients/search'],
+            paths: ['/clients/create', '/clients/get'],
             children: [
                 { id: 1, name: 'Crear', current: true, route: '/clients/create', paths: ['/clients/create']  },
-                { id: 2, name: 'Buscar', current: false, route: '/clients/search', paths: ['/clients/search']},
+                { id: 2, name: 'Buscar', current: false, route: '/clients/get', paths: ['/clients/get']},
             ],
         },
         {
@@ -71,6 +72,10 @@ function SideBar({ user }) {
         setNavigation(cleanedNav);
     }
 
+    const handlerLogout = () => {
+        localStorage.removeItem('session');
+        history('/')
+    }
     useEffect(() => {
         changeCurrentNavigation()
     }, [location.pathname]);
@@ -163,12 +168,12 @@ function SideBar({ user }) {
                         <div className='flex items-center justify-center h-12 w-12 rounded-full border border-white/30'>
                             <img
                                 className="inline-block h-full w-full rounded-full"
-                                src={user?.picture || axolote}
+                                src={user?.profile_image || axolote}
                             />
                         </div>
                         <div className="ml-3">
-                            <p className="text-sm font-medium text-white group-hover:text-white">{user?.givenName}</p>
-                            <p className="text-xs font-medium text-white group-hover:text-white pt-1 -ml-[3px] cursor-pointer flex items-center gap-1 underline" onClick={() => {history('/')}}><ArrowRightOnRectangleIcon className='w-5 h-5' /> Cerrar sesión</p>
+                            <Link to={'/profile'}>  <p className="text-sm font-medium text-white group-hover:text-white">{user?.name}</p></Link>
+                            <p className="text-xs font-medium text-white group-hover:text-white pt-1 -ml-[3px] cursor-pointer flex items-center gap-1 underline" onClick={handlerLogout}><ArrowRightOnRectangleIcon className='w-5 h-5' /> Cerrar sesión</p>
                         </div>
                     </div>
                 </div>

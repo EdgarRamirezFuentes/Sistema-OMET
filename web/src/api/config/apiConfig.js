@@ -3,7 +3,7 @@
  */
 const config_env = {
     "default": {
-        "host": "http://localhost:8001"
+        "host": "http://localhost:8001/api/v1/"
         
     }
 };

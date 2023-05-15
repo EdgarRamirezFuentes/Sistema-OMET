@@ -1,15 +1,13 @@
-import escom from '../assets/escom.png'
-import axolote from '../assets/axolote.png'
-import ipn from '../assets/ipn.png'
-
 import '../App.css'
 import Timer from '../Components/Timer/Timer'
+import SideBar from '../Components/Sidebar/Sidebar'
 
 function Dashboard() {
 
   return (
     <div className="w-full h-full bg-slate-100">
       <div className='flex flex-row h-screen'>
+      <SideBar/>
         <div className='w-full'>
           <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
             <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>

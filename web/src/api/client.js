@@ -16,7 +16,7 @@ const apiClient = (endpoint) => {
             options.body = JSON.stringify(body);
         }
         if (token) {
-            options.headers = { 'Content-Type': 'application/json', 'token': token }
+            options.headers = { 'Content-Type': 'application/json', 'Authorization': 'Token '+token }
 
         } else {
             options.headers = { 'Content-Type': 'application/json' }
@@ -45,17 +45,17 @@ const apiClient = (endpoint) => {
         if (!body) throw new Error("to make a post you must provide a body");
         return await customFetch(endpoint, "POST", body, token);
     };
-    const put = (id = false, body = false) => {
+    const put = async (id = false, body = false) => {
         if (!id || !body)
             throw new Error("to make a put you must provide the id and the body");
         const url = `${endpoint}/${id}`;
-        return customFetch(url, "PUT", body);
+        return await customFetch(url, "PUT", body);
     };
-    const del = (id = false) => {
+    const del = async (id = false, token = undefined) => {
         if (!id)
             throw new Error("to make a delete you must provide the id and the body");
-        const url = `${endpoint}/${id}`;
-        return customFetch(url, "DELETE");
+        const url = `${endpoint}/${id}/`;
+        return await customFetch(url, "DELETE", undefined, token);
     };
 
 
