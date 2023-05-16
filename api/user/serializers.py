@@ -8,6 +8,7 @@ from .utils import (
     validate_name,
     validate_rfc,
     validate_phone,
+    format_data,
 )
 from rest_framework import serializers
 from drf_extra_fields.fields import Base64ImageField
@@ -27,74 +28,125 @@ class UserSerializer(serializers.ModelSerializer):
                   'phone', 'profile_image', 'is_superuser')
         extra_kwargs = {'password': {'write_only': True, 'min_length': 8}}
 
-    def validate(self, data):
-        """Validate and authenticate the user."""
+    def validate_name(self, name:str)->str:
+        """Validate a name.
 
-        if not validate_name(data['name']):
+        Args:
+            name (str): name.
+
+        Returns:
+            str: Formatted name.
+        """
+        if not validate_name(name):
             raise serializers.ValidationError(
                 _('Name must contain only letters.')
             )
+        return format_data(name)
 
-        if not validate_name(data['first_last_name']):
+    def validate_first_last_name(self, first_last_name:str)->str:
+        """Validate a first last name.
+
+        Args:
+            first_last_name (str): first last name.
+
+        Returns:
+            str: Formatted first last name.
+        """
+        if not validate_name(first_last_name):
             raise serializers.ValidationError(
                 _('First last name must contain only letters.')
             )
+        return format_data(first_last_name)
 
-        if not validate_name(data['second_last_name']):
+    def validate_second_last_name(self, second_last_name:str)->str:
+        """Validate a second last name.
+
+        Args:
+            second_last_name (str): second last name.
+
+        Returns:
+            str: Formatted second last name.
+        """
+        if not validate_name(second_last_name):
             raise serializers.ValidationError(
                 _('Second last name must contain only letters.')
             )
+        return format_data(second_last_name)
 
-        if not validate_rfc(data['rfc']):
+    def validate_rfc(self, rfc:str)->str:
+        """Validate a RFC.
+
+        Args:
+            rfc (str): RFC.
+
+        Returns:
+            str: Formatted RFC.
+        """
+        if not rfc:
+            raise serializers.ValidationError(
+                _('RFC is required.')
+            )
+
+        if not validate_rfc(rfc):
             raise serializers.ValidationError(
                 _('RFC not valid.')
             )
 
-        if not validate_password(data['password']):
+        rfc = format_data(rfc)
+
+        if get_user_model().objects.filter(rfc=rfc).exists():
+            raise serializers.ValidationError(
+                _('RFC already exists.')
+            )
+
+        return rfc
+
+    def validate_password(self, password:str)->str:
+        """Validate a password.
+
+        Args:
+            password (str): password.
+
+        Returns:
+            str: Formatted password.
+        """
+        if not validate_password(password):
             raise serializers.ValidationError(
                 _('Password must be at least 8 characters long and contain at least one number' + \
                     'one uppercase letter,and one lowercase letter, and one special character(@$_-!%*?&).')
             )
 
-        if not validate_phone(data['phone']):
+        return password
+
+    def validate_phone(self, phone:str)->str:
+        """Validate a phone number.
+
+        Args:
+            phone (str): phone number.
+
+        Returns:
+            str: Formatted phone number.
+        """
+        if not validate_phone(phone):
             raise serializers.ValidationError(
                 _('Phone number not valid.')
             )
-
-        return data
-
-    def save(self, **kwargs):
-        """Create a new user."""
-        self.validated_data['name'] = self.validated_data['name'].lower()
-        self.validated_data['first_last_name'] = self.validated_data['first_last_name'].lower()
-        self.validated_data['second_last_name'] = self.validated_data['second_last_name'].lower()
-        self.validated_data['rfc'] = self.validated_data['rfc'].lower()
-        user = get_user_model().objects.create_user(**self.validated_data)
-        return user
+        return format_data(phone)
 
     def update(self, instance, validated_data):
         """Update and return user."""
         password = validated_data.pop('password', None)
 
-        if self.validated_data['name']:
-            self.validated_data['name'] = self.validated_data['name'].lower()
-
-        if self.validated_data['first_last_name']:
-            self.validated_data['first_last_name'] = self.validated_data['first_last_name'].lower()
-
-        if self.validated_data['second_last_name']:
-            self.validated_data['second_last_name'] = self.validated_data['second_last_name'].lower()
-
-        if self.validated_data['rfc']:
-            self.validated_data['rfc'] = self.validated_data['rfc'].lower()
-
         user = super().update(instance, validated_data)
 
         if password:
-            validate_password(password)
             user.set_password(password)
-            user.save()
 
+        user.save()
+
+    def create(self, validated_data):
+        """Create and return a new user."""
+        user = get_user_model().objects.create_user(**validated_data)
         return user
 
 

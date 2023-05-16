@@ -14,6 +14,18 @@ def validate_rfc(rfc):
     return re.match(rfc_regex, rfc, flags=re.IGNORECASE)
 
 def validate_phone(phone):
-    phone_regex = r'^\d{10}$'
-    return re.match(phone_regex, phone, flags=re.IGNORECASE)
+    print(phone)
+    phone_regex = r'^(\+\d{1,3})?\s?\d{10,14}$'
+    return re.match(phone_regex, phone)
+
+def format_data(data:str)->str:
+    """Format a data.
+
+    Args:
+        data (str): data.
+
+    Returns:
+        str: Formatted data.
+    """
+    return data.lower().strip()
 

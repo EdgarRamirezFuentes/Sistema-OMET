@@ -6,4 +6,6 @@ from .Maintenance import Maintenance
 from .ProjectModel import ProjectModel
 from .DataType import DataType
 from .ModelField import ModelField
-from .InputType import InputType
+from .ForeignKeyRelation import ForeignKeyRelation
+from .ConfigFields import ConfigFields
+from .ConfigValues import ConfigValues

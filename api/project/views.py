@@ -39,7 +39,6 @@ from rest_framework import (
     mixins,
     response,
     status,
-    generics,
     views,
 )
 

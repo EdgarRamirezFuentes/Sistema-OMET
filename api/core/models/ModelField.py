@@ -7,7 +7,6 @@ class ModelField(models.Model):
     is_active = models.BooleanField(default=True)
     is_required = models.BooleanField(default=False)
     order = models.IntegerField(default=0)
-    config_fields = models.JSONField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     data_type = models.ForeignKey('DataType', on_delete=models.SET_NULL, null=True)
     project_model = models.ForeignKey('ProjectModel', on_delete=models.CASCADE, null=False)

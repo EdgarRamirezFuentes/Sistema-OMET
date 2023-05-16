@@ -1,5 +1,11 @@
+from django.utils.translation import gettext as _
 from user.serializers import (
     UserMinimalSerializer,
+)
+
+from .utils import (
+    validate_name,
+    format_name,
 )
 
 from customer.serializers import CustomerMinimalSerializer
@@ -13,7 +19,8 @@ from core.models import (
     ProjectModel,
     ModelField,
     Maintenance,
-    DataType,
+    ConfigFields,
+    ConfigValues,
 )
 
 
@@ -61,15 +68,25 @@ class ProjectModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectModel
-        fields = ('id', 'name', 'is_static',
-                  'project')
+        fields = ('id', 'name', 'project')
+
+    def validate_name(self, name):
+        # Validate model name
+        is_valid_name = validate_name(name)
+
+        if not is_valid_name:
+            raise serializers.ValidationError(
+                _('The model name does not fulfill the requirements.')
+            )
+
+        return format_name(name)
 
 
 class ProjectModelMinimalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectModel
-        fields = ('id', 'name', 'is_static')
+        fields = ('id', 'name')
 
 
 class ProjectModelDataSerializer(serializers.ModelSerializer):
@@ -77,7 +94,7 @@ class ProjectModelDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectModel
-        fields = ('id', 'name', 'is_static',
+        fields = ('id', 'name',
                   'project', 'is_active')
 
 
@@ -87,7 +104,18 @@ class ModelFieldSerializer(serializers.ModelSerializer):
         model = ModelField
         fields = ('id', 'name', 'data_type',
                   'order', 'caption', 'is_required',
-                  'project_model')
+                   'project_model')
+
+    def validate_name(self, name):
+        # Validate model field name
+        is_valid_name = validate_name(name)
+
+        if not is_valid_name:
+            raise serializers.ValidationError(
+                _('The field name does not fulfill the requirements.')
+            )
+
+        return format_name(name)
 
 
 class ModelFieldMinimalSerializer(serializers.ModelSerializer):

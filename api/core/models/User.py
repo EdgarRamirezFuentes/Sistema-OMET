@@ -25,7 +25,9 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError('User must have an email address.')
         user = self.model(email=self.normalize_email(email), **extra_fields)
+        print(password)
         user.set_password(password)
+        print(user.password)
         user.save(using=self._db)
 
         return user
@@ -47,7 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255, null=False)
     first_last_name = models.CharField(max_length=255, null=True)
     second_last_name = models.CharField(max_length=255, null=True)
-    phone = models.CharField(max_length=10, null=True)
+    phone = models.CharField(max_length=20, null=True)
     password = models.CharField(max_length=255, null=False)
     profile_image = models.ImageField(upload_to=profile_image_file_path, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
