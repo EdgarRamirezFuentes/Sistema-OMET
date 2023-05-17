@@ -19,7 +19,6 @@ from core.models import (
     ProjectModel,
     ModelField,
     Maintenance,
-    ConfigFields,
     ConfigValues,
 )
 
@@ -134,3 +133,21 @@ class ModelFieldDataSerializer(serializers.ModelSerializer):
         model = ModelField
         fields = ('id', 'name', 'data_type',
                   'project_model', 'created_at')
+
+
+class ConfigValuesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ConfigValues
+        fields = ('id', 'config_field', 'model_field',
+                  'value')
+
+
+class ConfigValuesMinimalSerializer(serializers.ModelSerializer):
+    config_field = ModelFieldMinimalSerializer()
+    model_field = ModelFieldMinimalSerializer()
+
+    class Meta:
+        model = ConfigValues
+        fields = ('id', 'config_field', 'value',
+                  'model_field')

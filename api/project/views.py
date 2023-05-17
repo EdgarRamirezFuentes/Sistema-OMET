@@ -17,7 +17,8 @@ from project.serializers import (
     ProjectModelDataSerializer,
     ModelFieldSerializer,
     ModelFieldMinimalSerializer,
-    ModelFieldDataSerializer,
+    ConfigValuesSerializer,
+    ConfigValuesMinimalSerializer,
 )
 
 from core.models import (
@@ -25,6 +26,7 @@ from core.models import (
     Maintenance,
     ProjectModel,
     ModelField,
+    ConfigValues
 )
 
 from core.permissions import (
@@ -293,3 +295,98 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChangeModelFieldStatusView(views.APIView):
+    """View for changing the status (is_active) of the model field"""
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
+    serializer_class = ModelFieldSerializer
+
+    def post(self, request, *args, **kwargs):
+        """Change the status of the model field"""
+        try:
+            model_field_id = kwargs.get('pk', None)
+
+            if not model_field_id :
+                return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+            model_field = ModelField.objects.get(id=model_field_id)
+            model_field.is_active = not model_field.is_active
+            model_field.save()
+
+            return response.Response(status=status.HTTP_200_OK)
+        except (ObjectDoesNotExist, Http404):
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ConfigValuesViewSet(viewsets.ModelViewSet):
+    """Viewset for config values"""
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated, isActiveUser)
+    queryset = ConfigValues.objects.all()
+    serializer_class = ConfigValuesSerializer
+
+    def create(self, request, *args, **kwargs):
+        """Create a list of config values"""
+        try:
+            data = request.data
+            serializer = ConfigValuesSerializer(data=data, many=True)
+            if serializer.is_valid():
+                serializer.save()
+                return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+            return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def list(self, request, *args, **kwargs):
+        """List the all the config values filtered by model field id and is active"""
+        try:
+            model_field_id = request.query_params.get('model_field_id', None)
+            is_active = request.query_params.get('is_active', None)
+
+            queryset = self.queryset
+
+            if model_field_id:
+                queryset = queryset.filter(model_field=int(model_field_id))
+
+            if is_active:
+                is_active = True if is_active.lower() == 'true' else False
+                queryset = queryset.filter(is_active=is_active)
+
+            serializer = ConfigValuesMinimalSerializer(queryset, many=True)
+            return response.Response(serializer.data, status=status.HTTP_200_OK)
+        except (ObjectDoesNotExist, Http404):
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChangeConfigValuesStatusView(views.APIView):
+    """View for changing the status (is_active) of the config value"""
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
+    serializer_class = ConfigValuesSerializer
+
+    def post(self, request, *args, **kwargs):
+        """Change the status of the config value"""
+        try:
+            config_value_id = kwargs.get('pk', None)
+
+            if not config_value_id :
+                return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+            config_value = ConfigValues.objects.get(id=config_value_id)
+            config_value.is_active = not config_value.is_active
+            config_value.save()
+
+            return response.Response(status=status.HTTP_200_OK)
+        except (ObjectDoesNotExist, Http404):
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
