@@ -60,6 +60,7 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=sistemaOmetAdmin
       - MONGO_INITDB_ROOT_PASSWORD=vjcg7WxxjBgHPa4bMWhj7qVLNJX5Tx
+      - MONGO_INITDB_DATABASE=sistemaOmetLogs
     volumes:
       - 'dev-mongo-data:/data/db'
 volumes:

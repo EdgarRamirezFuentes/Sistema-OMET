@@ -10,3 +10,7 @@ celery
 django-celery-results
 django-celery-beat
 drf-extra-fields
+djongo
+mongoengine
+pylint-mongoengine
+pymongo

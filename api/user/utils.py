@@ -14,7 +14,6 @@ def validate_rfc(rfc):
     return re.match(rfc_regex, rfc, flags=re.IGNORECASE)
 
 def validate_phone(phone):
-    print(phone)
     phone_regex = r'^(\+\d{1,3})?\s?\d{10,14}$'
     return re.match(phone_regex, phone)
 

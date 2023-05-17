@@ -6,6 +6,8 @@ from .Maintenance import Maintenance
 from .ProjectModel import ProjectModel
 from .DataType import DataType
 from .ModelField import ModelField
-from .ForeignKeyRelation import ForeignKeyRelation
 from .ConfigFields import ConfigFields
 from .ConfigValues import ConfigValues
+
+# MongoDB models
+from .UserInsertionLogs import UserInsertionLogs
