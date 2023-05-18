@@ -8,6 +8,3 @@ from .DataType import DataType
 from .ModelField import ModelField
 from .ConfigFields import ConfigFields
 from .ConfigValues import ConfigValues
-
-# MongoDB models
-from .UserInsertionLogs import UserInsertionLogs

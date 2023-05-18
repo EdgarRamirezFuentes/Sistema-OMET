@@ -9,8 +9,6 @@ from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import get_user_model
 
-
-from rest_framework.serializers import DateTimeField
 from rest_framework import (
     generics,
     permissions,
@@ -42,6 +40,7 @@ from user.serializers import (
 )
 
 from core.tasks import send_reset_password_email
+from core.signals import user_insertion_signal
 
 class UserViewSet(viewsets.ModelViewSet):
     """Viewset for users."""

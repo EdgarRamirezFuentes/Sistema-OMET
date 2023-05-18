@@ -52,17 +52,16 @@ services:
       - './web:/web'
     depends_on:
       - api
-  mongo:
+  mongodb:
+    image: mongo
     container_name: sistema-omet-mongo
-    image: 'mongo:5.0.15-focal'
     ports:
       - '27017:27017'
+    env_file: ./api/.env
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=sistemaOmetAdmin
-      - MONGO_INITDB_ROOT_PASSWORD=vjcg7WxxjBgHPa4bMWhj7qVLNJX5Tx
       - MONGO_INITDB_DATABASE=sistemaOmetLogs
     volumes:
-      - 'dev-mongo-data:/data/db'
+      - dev-mongo-data:/data/db
 volumes:
   dev-db-data:
   dev-static-data:
