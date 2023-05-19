@@ -20,7 +20,7 @@ from django.contrib.auth import (
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
-    profile_image = Base64ImageField(required=False)
+    profile_image = Base64ImageField(required=False, allow_null=True)
     class Meta:
         model = get_user_model()
         fields = ('rfc', 'email', 'password', 'name',
@@ -132,6 +132,7 @@ class UserSerializer(serializers.ModelSerializer):
                 _('Phone number not valid.')
             )
         return format_data(phone)
+
 
     def update(self, instance, validated_data):
         """Update and return user."""
