@@ -19,11 +19,27 @@ export const deleteUser = async (token, userId) => {
 }
 
 export const createClient = async (formData, token) => {
-    console.log("====createClient formData====");
-    console.log(formData);
     return await clientsAction.create(formData, token).then((response) => {
-        console.log("====createClient response====");
-        console.log(response);
         return response;
     });
+}
+
+export const getClient = async (token, userId) => {
+    return await clientsAction.getClient(token, userId).then((response) => {
+        return response;
+    });
+}
+
+export const updateClient = async (formData, token, userId) => {
+    return await clientsAction.updateClient(formData, token, userId).then((response) => {
+        return response;
+    });
+}
+
+export const changePassword = async (formData, token) => {
+
+    return await clientsAction.changePassword(formData, token).then((response) => {
+        return response;
+    });
+
 }

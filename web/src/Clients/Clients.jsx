@@ -24,11 +24,7 @@ function Clients() {
   }, []);
 
   const clients = async ()=>{
-    console.log("====Token====");
-    console.log(JSON.parse(localStorage.getItem('session')).token);
     await getAllClients(JSON.parse(localStorage.getItem('session')).token).then((clients)=>{
-      console.log("====clients====");
-      console.log(clients);
       setAllClients(clients)
       setIsLoadingData(false)
     })
@@ -42,7 +38,13 @@ function Clients() {
   ];
 
   const handleView = item => {
-    history(`/view/${item.id}`,{
+    history(`/clients/view/${item.id}`,{
+            client: item,
+        }
+    )
+  }
+  const handleUpdate = item => {
+    history(`/clients/update/${item.id}`,{
             client: item,
         }
     )
@@ -98,7 +100,7 @@ function Clients() {
         name: 'Actualizar cliente',
         type: 'primary',
         icon: <ClipboardIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
-        action: handleView,
+        action: handleUpdate,
     },
     {
         id: 3,

@@ -23,6 +23,7 @@ function SideBar({ user }) {
             current: true,
             route: '/home',
             paths: ['/home'],
+            general : true
         },
         {
             id: 2,
@@ -31,20 +32,23 @@ function SideBar({ user }) {
             current: true,
             paths: ['/clients/create', '/clients/get'],
             children: [
-                { id: 1, name: 'Crear', current: true, route: '/clients/create', paths: ['/clients/create']  },
-                { id: 2, name: 'Buscar', current: false, route: '/clients/get', paths: ['/clients/get']},
+                { id: 1, name: 'Crear', current: true, route: '/clients/create', paths: ['/clients/create'], superuser: true},
+                { id: 2, name: 'Ver', current: false, route: '/clients/get', paths: ['/clients/get'], superuser: true},
             ],
+            general : false,
+            superuser: true
         },
         {
             id: 3,
-            name: 'Formularios',
+            name: 'Proyectos',
             icon: ClipboardDocumentListIcon,
             current: true,
-            paths: [ '/forms/create', '/forms/search'],
+            paths: [ '/projects/create', '/projects/get'],
             children: [
-                { id: 1, name: 'Crear', current: true, route: '/forms/create', paths: ['/forms/create']  },
-                { id: 2, name: 'Buscar', current: false, route: '/forms/search', paths: ['/forms/get']},
+                { id: 1, name: 'Crear', current: true, route: '/projects/create', paths: ['/projects/create'], superuser: true  },
+                { id: 2, name: 'Ver', current: false, route: '/projects/get', paths: ['/projects/get'], superuser: false, general: true } ,
             ],
+            general : true
         },
     ]);
 
@@ -117,7 +121,7 @@ function SideBar({ user }) {
             <div className="w-full pt-6 flex flex-grow flex-col overflow-y-auto">
                 <nav className="flex-1 bg-v2-blue-text-login px-2" aria-label="Sidebar">
                     {navigation.map((item) =>
-                        !item.children ? (
+                        item.superuser == user?.is_superuser || item.general ? !item.children ? (
                                 <Link to={item.route}>
                                     <div className={`${item.current ? 'bg-sky-600' : 'bg-sky-500 hover:bg-sky-400'} text-white group w-full flex items-center my-2 text-sm font-medium rounded-md cursor-pointer`}>
                                         <div className='group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md'>
@@ -147,18 +151,19 @@ function SideBar({ user }) {
                                             </Disclosure.Button>
                                             <Disclosure.Panel className={`pl-5`} >
                                                 {item.children.map((subItem) => (
+                                                        subItem.superuser == user?.is_superuser || subItem.general ?
                                                         <Link to={subItem.route}>
                                                             <div className={`${subItem.current ? 'bg-sky-600' : 'bg-sky-500 hover:bg-sky-400'} group flex w-full items-center rounded-md py-2 my-1.5 pl-6 pr-2 text-sm font-medium text-white`}>
                                                                 {subItem.name}
                                                             </div>
-                                                        </Link>
+                                                        </Link>:null
 
                                                 ))}
                                             </Disclosure.Panel>
                                         </>
                                     )}
                                 </Disclosure>
-                        )
+                        ):null
                     )}
                 </nav>
             </div>

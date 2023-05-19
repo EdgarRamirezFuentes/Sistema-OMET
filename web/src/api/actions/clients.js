@@ -30,6 +30,16 @@ export const getAll = async (token) => {
     }
 }
 
+export const getClient = async (token, userId) => {
+    const objApi = apiClient('user/'+userId+'/');
+    try {
+        var response = await objApi.get(undefined, token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+}
+
 export const resetPassword = async (token, userId) => {
 
     const objApi = apiClient('user/reset-password/');
@@ -52,4 +62,28 @@ export const deleteUser = async (token, userId) => {
         console.log("Error ===>", e)
     }
 
+}
+
+export const updateClient = async (formData, token, userId) => {
+    
+    const objApi = apiClient('user');
+    try {
+        var response = await objApi.patch(userId, formData, token)
+        console.log("response", response);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+    
+}
+
+export const changePassword = async (formData, token) => {
+    console.log("token", token);
+    const objApi = apiClient('user/change-password/');
+    try {
+        var response = await objApi.patch(undefined, formData, token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
 }
