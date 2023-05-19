@@ -41,5 +41,10 @@ export const changePassword = async (formData, token) => {
     return await clientsAction.changePassword(formData, token).then((response) => {
         return response;
     });
+}
 
+export const getCustomers = async (token) => {
+    return await clientsAction.getCustomers(token).then((response) => {
+        return response;
+    })
 }

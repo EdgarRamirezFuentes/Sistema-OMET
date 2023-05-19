@@ -3,13 +3,13 @@ import Timer from '../Components/Timer/Timer'
 import SideBar from '../Components/Sidebar/Sidebar'
 import Table from '../Components/tailwindUI/Table'
 import { getAllClients, resetPassword, deleteUser } from '../api/controller/ClientsController'
-import { getAllProjects, deleteProject } from '../api/controller/ProjectsController'
 import { useEffect, useState } from 'react'
 import { TrashIcon, ClipboardIcon, EyeIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../Components/Alert/Alert'
+import { getCustomers, deleteCustomer } from '../api/controller/CustomersController';
 
-function Projects() {
+function Customers() {
   const history = useNavigate();
   const session = JSON.parse(localStorage.getItem('session'));
   const [allClients, setAllClients] = useState([])
@@ -18,80 +18,98 @@ function Projects() {
   const [error, setError] = useState(null);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState('Error');
-  const [deletedProject, setDeletedProject] = useState(null);
+  const [deletedUser, setDeletedUser] = useState(null);
 
   useEffect(() => {
-    console.log("deletedProject");
-    console.log(deletedProject);
-    if (deletedProject == null || deletedProject){
-      projects()
-      setDeletedProject(false);
+    if (deletedUser == null || deletedUser == true){
+      clients()
+      setDeletedUser(false);
     }
-  }, [deletedProject]);
+  }, [deletedUser]);
 
-  const projects = async ()=>{
-    await getAllProjects(session.token).then(async (projects)=>{
-      let projectsList = await projects.json()
-      if (projectsList.length > 0){
-        setAllClients(projectsList)
-        setIsLoadingData(false)
-      }else{
-        setAllClients([])
-        setIsLoadingData(true)
-      }
+  const clients = async ()=>{
+    await getCustomers(session.token).then(async(clients)=>{
+      let clientsArray = await clients.json()
+      setAllClients(clientsArray)
+      setIsLoadingData(false)
     })
   }
 
   const tableColumns = [
     { heading: 'Id', value: 'id',align: 'center' },
     { heading: 'Nombre', value: 'name' , main: true},
-    { heading: 'Customer', value: 'customer.name'}
+    { heading: 'Email', value: 'email'}
   ];
 
   const handleView = item => {
-    /*history(`/clients/view/${item.id}`,{
+    history(`/clients/view/${item.id}`,{
             client: item,
         }
-    )*/
+    )
   }
   const handleUpdate = item => {
-    /*history(`/clients/update/${item.id}`,{
+    history(`/clients/update/${item.id}`,{
             client: item,
         }
-    )*/
+    )
   }
   
   const handleDelete = async (item) => {
-    await deleteProject(session.token, item.id).then((response)=>{
-
-      if(response.status === 204){
-        setAlertType('Success');
-        setAlertMessage('Proyecto eliminado correctamente.')
+    await deleteCustomer(session.token, item.id).then(async (response)=>{
+      console.log("Response");
+      console.log(response);
+      if(response.status == 204){
         setError(true);
-        setDeletedProject(true);
-    }
-  })
+        setAlertMessage("Customer eliminado correctamente");
+        setAlertType('Success');
+        setDeletedUser(true);
+      }
+      else{
+        setError(true);
+        setAlertMessage("Error al eliminar customer");
+        setAlertType('Error');
+      }
+      
+
+      /*
+      let json = await response.json()
+      console.log("json");
+      console.log(json);
+      if(res.non_field_errors){
+        setError(true);
+        setAlertMessage(res.non_field_errors[0]);
+        setAlertType('Error');
+        return;
+      }
+      if(res.message){
+        setError(true);
+        setAlertMessage(res.message);
+        setAlertType('Success');
+        return;
+      }*/
+
+    })
     //setDeletedUser(true);
   }
 
   const columnActions = [
     {
         id: 1,
-        name: 'Ver cliente',
+        name: 'Ver customer',
         type: 'primary',
         icon: <EyeIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleView,
     },
     {
         id: 2,
-        name: 'Actualizar cliente',
+        name: 'Actualizar customer',
         type: 'primary',
         icon: <ClipboardIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleUpdate,
     },
     {
         id: 3,
-        name: 'Eliminar cliente',
+        name: 'Eliminar customer',
         type: 'primary',
         icon: <TrashIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleDelete,
@@ -133,4 +151,4 @@ function Projects() {
   )
 }
 
-export default Projects
+export default Customers

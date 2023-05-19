@@ -50,6 +50,18 @@ function SideBar({ user }) {
             ],
             general : true
         },
+        {
+            id: 4,
+            name: 'Customers',
+            icon: ClipboardDocumentListIcon,
+            current: true,
+            paths: [ '/customers/create', '/customers/get'],
+            children: [
+                { id: 1, name: 'Crear', current: true, route: '/customers/create', paths: ['/customers/create'], superuser: true  },
+                { id: 2, name: 'Ver', current: false, route: '/customers/get', paths: ['/customers/get'], superuser: false, general: true } ,
+            ],
+            general : true
+        },
     ]);
 
     const changeCurrentNavigation = () => {

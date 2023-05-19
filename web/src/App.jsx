@@ -12,6 +12,9 @@ import See from "./Clients/See";
 import Update from "./Clients/Update";
 import ChangePassword from "./Profile/ChangePassword";
 import CreateProject from "./Projects/Create";
+import CreateCustomer from "./Customers/Create";
+import Customers from "./Customers/Customers";
+import Projects from "./Projects/Projects";
 function App() {
 
   return (
@@ -31,6 +34,11 @@ function App() {
               <Route path="/clients/change-password" element={<ChangePassword />} />
 
               <Route path="/projects/create" element={<CreateProject />} />
+              <Route path="/projects/get" element={<Projects />} />
+
+              <Route path="/customers/create" element={<CreateCustomer />} />
+              <Route path="/customers/get" element={<Customers />} />
+
             </Routes>
         </div>
       </div>

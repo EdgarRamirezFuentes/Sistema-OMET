@@ -30,6 +30,16 @@ export const getAll = async (token) => {
     }
 }
 
+export const getCustomers = async (token) => {
+    const objApi = apiClient('user?is_superuser='+false);
+    try {
+        var response = await objApi.get(undefined,token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+}
+
 export const getClient = async (token, userId) => {
     const objApi = apiClient('user/'+userId+'/');
     try {

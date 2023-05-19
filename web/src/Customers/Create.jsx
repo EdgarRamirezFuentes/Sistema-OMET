@@ -4,10 +4,9 @@ import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
-import {createProject} from '../api/controller/ProjectsController'
-import { getCustomers } from '../api/controller/CustomersController';
+import { createCustomer } from '../api/controller/CustomersController';
 
-function CreateProject() {
+function CreateCustomer() {
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'))
     const user = session.user;
@@ -16,18 +15,28 @@ function CreateProject() {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
     const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
+    const [phone, setPhone] = useState('');
+    const [rfc, setRfc] = useState('');
+    const [email, setEmail] = useState('');
+
     const [selectedUser, setSelectedUser] = useState('');
     const [allClients, setAllClients] = useState([])
+    const [rfcError, setRfcError] = useState(false);
+
+    useEffect(() => {
+      if(rfc.length<12 || rfc.length > 13){
+        setRfcError(true);
+        return;
+      }else{
+        setRfcError(false);
+      }
+    },[rfc])
+
     const handleChange = (event) => {
       setSelectedUser(event.target.value);
       console.log("===selectedUser===");
       console.log(event.target.value);
     };
-
-    useEffect(() => {
-      getActiveCustomers();
-    }, []);
 
     const onCloseHandler = () => {
         setError(null)
@@ -36,20 +45,21 @@ function CreateProject() {
     }
 
     const buttonHandler = async () => {
-      if(name === '' || description === '' || selectedUser === ''){
+      if (name === '' || phone === '' || rfc === '' || email === ''){
           setAlertType('Warning');
-          setAlertMessage('Ingresa tus datos.')
+          setAlertMessage('Ingresa los datos del customer.')
           setError(true);
           return;
       }
 
-      let data = {
+      let customerData = {
         name: name,
-        description: description,
-        customer: selectedUser
+        phone: phone,
+        rfc: rfc,
+        email: email
       }
 
-      await createProject(data, session.token).then(async (response) => {
+      await createCustomer(customerData, session.token).then(async (response) => {
         console.log("Response");
         console.log(response);
         let res = await response.json();
@@ -57,21 +67,19 @@ function CreateProject() {
         console.log(res);
         if (response.status === 201){
           setAlertType('Success');
-          setAlertMessage('Proyecto creado correctamente.')
-          setError(true);
+          setAlertMessage('Customer creado correctamente.')
           setTimeout(() => {
-            history('/projects/get')
-          },1000);
+            history('/customers/get');
+          }, 1000);
+          setError(true);
+          return;
+        }else{
+          setAlertType('Error');
+          setAlertMessage('Error al crear el customer.')
+          setError(true);
           return;
         }
       })
-    }
-
-    const getActiveCustomers = async () => {
-      await getCustomers(session.token).then(async(clients)=>{
-         let clientsArray = await clients.json()
-         setAllClients(clientsArray)
-       })
     }
   
     return (
@@ -87,7 +95,7 @@ function CreateProject() {
                         </div>
                     </div>
                     <div className='mt-3 ml-5 flex justify-center'>
-                        <p className='text-3xl font-bold'>Crear proyecto</p>
+                        <p className='text-3xl font-bold'>Crear customer</p>
                     </div>
                     <div className='flex flex-col justify-between'>
                     <div className='mt-5 p-5 flex flex-col items-center m-auto w-1/2 rounded-2xl bg-white'>
@@ -96,39 +104,40 @@ function CreateProject() {
                             <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
                         </div>
 
-                        <div className='mt-5 w-full items-center flex flex-row'>
+                        <div className='mt-5 w-full items-center flex flex-row  justify-center items-center'>
 
-                        <div className='w-full flex flex-col items-center'>
+                        <div className='w-3/4 flex flex-col items-center'>
 
                             <div className='w-full flex flex-col justify-between'>
                               <p className='font-bold'>Nombre:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input onChange={(event) => {setName(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="project_name" name="project_name"/><br/><br/>
+                                <input onChange={(event) => {setName(event.target.value)}} className='w-3/4 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="name" name="name"/><br/><br/>
                               </div>
                               
-                              <p className='font-bold'>Descripción:</p>
+                              <div className='w-full flex flex-row'>
+                                <p>RFC*</p>
+                                {rfcError ? <div>
+                                  <p className='ml-5 text-red-700 text-xs'>El RFC debe tener de 12 a 13 caracteres.</p>
+                                </div>:null}
+                              </div>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="description" name="description"/><br/><br/>
+                                <input onChange={(event) => {setRfc(event.target.value)}} className='w-3/4 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='RFC' type="text" id="rfc" name="rfc"/><br/><br/>
                               </div>
 
-                              <p className='font-bold'>Customer:</p>
+                              <p className='font-bold'>Número telefónico:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                              <div className="mt-1 relative rounded-md shadow-sm">
-                                <select className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'
-                                 value={selectedUser} onChange={handleChange}>
-                                  <option value="">Selecciona un usuario</option>
-                                  {allClients.map((option, i) => (
-                                      <option key={i} value={option.id}>{option.name}</option>
-                                  ))}
-                                </select>
+                                <input onChange={(event) => {setPhone(event.target.value)}} className='w-3/4 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Número telefónico:' type="text" id="phone" name="phone"/><br/><br/>
                               </div>
-                            </div>
+                              <p className='font-bold'>Email:</p>
+                              <div className='mb-10 w-full flex flex-row justify-center'>
+                                <input onChange={(event) => {setEmail(event.target.value)}} className='w-3/4 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Email' type="text" id="email" name="email"/><br/><br/>
+                              </div>
                           </div>
 
                         </div>
                         </div>
                         <div className='w-1/4'>
-                        <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Crear"/><br/><br/>
+                        <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Actualizar"/><br/><br/>
                         </div>
                     </div>
                     </div>
@@ -138,4 +147,4 @@ function CreateProject() {
     )
 }
 
-export default CreateProject
+export default CreateCustomer

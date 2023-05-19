@@ -23,10 +23,7 @@ const apiClient = (endpoint) => {
         }
         return await fetch(config.host + url, options)
             .then(response => {
-                return response.json();
-            })
-            .then(async function (json) {
-                return await json;
+                return response
             })
             .catch(err => {
                 console.log(err);

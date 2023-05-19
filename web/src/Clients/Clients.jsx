@@ -10,7 +10,9 @@ import Alert from '../Components/Alert/Alert'
 
 function Clients() {
   const history = useNavigate();
-
+  const session = JSON.parse(localStorage.getItem('session'));
+  console.log("Session");
+  console.log(session);
   const [allClients, setAllClients] = useState([])
   const [isLoadingData, setIsLoadingData] = useState(true)
 
@@ -20,12 +22,16 @@ function Clients() {
   const [deletedUser, setDeletedUser] = useState(null);
 
   useEffect(() => {
-    clients()
-  }, []);
+    if (deletedUser == null || deletedUser == true){
+      clients()
+      setDeletedUser(false);
+    }
+  }, [deletedUser]);
 
   const clients = async ()=>{
-    await getAllClients(JSON.parse(localStorage.getItem('session')).token).then((clients)=>{
-      setAllClients(clients)
+    await getAllClients(session.token).then(async(clients)=>{
+      let clientsArray = await clients.json()
+      setAllClients(clientsArray)
       setIsLoadingData(false)
     })
   }
@@ -51,36 +57,55 @@ function Clients() {
   }
   
   const handleDelete = async (item) => {
-    await deleteUser(JSON.parse(localStorage.getItem('session')).token, item.id).then((response)=>{
-
-      if(response.non_field_errors){
+    await deleteUser(session.token, item.id).then(async (response)=>{
+      console.log("Response");
+      console.log(response);
+      if(response.status == 204){
         setError(true);
-        setAlertMessage(response.non_field_errors[0]);
+        setAlertMessage("Usuario eliminado correctamente");
+        setAlertType('Success');
+        setDeletedUser(true);
+      }
+      else{
+        setError(true);
+        setAlertMessage("Error al eliminar usuario");
+        setAlertType('Error');
+      }
+      
+
+      /*
+      let json = await response.json()
+      console.log("json");
+      console.log(json);
+      if(res.non_field_errors){
+        setError(true);
+        setAlertMessage(res.non_field_errors[0]);
         setAlertType('Error');
         return;
       }
-      if(response.message){
+      if(res.message){
         setError(true);
-        setAlertMessage(response.message);
+        setAlertMessage(res.message);
         setAlertType('Success');
         return;
-      }
+      }*/
 
     })
     //setDeletedUser(true);
   }
   
   const handleResetPassword = async (item) => {
-    await resetPassword(JSON.parse(localStorage.getItem('session')).token, item.id).then((response)=>{
-      if(response.non_field_errors){
+    await resetPassword(session.token, item.id).then(async(response)=>{
+      let res = await response.json()
+      if(res.non_field_errors){
         setError(true);
-        setAlertMessage(response.non_field_errors[0]);
+        setAlertMessage(res.non_field_errors[0]);
         setAlertType('Error');
         return;
       }
-      if(response.message){
+      if(res.message){
         setError(true);
-        setAlertMessage(response.message);
+        setAlertMessage(res.message);
         setAlertType('Success');
         return;
       }

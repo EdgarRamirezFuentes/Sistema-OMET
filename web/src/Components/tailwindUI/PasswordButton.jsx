@@ -16,7 +16,7 @@ const PasswordInput = ({val}) => {
   };
 
   return (
-    <div className='mb-10 w-full flex flex-row justify-center'>
+    <div className='w-full flex flex-row'>
       <input
         className='w-1/2 my-2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600'
         type={showPassword ? 'text' : 'password'}

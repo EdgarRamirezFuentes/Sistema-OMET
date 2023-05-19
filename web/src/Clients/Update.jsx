@@ -85,9 +85,8 @@ function Update() {
     }
 
     const getClientData = async (userId)=>{
-        await getClient(session.token, userId).then((client)=>{
-            console.log("Image");
-            console.log(client.profile_image);
+        await getClient(session.token, userId).then(async(client)=>{
+            client = await client.json();
             setUser(client);
             setName(client?.name);
             setFirstLastName(client?.first_last_name);
@@ -209,7 +208,7 @@ function Update() {
                                         </div>:null}
                                     </div>
                                         <input onChange={(event) => {setRfc(event.target.value)}} className='w-full my-2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='RFC' value={rfc} type="text" id="rfc" name="rfc"/><br/><br/>
-                                        <p className='font-bold'>Número telefonico:</p>
+                                        <p className='font-bold'>Número telefónico:</p>
                                         <input onChange={(event) => {setPhone(event.target.value)}} className='w-full my-2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Número telefónico:' value={phone} type="text" id="phone" name="phone"/><br/><br/>
                                         <p className='font-bold'>Email:</p>
                                         <input onChange={(event) => {setEmail(event.target.value)}} className='w-full my-2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Email:' type="email" value={email} id="email" name="email"/><br/><br/>

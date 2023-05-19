@@ -85,22 +85,20 @@ function See() {
     }
 
     const getClientData = async (userId)=>{
-        await getClient(session.token, userId).then((client)=>{
-            console.log("Image");
-            console.log(client.profile_image);
-            setUser(client);
-            setName(client?.name);
-            setFirstLastName(client?.first_last_name);
-            setSecondLastName(client?.second_last_name);
-            setEmail(client?.email);
-            setRfc(client?.rfc);
-            setPhone(client?.phone);
+        await getClient(session.token, userId).then(async (client)=>{
+            let cliente = await client.json();
+            setUser(cliente);
+            setName(cliente?.name);
+            setFirstLastName(cliente?.first_last_name);
+            setSecondLastName(cliente?.second_last_name);
+            setEmail(cliente?.email);
+            setRfc(cliente?.rfc);
+            setPhone(cliente?.phone);
         })
     }
 
     useEffect(() => {
         if (user === null){
-            console.log(params); 
             getClientData(params.id);
         }
     },[user])
@@ -202,7 +200,7 @@ function See() {
                             <p className='font-bold'>RFC:</p>
                         </div>
                         <input disabled className=' disabled:opacity-75 w-full my-2 text-black py-2 px-4 rounded-full bg-white ' placeholder='RFC' value={rfc} type="text" id="rfc" name="rfc"/><br/><br/>
-                        <p className='font-bold'>Número telefonico:</p>
+                        <p className='font-bold'>Número telefónico:</p>
                         <input disabled className='disabled:opacity-75 w-full my-2 text-black py-2 px-4 rounded-full bg-white ' placeholder='Número telefónico:' value={phone} type="text" id="phone" name="phone"/><br/><br/>
                         <p className='font-bold'>Email:</p>
                         <input disabled className='disabled:opacity-75 w-full my-2 text-black py-2 px-4 rounded-full bg-white ' placeholder='Email:' type="email" value={email} id="email" name="email"/><br/><br/>
