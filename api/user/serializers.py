@@ -153,7 +153,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
     profile_image = Base64ImageField(required=False)
     class Meta:
         model = get_user_model()
-        fields = ('id', 'name', 'first_last_name', 'second_last_name', 'profile_image', 'is_superuser', 'is_staff')
+        fields = ('id', 'rfc', 'email', 'name', 'first_last_name',
+                  'second_last_name', 'profile_image', 'phone',
+                  'is_superuser', 'is_staff')
 
 
 class UserMinimalSerializer(serializers.ModelSerializer):
