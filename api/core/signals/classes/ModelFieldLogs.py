@@ -22,18 +22,18 @@ class ModelFieldInsertionLog:
 
     def get_json(self):
         return {
-            'name': self.name,
-            'caption': self.caption,
-            'is_active': self.is_active,
-            'is_required': self.is_required,
-            'order': self.order,
-            'data_type_id': self.data_type_id,
-            'data_type_name': self.data_type_name,
-            'project_model_id': self.project_model_id,
-            'project_model_name': self.project_model_name,
-            'project_id': self.project_id,
-            'project_name': self.project_name,
-            'customer_rfc': self.customer_rfc,
+            'name_registered': self.name,
+            'caption_registered': self.caption,
+            'is_active_registered': self.is_active,
+            'is_required_registered': self.is_required,
+            'order_registered': self.order,
+            'data_type_id_registered': self.data_type_id,
+            'data_type_name_registered': self.data_type_name,
+            'project_model_id_registered': self.project_model_id,
+            'project_model_name_registered': self.project_model_name,
+            'project_id_registered': self.project_id,
+            'project_name_registered': self.project_name,
+            'customer_rfc_registered': self.customer_rfc,
             'insertion_date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
 

@@ -46,7 +46,7 @@ services:
         - DEV=true
     ports:
       - '3001:3001'
-    command: sh -c "npm start"
+    command: sh -c "npm install --dev --silent && npm start"
     stdin_open: true
     volumes:
       - './web:/web'
