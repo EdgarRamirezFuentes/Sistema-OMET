@@ -2,7 +2,6 @@
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
-from django.forms.models import model_to_dict
 from core.tasks import (
     user_insertion_log,
     user_update_log,
@@ -28,6 +27,7 @@ def user_insertion_signal(sender, instance, created, **kwargs):
             email=instance.email,
             phone=instance.phone,
             is_superuser=instance.is_superuser,
+            is_staff=instance.is_staff,
             insertion_date=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         )
 

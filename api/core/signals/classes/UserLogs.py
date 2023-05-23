@@ -4,13 +4,14 @@ class UserInsertionLog:
     def __init__(self, name, first_last_name
                     , second_last_name, email
                     , phone, is_superuser
-                    , insertion_date):
+                    , is_staff, insertion_date):
             self.name = name
             self.first_last_name = first_last_name
             self.second_last_name = second_last_name
             self.email = email
             self.phone = phone
             self.is_superuser = is_superuser
+            self.is_staff = is_staff
             self.insertion_date = insertion_date
 
     def get_json(self):
@@ -21,6 +22,7 @@ class UserInsertionLog:
             'email_registered': self.email,
             'phone_registered': self.phone,
             'is_superuser': self.is_superuser,
+            'is_staff': self.is_staff,
             'insertion_date': self.insertion_date,
         }
 
@@ -32,6 +34,7 @@ class UserUpdateLog:
             self.previous_email = ''
             self.previous_phone = ''
             self.previous_is_superuser = None
+            self.is_staff = None
             self.updated_name = ''
             self.updated_first_last_name = ''
             self.updated_second_last_name = ''
@@ -47,6 +50,7 @@ class UserUpdateLog:
         self.previous_email = previous_data['email']
         self.previous_phone = previous_data['phone']
         self.previous_is_superuser = previous_data['is_superuser']
+        self.previous_is_staff = previous_data['is_staff']
 
     def set_updated_data(self, updated_data):
         self.updated_name = updated_data['name']
@@ -55,6 +59,7 @@ class UserUpdateLog:
         self.updated_email = updated_data['email']
         self.updated_phone = updated_data['phone']
         self.updated_is_superuser = updated_data['is_superuser']
+        self.updated_is_staff = updated_data['is_staff']
         self.updated_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     def get_json(self):
@@ -65,11 +70,13 @@ class UserUpdateLog:
             'previous_email': self.previous_email,
             'previous_phone': self.previous_phone,
             'previous_is_superuser': self.previous_is_superuser,
+            'previous_is_staff': self.previous_is_staff,
             'updated_name': self.updated_name,
             'updated_first_last_name': self.updated_first_last_name,
             'updated_second_last_name': self.updated_second_last_name,
             'updated_email': self.updated_email,
             'updated_phone': self.updated_phone,
             'updated_is_superuser': self.updated_is_superuser,
+            'updated_is_staff': self.updated_is_staff,
             'updated_date': self.updated_date,
         }

@@ -3,14 +3,14 @@ import pymongo
 
 
 @shared_task
-def user_insertion_log(user):
-    """Register the user registration in the logs database"""
+def customer_insertion_log(customer):
+    """Register the customer registration in the logs database"""
     try:
         MONGO_URI = f'mongodb://mongodb:27017'
         client = pymongo.MongoClient(MONGO_URI)
         db = client['sistemaOmetLogs']
-        collection = db['userInsertionLogs']
-        collection.insert_one(user)
+        collection = db['customerInsertionLogs']
+        collection.insert_one(customer)
         client.close()
     except Exception as e:
         return False
@@ -18,14 +18,14 @@ def user_insertion_log(user):
     return True
 
 @shared_task
-def user_update_log(updated_user):
-    """Register the user update in the logs database"""
+def customer_update_log(updated_customer):
+    """Register the customer update in the logs database"""
     try:
         MONGO_URI = f'mongodb://mongodb:27017'
         client = pymongo.MongoClient(MONGO_URI)
         db = client['sistemaOmetLogs']
-        collection = db['userUpdateLogs']
-        collection.insert_one(updated_user)
+        collection = db['customerUpdateLogs']
+        collection.insert_one(updated_customer)
         client.close()
     except Exception as e:
         return False
