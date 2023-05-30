@@ -11,6 +11,7 @@ from project.serializers import (
     ProjectDataSerializer,
     MaintenanceSerializer,
     MaintenanceMinimalSerializer,
+    ProjectMaintainersSerializer,
     ProjectModelSerializer,
     ProjectModelMinimalSerializer,
     ProjectModelDataSerializer,
@@ -132,8 +133,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
             # Getting the maintainers of the project only if the user is admin
             if request.user.is_superuser:
-                maintainers = instance.maintainers.filter(is_active=True)
-                maintainers_serializer = UserMinimalSerializer(maintainers, many=True)
+                maintainers = Maintenance.objects.filter(project=instance)
+                maintainers_serializer = ProjectMaintainersSerializer(maintainers, many=True)
                 response_data['maintainers'] = maintainers_serializer.data
 
             return response.Response(response_data, status=status.HTTP_200_OK)
