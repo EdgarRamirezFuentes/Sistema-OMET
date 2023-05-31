@@ -25,9 +25,8 @@ function Login() {
       return;
     }
 
-    await loginUser(username, password).then((response) => {
-      console.log("Response");
-      console.log(response);
+    await loginUser(username, password).then(async (res) => {
+      let response = await res.json()
       if(response.non_field_errors){
         setError(true);
         setAlertMessage(response.non_field_errors[0]);
@@ -38,8 +37,10 @@ function Login() {
         setError(false);
         setAlertMessage('Bienvenido');
         setAlertType('Success');
-        localStorage.setItem('session', JSON.stringify(response));
-        window.location.href = '/home';
+        setTimeout(() => {
+          localStorage.setItem('session', JSON.stringify(response));
+          window.location.href = '/home';
+        },2000)
       }
       //localStorage.setItem('session', JSON.stringify(response));
     });

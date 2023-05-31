@@ -14,7 +14,17 @@ import ChangePassword from "./Profile/ChangePassword";
 import CreateProject from "./Projects/Create";
 import CreateCustomer from "./Customers/Create";
 import Customers from "./Customers/Customers";
+import UpdateCustomer from "./Customers/Update";
+import SeeCustomer from "./Customers/See";
+
 import Projects from "./Projects/Projects";
+import UpdateProject from "./Projects/Update";
+import UpdateMaintainersProject from "./Projects/Maintainers";
+import SeeProject from "./Projects/See";
+
+import Models from "./Projects/Model/Models";
+import CreateProjectModel from "./Projects/Model/Create";
+import UpdateProjectModel from "./Projects/Model/Update";
 function App() {
 
   return (
@@ -35,9 +45,18 @@ function App() {
 
               <Route path="/projects/create" element={<CreateProject />} />
               <Route path="/projects/get" element={<Projects />} />
+              <Route path="/projects/update/:id" element={<UpdateProject />} />
+              <Route path="/projects/view/:id" element={<SeeProject />} />
+              <Route path="/projects/update/maintainer/:id" element={<UpdateMaintainersProject />} />
+
+              <Route path="/projects/model/:id" element={<Models />} />
+              <Route path="/projects/model/create/:id" element={<CreateProjectModel />} />
+              <Route path="/projects/model/update/:id" element={<UpdateProjectModel />} />
 
               <Route path="/customers/create" element={<CreateCustomer />} />
               <Route path="/customers/get" element={<Customers />} />
+              <Route path="/customers/update/:id" element={<UpdateCustomer />} />
+              <Route path="/customers/view/:id" element={<SeeCustomer />} />
 
             </Routes>
         </div>

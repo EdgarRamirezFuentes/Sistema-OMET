@@ -1,0 +1,202 @@
+import '../App.css'
+import Timer from '../Components/Timer/Timer'
+import SideBar from '../Components/Sidebar/Sidebar'
+import React, { useState, useEffect } from 'react';
+import Alert from '../Components/Alert/Alert'
+import { useNavigate } from 'react-router-dom';
+import { createProjectMaintenance, getProject, deleteProjectMaintenance } from '../api/controller/ProjectsController'
+import { getCustomers } from '../api/controller/ClientsController';
+import { useParams } from 'react-router-dom';
+import Table from '../Components/tailwindUI/Table'
+import { TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
+function UpdateMaintainersProject() {
+    const params = useParams();
+    const history = useNavigate();
+    const session = JSON.parse(localStorage.getItem('session'))
+    const user = session.user;
+
+    const [error, setError] = useState(null);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('Error');
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [selectedUser, setSelectedUser] = useState('');
+    const [allClients, setAllClients] = useState([])
+    const [maintainers, setMaintainers] = useState([])
+    const [isLoadingData, setIsLoadingData] = useState(true)
+
+    const handleChange = (event) => {
+      setSelectedUser(event.target.value);
+    };
+
+    const tableColumns = [
+      { heading: 'Id', value: 'id',align: 'center' },
+      { heading: 'Nombre', value: 'name' , main: true},
+    ];
+
+    const handleView = item => {
+      history(`/clients/view/${item.id}`,{
+              client: item,
+          }
+      )
+    }
+    const handleUpdate = item => {
+      history(`/projects/update/${item.id}`,{
+              client: item,
+          }
+      )
+    }
+    
+    const handleDelete = async (item) => {
+      console.log(item);
+      await deleteProjectMaintenance(item.id, session.token).then(async (response) => {
+        let res = await response.json();
+        if (response.status === 200){
+          setAlertType('Success');
+          setAlertMessage('Maintainer eliminado correctamente.')
+          setError(true);
+          setTimeout(() => {
+            history('/projects/get')
+          },1000);
+          return;
+        }
+      })
+    }
+
+    const columnActions = [
+      {
+          id: 1,
+          name: 'Ver cliente',
+          type: 'primary',
+          icon: <EyeIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
+          action: handleView,
+      },
+      {
+          id: 2,
+          name: 'Eliminar cliente',
+          type: 'primary',
+          icon: <TrashIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
+          action: handleDelete,
+      }
+    ];
+
+    useEffect(() => {
+      getActiveCustomers();
+      getProjectData();
+    }, []);
+
+    const onCloseHandler = () => {
+        setError(null)
+        setAlertType('Error');
+        setAlertMessage('')
+    }
+
+    
+
+    const buttonHandler = async () => {
+      if(name === '' || description === '' || selectedUser === ''){
+          setAlertType('Warning');
+          setAlertMessage('Ingresa los datos.')
+          setError(true);
+          return;
+      }
+
+      let data = {
+        project: params.id,
+        user: selectedUser,
+      }
+
+      await createProjectMaintenance(data, session.token).then(async (response) => {
+        let res = await response.json();
+        if (response.status === 201){
+          setAlertType('Success');
+          setAlertMessage('Maintainer asignado creado correctamente.')
+          setError(true);
+          setTimeout(() => {
+            history('/projects/get')
+          },1000);
+          return;
+        }
+      })
+    }
+
+    const getActiveCustomers = async () => {
+      await getCustomers(session.token).then(async(clients)=>{
+         let clientsArray = await clients.json();
+         setAllClients(clientsArray);
+       })
+    }
+
+    const getProjectData = async () => {
+        await getProject(session.token, params.id).then(async(response)=>{
+              let projectArray = await response.json()
+              let project  = projectArray.project;
+              let mainteiner = projectArray.maintainers;
+              setMaintainers(mainteiner);
+              setIsLoadingData(false)
+              setName(project.name);
+              setDescription(project.description);
+              setSelectedUser(project.customer.id);
+         })
+    }
+  
+    return (
+        <div className="w-full h-full bg-slate-100">
+            <div className='flex flex-row h-screen'>
+                <SideBar/>
+                <div className='w-full'>
+                    <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
+                        <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
+                        <p className='w-full font-sans text-xl text-black'>/ Profile</p>
+                        <div className='w-full mr-5'>
+                            <Timer/>
+                        </div>
+                    </div>
+                    <div className='mt-3 ml-5 flex justify-center'>
+                        <p className='text-3xl font-bold'>Maintainers</p>
+                    </div>
+                    <div className='flex flex-col justify-between'>
+                    <div className='mt-5 p-5 flex flex-col items-center m-auto w-1/2 rounded-2xl bg-white'>
+
+                        <div className="w-full overflow-hidden">
+                            <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
+                        </div>
+
+                        <div className='mt-5 w-full items-center flex flex-row'>
+
+                        <div className='w-full flex flex-col items-center'>
+
+                            <div className='w-full flex flex-col justify-between'>
+
+                              <p className='font-bold'>Asignados:</p>
+                              <div className='mt-5'>
+                                  <Table title='Clientes' data={ maintainers } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
+                              </div>
+                              {allClients.length >0 ?<div className='mt-10 mb-10 w-full flex flex-row justify-center'>
+                                <p className='font-bold mr-10'>Asignar:</p>
+                                <div className="mt-1 relative rounded-md shadow-sm">
+                                  <select className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'
+                                  value={selectedUser} onChange={handleChange}>
+                                    <option value="">Selecciona un usuario</option>
+                                    {allClients.map((option, i) => (
+                                        i in maintainers ?  null:<option key={i} value={option.id}>{option.name}</option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>:null}
+                          </div>
+
+                        </div>
+                        </div>
+                        {allClients.length >0 ?<div className='mt-10 w-1/4'>
+                        <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Asignar"/><br/><br/>
+                        </div>:null}
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default UpdateMaintainersProject

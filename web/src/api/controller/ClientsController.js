@@ -31,7 +31,7 @@ export const getClient = async (token, userId) => {
 }
 
 export const updateClient = async (formData, token, userId) => {
-    return await clientsAction.updateClient(formData, token, userId).then((response) => {
+    return await clientsAction.updateClient(formData, token, userId).then(async (response) => {
         return response;
     });
 }

@@ -4,10 +4,13 @@ import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
-import {createProject} from '../api/controller/ProjectsController'
-import { getCustomers } from '../api/controller/CustomersController';
-
-function CreateProject() {
+import { createProjectMaintenance, getProject } from '../api/controller/ProjectsController'
+import { getCustomers } from '../api/controller/ClientsController';
+import { useParams } from 'react-router-dom';
+import Table from '../Components/tailwindUI/Table'
+import { TrashIcon, ClipboardIcon, EyeIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+function SeeProject() {
+    const params = useParams();
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'))
     const user = session.user;
@@ -19,14 +22,41 @@ function CreateProject() {
     const [description, setDescription] = useState('');
     const [selectedUser, setSelectedUser] = useState('');
     const [allClients, setAllClients] = useState([])
+    const [isLoadingData, setIsLoadingData] = useState(true)
+    const [allModels, setAllModels] = useState([])
+
     const handleChange = (event) => {
       setSelectedUser(event.target.value);
-      console.log("===selectedUser===");
-      console.log(event.target.value);
     };
+
+    const tableColumns = [
+      { heading: 'Id', value: 'id',align: 'center' },
+      { heading: 'Nombre', value: 'name' , main: true},
+    ];
+
+    const handleView = item => {
+      /*history(`/clients/view/${item.id}`,{
+              client: item,
+          }
+      )*/
+    }
+    const handleUpdate = item => {
+      history(`/projects/update/${item.id}`,{
+              client: item,
+          }
+      )
+    }
+    
+    const handleDelete = async (item) => {
+      //setDeletedUser(true);
+    }
+
+    const columnActions = [
+    ];
 
     useEffect(() => {
       getActiveCustomers();
+      getProjectData();
     }, []);
 
     const onCloseHandler = () => {
@@ -35,21 +65,22 @@ function CreateProject() {
         setAlertMessage('')
     }
 
+    
+
     const buttonHandler = async () => {
       if(name === '' || description === '' || selectedUser === ''){
           setAlertType('Warning');
-          setAlertMessage('Ingresa tus datos.')
+          setAlertMessage('Ingresa los datos.')
           setError(true);
           return;
       }
 
       let data = {
-        name: name,
-        description: description,
-        customer: selectedUser
+        project: params.id,
+        user: selectedUser,
       }
 
-      await createProject(data, session.token).then(async (response) => {
+      await createProjectMaintenance(data, session.token).then(async (response) => {
         let res = await response.json();
         if (response.status === 201){
           setAlertType('Success');
@@ -69,6 +100,20 @@ function CreateProject() {
          setAllClients(clientsArray)
        })
     }
+
+    const getProjectData = async () => {
+        await getProject(session.token, params.id).then(async(response)=>{
+              let projectArray = await response.json()
+              let project  = projectArray.project;
+              let mainteiner = projectArray.maintainers;
+              setAllClients(mainteiner);
+              setAllModels(projectArray.project_models)
+              setIsLoadingData(false)
+              setName(project.name);
+              setDescription(project.description);
+              setSelectedUser(project.customer.id);
+         })
+    }
   
     return (
         <div className="w-full h-full bg-slate-100">
@@ -83,7 +128,7 @@ function CreateProject() {
                         </div>
                     </div>
                     <div className='mt-3 ml-5 flex justify-center'>
-                        <p className='text-3xl font-bold'>Crear proyecto</p>
+                        <p className='text-3xl font-bold'>Información del proyecto</p>
                     </div>
                     <div className='flex flex-col justify-between'>
                     <div className='mt-5 p-5 flex flex-col items-center m-auto w-1/2 rounded-2xl bg-white'>
@@ -99,32 +144,29 @@ function CreateProject() {
                             <div className='w-full flex flex-col justify-between'>
                               <p className='font-bold'>Nombre:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input onChange={(event) => {setName(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="project_name" name="project_name"/><br/><br/>
+                                <input disabled value ={name} onChange={(event) => {setName(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="project_name" name="project_name"/><br/><br/>
                               </div>
                               
                               <p className='font-bold'>Descripción:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="description" name="description"/><br/><br/>
+                                <input disabled value={description} onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="description" name="description"/><br/><br/>
                               </div>
 
-                              <p className='font-bold'>Customer:</p>
-                              <div className='mb-10 w-full flex flex-row justify-center'>
-                              <div className="mt-1 relative rounded-md shadow-sm">
-                                <select className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'
-                                 value={selectedUser} onChange={handleChange}>
-                                  <option value="">Selecciona un usuario</option>
-                                  {allClients.map((option, i) => (
-                                      <option key={i} value={option.id}>{option.name}</option>
-                                  ))}
-                                </select>
+                              <p className='font-bold'>Maintainers:</p>
+                              <div className='mt-5'>
+                                  <Table title='Clientes' data={ allClients } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
                               </div>
-                            </div>
+                              
+                              <p className='mt-10 font-bold'>Modelos:</p>
+                              <div className='mt-5'>
+                                  <Table title='Clientes' data={ allModels } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
+                              </div>
+                              
                           </div>
 
                         </div>
                         </div>
                         <div className='w-1/4'>
-                        <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Crear"/><br/><br/>
                         </div>
                     </div>
                     </div>
@@ -134,4 +176,4 @@ function CreateProject() {
     )
 }
 
-export default CreateProject
+export default SeeProject

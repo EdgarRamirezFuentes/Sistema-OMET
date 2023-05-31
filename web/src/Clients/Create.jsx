@@ -90,7 +90,7 @@ function Clients() {
     await createClient(userData,session.token).then(async(res)=>{
       let json = await res.json()
       console.log("JSON");
-      console.log(json);
+      console.log(json.password);
 
       if (res.status === 201){
         setAlertMessage('Usuario registrado con éxito.')
@@ -102,7 +102,8 @@ function Clients() {
         return;
       }
       if (res.status === 400){
-        setAlertMessage('Ocurrió un error.')
+        const keys = Object.keys(json);
+        setAlertMessage(json[keys[0]][0])
         setError(true);
         setAlertType('Error');
       }

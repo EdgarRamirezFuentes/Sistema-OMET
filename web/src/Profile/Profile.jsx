@@ -34,7 +34,7 @@ function Profile() {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState('Error');
 
-  const [userData, setUserData] = useState({})
+  const [userData, setUserData] = useState(null)
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -90,7 +90,7 @@ function Profile() {
   }
 
   useEffect(() => {
-    if (userData === {}){
+    if (userData === null){
       getClientData();
     }
 
@@ -125,31 +125,28 @@ function Profile() {
       phone: phone,
       profile_image: profileImage,
     }
-    setAlertMessage('Enviar a servidor')
-    setError(true);
-    setAlertType('Success');
 
-    response = await updateClient(userData, session.token, user.id).then((response)=>{
-      if(response.non_field_errors){
+    await updateClient(userData, session.token, user.id).then(async (response)=>{
+      let res = await response.json();
+      if(res.non_field_errors){
         setError(true);
-        setAlertMessage(response.non_field_errors[0]);
+        setAlertMessage(res.non_field_errors[0]);
         setAlertType('Error');
         return;
       }
-      if(response.message){
+      if(res.message){
         setError(true);
-        setAlertMessage(response.message);
+        setAlertMessage(res.message);
         setAlertType('Error');
         return;
       }
-      if(response.id){
+      if(res.id){
         setError(true);
         setAlertMessage('Datos actualizados con éxito.');
         setAlertType('Success');
         return;
       }
     });
-
 
   }
   

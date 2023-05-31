@@ -79,7 +79,6 @@ export const updateClient = async (formData, token, userId) => {
     const objApi = apiClient('user');
     try {
         var response = await objApi.patch(userId, formData, token)
-        console.log("response", response);
         return response;
     } catch (e) {
         console.log("Error ===>", e)

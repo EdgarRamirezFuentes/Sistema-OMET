@@ -1,39 +1,42 @@
-import '../App.css'
-import Timer from '../Components/Timer/Timer'
-import SideBar from '../Components/Sidebar/Sidebar'
-import Table from '../Components/tailwindUI/Table'
-import { getAllProjects, deleteProject } from '../api/controller/ProjectsController'
+import '../../App.css'
+import Timer from '../../Components/Timer/Timer'
+import SideBar from '../../Components/Sidebar/Sidebar'
+import Table from '../../Components/tailwindUI/Table'
+import { deleteProject, getProjectModels, deleteProjectModel } from '../../api/controller/ProjectsController'
 import { useEffect, useState } from 'react'
-import { TrashIcon, ClipboardIcon, EyeIcon, WrenchScrewdriverIcon, CircleStackIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
-import Alert from '../Components/Alert/Alert'
+import Alert from '../../Components/Alert/Alert'
+import { useParams, useLocation } from 'react-router-dom'
 
-function Projects() {
-  const history = useNavigate();
-  const session = JSON.parse(localStorage.getItem('session'));
-  const [allClients, setAllClients] = useState([])
-  const [isLoadingData, setIsLoadingData] = useState(true)
+function Models() {
+    const params = useParams();
+    const location = useLocation();
+    const history = useNavigate();
+    const session = JSON.parse(localStorage.getItem('session'));
+    const [allModels, setAllModels] = useState([])
+    const [isLoadingData, setIsLoadingData] = useState(true)
 
-  const [error, setError] = useState(null);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertType, setAlertType] = useState('Error');
-  const [deletedProject, setDeletedProject] = useState(null);
+    const [error, setError] = useState(null);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('Error');
+    const [deletedProject, setDeletedProject] = useState(null);
 
   useEffect(() => {
     if (deletedProject == null || deletedProject){
-      projects()
+      getModels()
       setDeletedProject(false);
     }
   }, [deletedProject]);
 
-  const projects = async ()=>{
-    await getAllProjects(session.token).then(async (projects)=>{
-      let projectsList = await projects.json()
-      if (projectsList.length > 0){
-        setAllClients(projectsList)
+  const getModels = async ()=>{
+    await getProjectModels(session.token, params.id).then(async (models)=>{
+      let modelList = await models.json()
+      if (modelList.length > 0){
+        setAllModels(modelList)
         setIsLoadingData(false)
       }else{
-        setAllClients([])
+        setAllModels([])
         setIsLoadingData(true)
       }
     })
@@ -46,31 +49,35 @@ function Projects() {
   ];
 
   const handleView = item => {
-    history(`/projects/view/${item.id}`,{
-            client: item,
+    history(`/projects/model/view/${item.id}`,{
+            item: item,
+            model: params.id
         }
     )
   }
   const handleUpdate = item => {
-    history(`/projects/update/${item.id}`,{
-            client: item,
+    history(`/projects/model/update/${item.id}`,{
+                state: {
+                    item: item,
+                    model: params.id
+                }
         }
     )
   }
   
   const handleUpdateMaintainer = item => {
     history(`/projects/update/maintainer/${item.id}`,{
-            client: item,
+            item: item,
         }
     )
   }
   
   const handleDelete = async (item) => {
-    await deleteProject(session.token, item.id).then((response)=>{
+    await deleteProjectModel(session.token, item.id).then((response)=>{
 
       if(response.status === 204){
         setAlertType('Success');
-        setAlertMessage('Proyecto eliminado correctamente.')
+        setAlertMessage('Modelo eliminado correctamente.')
         setError(true);
         setDeletedProject(true);
      }
@@ -78,7 +85,7 @@ function Projects() {
   }
 
   const handleProjectModel = item => {
-    history(`/projects/model/${item.id}`,{
+    history(`/projects/create/model/${item.id}`,{
             client: item,
         }
     )
@@ -87,35 +94,28 @@ function Projects() {
   const columnActions = [
     {
         id: 1,
-        name: 'Ver cliente',
+        name: 'Ver modelo',
         type: 'primary',
         icon: <EyeIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleView,
     },
     {
         id: 2,
-        name: 'Actualizar projecto',
+        name: 'Actualizar modelo',
         type: 'primary',
         icon: <ClipboardIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleUpdate,
     },
     {
-        id: 2,
-        name: 'Actualizar maintainers',
-        type: 'primary',
-        icon: <WrenchScrewdriverIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
-        action: handleUpdateMaintainer,
-    },
-    {
-        id: 4,
+        id: 3,
         name: 'Project Model',
         type: 'primary',
-        icon: <CircleStackIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
+        icon: <AdjustmentsHorizontalIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleProjectModel,
     },
     {
-        id: 3,
-        name: 'Eliminar cliente',
+        id: 4,
+        name: 'Eliminar modelo',
         type: 'primary',
         icon: <TrashIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleDelete,
@@ -142,13 +142,14 @@ function Projects() {
           </div>
           <div>
             <div className='mt-3 ml-5 flex flex-row justify-between items-center '>
-                <p className='text-3xl font-bold'>Proyectos</p>
+                <p className='text-3xl font-bold'>Modelos</p>
+                <button onClick={()=>{history('/projects/model/create/'+params.id)}} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear Modelo</button>
             </div>
             <div className="mt-5 w-full overflow-hidden">
               <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
             </div>
             <div className='mt-5'>
-              <Table title='Proyectos' data={ allClients } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
+              <Table title='Clientes' data={ allModels } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
             </div>
           </div>
         </div>
@@ -157,4 +158,4 @@ function Projects() {
   )
 }
 
-export default Projects
+export default Models

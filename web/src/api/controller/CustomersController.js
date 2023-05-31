@@ -12,6 +12,18 @@ export const getCustomers = async (token) => {
     })
 }
 
+export const getCustomer = async (token, customerId) => {
+    return await customersActions.getCustomer(token, customerId).then((response) => {
+        return response;
+    })
+}
+
+export const updateCustomer = async (formData, token, customerId) => {
+    return await customersActions.updateCustomer(formData, token, customerId).then(async (response) => {
+        return response;
+    })
+}
+
 export const deleteCustomer = async (token, customerId) => {
     return await customersActions.deleteCustomer(token, customerId).then((response) => {
         return response;

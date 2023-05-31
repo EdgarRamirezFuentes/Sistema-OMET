@@ -12,8 +12,64 @@ export const getAllProjects = async (token) => {
     })  
 }
 
+export const getProject = async (token, projectId) => {
+    return await projectsAction.getProject(token, projectId).then((response) => {
+        return response;
+    })
+}
+
+export const updateProject = async (projectId, formData, token) => {
+    return await projectsAction.updateProject(projectId, formData, token).then((response) => {
+        return response;
+    })
+}
+
 export const deleteProject = async (token, projectId) => {
     return await projectsAction.deleteProject(token, projectId).then((response) => {
+        return response;
+    })
+}
+
+export const createProjectMaintenance = async (formData, token) => {
+    return await projectsAction.createProjectMaintenance(formData, token).then((response) => {
+        return response;
+    })
+}
+
+export const deleteProjectMaintenance = async (maintenanceId, token) => {
+    return await projectsAction.deleteProjectMaintenance(token, maintenanceId).then((response) => {
+        return response;
+    })
+}
+
+
+export const getProjectModels = async (token, projectId) => {
+    return await projectsAction.getProjectModels(token, projectId).then((response) => {
+        return response;
+    })
+}
+
+
+export const createProjectModel = async (formData, token) => {
+    return await projectsAction.createProjectModel(formData, token).then((response) => {
+        return response;
+    })
+}
+
+export const getProjectModel = async (token, modelId) => {
+    return await projectsAction.getProjectModel(token, modelId).then((response) => {
+        return response;
+    })
+}
+
+export const updateProjectModel = async (modelId, formData, token) => {
+    return await projectsAction.updateProjectModel(modelId, formData, token).then((response) => {
+        return response;
+    })
+}
+
+export const deleteProjectModel = async (token, modelId) => {
+    return await projectsAction.deleteProjectModel(token, modelId).then((response) => {
         return response;
     })
 }

@@ -124,25 +124,25 @@ function See() {
         setError(true);
         setAlertType('Success');
 
-        response = await updateClient(userData, session.token, user.id).then((response)=>{
-        if(response.non_field_errors){
-            setError(true);
-            setAlertMessage(response.non_field_errors[0]);
-            setAlertType('Error');
-            return;
-        }
-        if(response.message){
-            setError(true);
-            setAlertMessage(response.message);
-            setAlertType('Error');
-            return;
-        }
-        if(response.id){
-            setError(true);
-            setAlertMessage('Datos actualizados con éxito.');
-            setAlertType('Success');
-            return;
-        }
+        await updateClient(userData, session.token, user.id).then((response)=>{
+            if(response.non_field_errors){
+                setError(true);
+                setAlertMessage(response.non_field_errors[0]);
+                setAlertType('Error');
+                return;
+            }
+            if(response.message){
+                setError(true);
+                setAlertMessage(response.message);
+                setAlertType('Error');
+                return;
+            }
+            if(response.id){
+                setError(true);
+                setAlertMessage('Datos actualizados con éxito.');
+                setAlertType('Success');
+                return;
+            }
         });
 
 

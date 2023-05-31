@@ -125,31 +125,41 @@ function Update() {
         return;
         }
         let userData = {
-        rfc: rfc
+            nombre: name,
+            apellido_paterno: first_last_name,
+            apellido_materno: second_last_name,
+            email: email,
+            telefono: phone,
+            imagen: profileImage
         }
-        setAlertMessage('Enviar a servidor')
-        setError(true);
-        setAlertType('Success');
 
-        response = await updateClient(userData, session.token, user.id).then((response)=>{
-        if(response.non_field_errors){
-            setError(true);
-            setAlertMessage(response.non_field_errors[0]);
-            setAlertType('Error');
-            return;
-        }
-        if(response.message){
-            setError(true);
-            setAlertMessage(response.message);
-            setAlertType('Error');
-            return;
-        }
-        if(response.id){
+        await updateClient(userData, session.token, user.id).then(async (response)=>{
+            let res = await response.json();
+            console.log("====RESPONSE====");
+            console.log(res);
+            if(res.non_field_errors){
+                setError(true);
+                setAlertMessage(res.non_field_errors[0]);
+                setAlertType('Error');
+                return;
+            }
+            if(res.message){
+                setError(true);
+                setAlertMessage(res.message);
+                setAlertType('Error');
+                return;
+            }
+
             setError(true);
             setAlertMessage('Datos actualizados con éxito.');
             setAlertType('Success');
-            return;
-        }
+            /*localStorage.setItem('session', JSON.stringify(res));
+
+            const session = JSON.parse(localStorage.getItem('session'))
+            res.id = user.id;
+            session.user = res;
+
+            localStorage.setItem('session', JSON.stringify(session));*/
         });
 
 

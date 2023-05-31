@@ -20,6 +20,26 @@ export const getAll = async (token) => {
     }
 }
 
+export const getCustomer = async (token, customerId) => {
+    const objApi = apiClient('customer/'+customerId+'/');
+    try {
+        var response = await objApi.get(undefined, token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+}
+
+export const updateCustomer = async (formData, token, customerId) => {
+    const objApi = apiClient('customer');
+    try {
+        var response = await objApi.patch(customerId, formData, token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+}
+
 export const deleteCustomer = async (token, customerId) => {
 
     const objApi = apiClient('customer');

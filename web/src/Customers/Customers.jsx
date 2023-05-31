@@ -42,13 +42,13 @@ function Customers() {
   ];
 
   const handleView = item => {
-    history(`/clients/view/${item.id}`,{
+    history(`/customers/view/${item.id}`,{
             client: item,
         }
     )
   }
   const handleUpdate = item => {
-    history(`/clients/update/${item.id}`,{
+    history(`/customers/update/${item.id}`,{
             client: item,
         }
     )
@@ -56,8 +56,6 @@ function Customers() {
   
   const handleDelete = async (item) => {
     await deleteCustomer(session.token, item.id).then(async (response)=>{
-      console.log("Response");
-      console.log(response);
       if(response.status == 204){
         setError(true);
         setAlertMessage("Customer eliminado correctamente");
@@ -69,27 +67,7 @@ function Customers() {
         setAlertMessage("Error al eliminar customer");
         setAlertType('Error');
       }
-      
-
-      /*
-      let json = await response.json()
-      console.log("json");
-      console.log(json);
-      if(res.non_field_errors){
-        setError(true);
-        setAlertMessage(res.non_field_errors[0]);
-        setAlertType('Error');
-        return;
-      }
-      if(res.message){
-        setError(true);
-        setAlertMessage(res.message);
-        setAlertType('Success');
-        return;
-      }*/
-
     })
-    //setDeletedUser(true);
   }
 
   const columnActions = [
