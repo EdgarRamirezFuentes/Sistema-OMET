@@ -40,7 +40,8 @@ class ConfigFieldsSerializer(serializers.ModelSerializer):
     def validate_name(self, value):
         """Validate name"""
         if not validate_name(value):
-            raise serializers.ValidationError('Invalid name')
+            raise serializers.ValidationError('El campo de configuracion debe comenzar y terminar con una letra,' +
+                  ' y solo puede contener letras, guiones medios y espacios.')
 
         return format_name(value)
 

@@ -14,25 +14,22 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     def validate_rfc(self, rfc):
         if not rfc:
-           raise serializers.ValidationError('RFC is required.')
+           raise serializers.ValidationError('RFC es requerido.')
 
         if not validate_rfc(rfc):
-            raise serializers.ValidationError('Invalid RFC.')
+            raise serializers.ValidationError('RFC no contiene una estructura válida.')
 
         return format_data(rfc)
 
     def validate_phone(self, phone):
         if not phone:
-           raise serializers.ValidationError('Phone is required.')
+           raise serializers.ValidationError('Número telefónico es requerido.')
 
         if not validate_phone(phone):
-            raise serializers.ValidationError('Invalid phone.')
+            raise serializers.ValidationError('El número telefónico no cumple con el formato establecido.\n' +
+                  'Ejemplo: +521234567890 o 1234567890.')
 
         return format_data(phone)
-
-
-
-
 
 
 class CustomerMinimalSerializer(serializers.ModelSerializer):

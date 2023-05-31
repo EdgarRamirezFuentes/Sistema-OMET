@@ -157,7 +157,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         user.save()
 
         return response.Response({
-            "message": "Password changed successfully.",
+            "message": "Contraseña actualizada correctamente.",
             },
             status=status.HTTP_200_OK)
 
@@ -182,6 +182,6 @@ class ResetPasswordView(views.APIView):
         send_reset_password_email.delay(user.name, user.first_last_name, user.email, new_password)
 
         return response.Response({
-            "message": "Password reset successfully.",
+            "message": "Contraseña reestablecida correctamente.",
             },
             status=status.HTTP_200_OK)

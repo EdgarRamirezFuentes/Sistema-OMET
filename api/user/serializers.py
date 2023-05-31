@@ -39,7 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
         """
         if not validate_name(name):
             raise serializers.ValidationError(
-                _('Name must contain only letters.')
+                _('El nombre solo debe contener letras y espacios.')
             )
         return format_data(name)
 
@@ -54,7 +54,7 @@ class UserSerializer(serializers.ModelSerializer):
         """
         if not validate_name(first_last_name):
             raise serializers.ValidationError(
-                _('First last name must contain only letters.')
+                _('El apellido paterno solo debe contener letras y espacios.')
             )
         return format_data(first_last_name)
 
@@ -69,7 +69,7 @@ class UserSerializer(serializers.ModelSerializer):
         """
         if not validate_name(second_last_name):
             raise serializers.ValidationError(
-                _('Second last name must contain only letters.')
+                _('El apellido materno solo debe contener letras y espacios.')
             )
         return format_data(second_last_name)
 
@@ -84,19 +84,19 @@ class UserSerializer(serializers.ModelSerializer):
         """
         if not rfc:
             raise serializers.ValidationError(
-                _('RFC is required.')
+                _('RFC es requerido.')
             )
 
         if not validate_rfc(rfc):
             raise serializers.ValidationError(
-                _('RFC not valid.')
+                _('RFC no contiene una estructura válida.')
             )
 
         rfc = format_data(rfc)
 
         if get_user_model().objects.filter(rfc=rfc).exists():
             raise serializers.ValidationError(
-                _('RFC already exists.')
+                _('RFC ya registrado.')
             )
 
         return rfc
@@ -112,8 +112,9 @@ class UserSerializer(serializers.ModelSerializer):
         """
         if not validate_password(password):
             raise serializers.ValidationError(
-                _('Password must be at least 8 characters long and contain at least one number' + \
-                    'one uppercase letter,and one lowercase letter, and one special character(@$_-!%*?&).')
+                _('La contraseña debe de tener una longitud de por lo menos 8 caracteres, ' +
+                   'debe contener por lo menos un número, una letra mayúscula, una letra minúscula ' +
+                   'y un caracter especial. (@$_-!%*?&).')
             )
 
         return password
@@ -127,9 +128,13 @@ class UserSerializer(serializers.ModelSerializer):
         Returns:
             str: Formatted phone number.
         """
+        if not phone:
+           raise serializers.ValidationError('Número telefónico es requerido.')
+
         if not validate_phone(phone):
             raise serializers.ValidationError(
-                _('Phone number not valid.')
+                _('El número telefónico no cumple con el formato establecido.\n' +
+                  'Ejemplo: +521234567890 o 1234567890.')
             )
         return format_data(phone)
 
@@ -179,7 +184,7 @@ class UserLoginSerializer(serializers.Serializer):
         if user and user.is_staff:
             return user
 
-        msg = _('Unable to authenticate with provided credentials')
+        msg = _('Las credenciales que se ingresarón no son válidas.')
         raise serializers.ValidationError(msg, code='authorization')
 
 
@@ -205,11 +210,11 @@ class UserChangePasswordSerializer(serializers.Serializer):
         user = self.context['request'].user
 
         if not user.check_password(data.get('old_password')):
-            msg = _('Current password is incorrect')
+            msg = _('La contraseña actual no es correcta.')
             raise serializers.ValidationError(msg)
 
         if data.get('new_password') != data.get('confirm_password'):
-            msg = _('Passwords do not match')
+            msg = _('Las contraseñas no coinciden.')
             raise serializers.ValidationError(msg)
 
         validate_password(data.get('new_password'))
@@ -226,7 +231,7 @@ class UserResetPasswordSerializer(serializers.Serializer):
         try:
             user = get_user_model().objects.get(pk=data.get('id'))
         except ObjectDoesNotExist:
-            msg = _('User does not exist')
+            msg = _('El usuario no existe.')
             raise serializers.ValidationError(msg)
 
         return user

@@ -83,7 +83,8 @@ class ProjectModelSerializer(serializers.ModelSerializer):
 
         if not is_valid_name:
             raise serializers.ValidationError(
-                _('The model name does not fulfill the requirements.')
+                _('El nombre del modelo debe comenzar y terminar con una letra,' +
+                  ' y solo puede contener letras, guiones medios y espacios.')
             )
 
         return format_name(name)
@@ -119,7 +120,8 @@ class ModelFieldSerializer(serializers.ModelSerializer):
 
         if not is_valid_name:
             raise serializers.ValidationError(
-                _('The field name does not fulfill the requirements.')
+                _('El nombre del campo de un modelo debe comenzar y terminar con una letra,' +
+                  ' y solo puede contener letras, guiones medios y espacios.')
             )
 
         return format_name(name)
