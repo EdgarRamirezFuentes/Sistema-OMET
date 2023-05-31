@@ -27,7 +27,7 @@ function SideBar({ user }) {
         },
         {
             id: 2,
-            name: 'Clientes',
+            name: 'Usuarios',
             icon: UserGroupIcon,
             current: true,
             paths: ['/clients/create', '/clients/get'],
@@ -59,6 +59,18 @@ function SideBar({ user }) {
             children: [
                 { id: 1, name: 'Crear', current: true, route: '/customers/create', paths: ['/customers/create'], superuser: true  },
                 { id: 2, name: 'Ver', current: false, route: '/customers/get', paths: ['/customers/get'], superuser: false, general: true } ,
+            ],
+            general : true
+        },
+        {
+            id: 4,
+            name: 'DataTypes',
+            icon: ClipboardDocumentListIcon,
+            current: true,
+            paths: [ '/data-type/create', '/data-type/get'],
+            children: [
+                { id: 1, name: 'Crear', current: true, route: '/data-type/create', paths: ['/data-type/create'], superuser: true  },
+                { id: 2, name: 'Ver', current: false, route: '/data-type/get', paths: ['/data-type/get'], superuser: false, general: true } ,
             ],
             general : true
         },

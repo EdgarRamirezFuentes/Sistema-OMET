@@ -129,7 +129,9 @@ function UpdateMaintainersProject() {
 
     const getProjectData = async () => {
         await getProject(session.token, params.id).then(async(response)=>{
+          
               let projectArray = await response.json()
+              console.log("projectArray", projectArray);
               let project  = projectArray.project;
               let mainteiner = projectArray.maintainers;
               setMaintainers(mainteiner);

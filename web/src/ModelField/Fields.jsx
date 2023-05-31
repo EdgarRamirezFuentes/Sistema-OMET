@@ -32,7 +32,6 @@ function Models() {
   const getModels = async ()=>{
     await getProjectModels(session.token, params.id).then(async (models)=>{
       let modelList = await models.json()
-      console.log(modelList);
       if (modelList.length > 0){
         setAllModels(modelList)
         setIsLoadingData(false)
@@ -65,7 +64,14 @@ function Models() {
         }
     )
   }
-
+  
+  const handleUpdateMaintainer = item => {
+    history(`/projects/update/maintainer/${item.id}`,{
+            item: item,
+        }
+    )
+  }
+  
   const handleDelete = async (item) => {
     await deleteProjectModel(session.token, item.id).then((response)=>{
 
@@ -95,20 +101,13 @@ function Models() {
     },
     {
         id: 2,
-        name: 'Actualizar modelo',
-        type: 'primary',
-        icon: <ClipboardIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
-        action: handleUpdate,
-    },
-    {
-        id: 3,
         name: 'Project Model',
         type: 'primary',
         icon: <AdjustmentsHorizontalIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleProjectModel,
     },
     {
-        id: 4,
+        id: 3,
         name: 'Eliminar modelo',
         type: 'primary',
         icon: <TrashIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,

@@ -178,7 +178,7 @@ function Update() {
                         </div>
                     </div>
                     <div className='mt-3 ml-5 flex flex-row items-center '>
-                        <p className='text-3xl font-bold' >Mi perfil</p>
+                        <p className='text-3xl font-bold' >Perfil</p>
                     </div>
                     <div className='flex flex-col justify-between'>
                         <div className='flex items-center justify-center h-full w-full rounded-full'>

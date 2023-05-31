@@ -16,9 +16,6 @@ function capitalizeFirstLetter(string) {
 function See() {
     const params = useParams();
     const session = JSON.parse(localStorage.getItem('session'))
-    const fileInputRef = useRef(null);
-    const [showText, setShowText] = useState(false);
-    const [profileImage, setProfileImageBase64] = useState(null);
     const [user, setUser] = useState(null)
 
     const [image, setImage] = useState(axolote);
@@ -28,55 +25,10 @@ function See() {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [rfc, setRfc] = useState('');
-
-
-    const [rfcError, setRfcError] = useState(false);
+    
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
-
-    
-
-    const handleImageUpload = (event) => {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-
-        reader.onload = () => {
-        // `reader.result` contiene los datos del archivo como un ArrayBuffer
-        const buffer = reader.result;
-        const base64Image = arrayBufferToBase64(buffer);
-        setImage("data:image/jpeg;charset=utf-8;base64,"+base64Image);
-        setProfileImageBase64(base64Image)
-        };
-
-        if (file) {
-        reader.readAsArrayBuffer(file);
-        }
-    };
-
-    const arrayBufferToBase64 = (buffer) => {
-        let binary = '';
-        const bytes = new Uint8Array(buffer);
-        const len = bytes.byteLength;
-
-        for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-        }
-
-        return window.btoa(binary);
-    };
-
-    const handleImageClick = () => {
-        fileInputRef.current.click();
-    };
-
-    const handleMouseEnter = () => {
-        setShowText(true);
-    };
-
-    const handleMouseLeave = () => {
-        setShowText(false);
-    };
 
     const onCloseHandler = () => {
         setError(null)
@@ -101,52 +53,7 @@ function See() {
         if (user === null){
             getClientData(params.id);
         }
-    },[user])
-
-    const buttonHandler = async () => {
-        if(name === '' || first_last_name === '' || second_last_name === '' || email === '' || phone === '' || rfc ===''){
-        setAlertMessage('Los datos son inválidos.')
-        setError(true);
-        setAlertType('Warning');
-        return;
-        }
-
-        if(rfc.length<12 || rfc.length > 13){
-        setAlertMessage('El RFC debe tener de 12 a 13 caracteres.')
-        setError(true);
-        setAlertType('Warning');
-        return;
-        }
-        let userData = {
-        rfc: rfc
-        }
-        setAlertMessage('Enviar a servidor')
-        setError(true);
-        setAlertType('Success');
-
-        await updateClient(userData, session.token, user.id).then((response)=>{
-            if(response.non_field_errors){
-                setError(true);
-                setAlertMessage(response.non_field_errors[0]);
-                setAlertType('Error');
-                return;
-            }
-            if(response.message){
-                setError(true);
-                setAlertMessage(response.message);
-                setAlertType('Error');
-                return;
-            }
-            if(response.id){
-                setError(true);
-                setAlertMessage('Datos actualizados con éxito.');
-                setAlertType('Success');
-                return;
-            }
-        });
-
-
-    }
+    },[user]);
     
     return (
         <div className="w-full h-full bg-slate-100">
@@ -162,7 +69,7 @@ function See() {
             </div>
             <div>
                 <div className='mt-3 ml-5 flex flex-row items-center '>
-                    <p className='text-3xl font-bold' >Mi perfil</p>
+                    <p className='text-3xl font-bold' >Perfil</p>
                 </div>
                 <div className='flex flex-col justify-between'>
                 <div className='flex items-center justify-center h-full w-full rounded-full'>

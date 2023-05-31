@@ -25,6 +25,11 @@ import SeeProject from "./Projects/See";
 import Models from "./Projects/Model/Models";
 import CreateProjectModel from "./Projects/Model/Create";
 import UpdateProjectModel from "./Projects/Model/Update";
+
+import CreateDataType from "./DataType/Create";
+import DataTypes from "./DataType/Types";
+import SeeDataType from "./DataType/See";
+import UpdateDataType from "./DataType/Update";
 function App() {
 
   return (
@@ -58,6 +63,10 @@ function App() {
               <Route path="/customers/update/:id" element={<UpdateCustomer />} />
               <Route path="/customers/view/:id" element={<SeeCustomer />} />
 
+              <Route path="/data-type/create" element={<CreateDataType />} />
+              <Route path="/data-type/get" element={<DataTypes />} />
+              <Route path="/data-type/update/:id" element={<UpdateDataType />} />
+              <Route path="/data-type/view/:id" element={<SeeDataType />} />
             </Routes>
         </div>
       </div>
