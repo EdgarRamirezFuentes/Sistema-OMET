@@ -236,7 +236,11 @@ class ProjectModelViewSet(viewsets.ModelViewSet):
         try:
             instance = self.get_object()
             serializer = ProjectModelDataSerializer(instance)
-            return response.Response(serializer.data, status=status.HTTP_200_OK)
+            response = serializer.data
+            model_fields = ModelField.objects.filter(project_model=instance)
+            model_fields_serializer = ModelFieldMinimalSerializer(model_fields, many=True)
+            response['model_fields'] = model_fields_serializer.data
+            return response.Response(response, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
