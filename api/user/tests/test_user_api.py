@@ -5,157 +5,411 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from rest_framework.test import APIClient
 from rest_framework import status
+from rest_framework.test import APITestCase
 
 
-CREATE_USER_URL = reverse('user:create')
-TOKEN_URL = reverse('user:token')
-ME_URL = reverse('user:me')
+USER_URL = reverse('user:user-list')
+TOKEN_URL = reverse('user:login')
+LOGOUT_URL = reverse('user:logout')
+LOGOUT_ALL_URL = reverse('user:logoutall')
 
 
-def create_user(**params):
-    """Create and return a new user."""
-    return get_user_model().objects.create_user(**params)
+class PublicUserApiTests(APITestCase):
+    """
+    Test the users API (public).
+    """
+    fixtures = ['fixtures/user.json',]
 
-
-class PublicUserApiTest(TestCase):
-    """Test the public features of the user API."""
 
     def setUp(self):
-        self.client = APIClient()
+        pass
+
+    def test_login_success(self):
+        """
+        Test successful login.
+        """
+        payload = {
+            'password': 'admin',
+            'email': 'admin@admin.com'
+        }
+
+        res = self.client.post(TOKEN_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn('token', res.data)
+
+    def test_login_invalid_credentials(self):
+        """
+        Test login with incorrect password.
+        """
+        payload = {
+            'password': 'wrong-password',
+            'email': 'admin@admin.com'
+        }
+
+        res = self.client.post(TOKEN_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_logout(self):
+        """
+        Test logout.
+        """
+        payload = {
+            'password': 'admin',
+            'email': 'admin@admin.com'
+        }
+
+        res = self.client.post(TOKEN_URL, payload)
+        token = res.data['token']
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token)
+        res = self.client.post(LOGOUT_URL)
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_logout_all(self):
+        """
+        Test logout all.
+        """
+        payload = {
+            'password': 'admin',
+            'email': 'admin@admin.com'
+        }
+
+        res = self.client.post(TOKEN_URL, payload)
+        token = res.data['token']
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token)
+        res = self.client.post(LOGOUT_ALL_URL)
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class PrivateUserApiTests(APITestCase):
+    """
+    Test the users API (private).
+    """
+    fixtures = ['fixtures/user.json',]
+
+    def setUp(self):
+        admin_credentials = {
+            'password': 'admin',
+            'email': 'admin@admin.com'
+        }
+
+        maintainer_credentials = {
+            'password': '123',
+            'email': 'edgar.ramirez.fuentes.dev@gmail.com'
+        }
+
+        res = self.client.post(TOKEN_URL, admin_credentials)
+        self.admin_token = res.data['token']
+
+        res = self.client.post(TOKEN_URL, maintainer_credentials)
+        self.maintainer_token = res.data['token']
 
     def test_create_user_success(self):
-        """Test creating a user is successful."""
+        """
+        Test creating a new user successfully.
+        """
         payload = {
-            'email': 'test@example.com',
-            'password': 'testpass123',
-            'name': 'Test Name',
+            "rfc": "TEST000000RFC",
+            "email": "test@email.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
         }
-        res = self.client.post(CREATE_USER_URL, payload)
 
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        user = get_user_model().objects.get(email=payload['email'])
-        self.assertTrue(user.check_password(payload['password']))
-        self.assertNotIn('password', res.data)
 
-    def test_user_with_email_exists_error(self):
-        """Test error returned if user with email exists."""
+    def test_create_user_invalid_rfc_error(self):
+        """
+        Test creating a new user with invalid RFC.
+        """
         payload = {
-            'email': 'test@example.com',
-            'password': 'testpass123',
-            'name': 'Test Name',
+            "rfc": "TEST000000RFCINVALID",
+            "email": "test@email.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
         }
-        get_user_model().objects.create(**payload)
-        res = self.client.post(CREATE_USER_URL)
 
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_password_too_short_error(self):
-        """Test an error is returned if password less than 5 chars."""
+    def test_create_user_empty_rfc_error(self):
+        """
+        Test creating a new user with empty RFC.
+        """
         payload = {
-            'email': 'test@example.com',
-            'password': 'pw',
-            'name': 'Test name',
+            "rfc": "",
+            "email": "testemail.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
         }
-        res = self.client.post(CREATE_USER_URL, payload)
 
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        user_exists = get_user_model().objects.filter(
-            email=payload['email']
-        ).exists()
-        self.assertFalse(user_exists)
-
-    def test_create_token_for_user(self):
-        """Test generates token for valid credentials"""
-        user_details = {
-            'email': 'test@example.com',
-            'password': 'test-password123',
-            'name': 'Test name',
-        }
-        create_user(**user_details)
-
-        payload = {
-            'email': user_details['email'],
-            'password': user_details['password']
-        }
-        res = self.client.post(TOKEN_URL, payload)
-
-        self.assertIn('token', res.data)
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-
-    def test_create_token_bad_credentials(self):
-        """Test return error if credentials invalid."""
-        user_details = {
-            'email': 'test@example.com',
-            'password': 'test-password123',
-            'name': 'Test name',
-        }
-        create_user(**user_details)
-
-        payload = {
-            'email': user_details['email'],
-            'password': 'invalid-password'
-        }
-        res = self.client.post(TOKEN_URL, payload)
-
-        self.assertNotIn('token', res.data)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_token_blank_password(self):
-        """Test posting a blank password returns an error."""
+    def test_create_user_registered_rfc_error(self):
+        """
+        Test creating a new user with registered RFC.
+        """
         payload = {
-            'email': 'test@example.com',
-            'password': ''
+            "rfc": "AAAA000000AAA",
+                "email": "test@email.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
         }
-        res = self.client.post(TOKEN_URL, payload)
 
-        self.assertNotIn('token', res.data)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_retrieve_user_unauthorized(self):
-        """Test authentication is required for users."""
-        res = self.client.get(ME_URL)
+    def test_create_user_invalid_email_error(self):
+        """
+        Test creating a new user with invalid email.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "testemail.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
+        }
 
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_registered_email_error(self):
+        """
+        Test creating a new user with registered email.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "admin@admin.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
+        }
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_invalid_password_error(self):
+        """
+        Test creating a new user with invalid password.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "test@email.com",
+            "password": "123",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
+        }
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_invalid_name_error(self):
+        """
+        Test creating a new user with invalid name.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "testemail.com",
+            "password": "TestPassword123$",
+            "name": "name with numbers 123",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
+        }
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_empty_name_error(self):
+        """
+        Test creating a new user with empty name.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "testemail.com",
+            "password": "TestPassword123$",
+            "name": "",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
+        }
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_invalid_first_last_name_error(self):
+        """
+        Test creating a new user with invalid first last name.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "testemail.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "first last name with numbers 123",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
+        }
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_empty_first_last_name_error(self):
+        """
+        Test creating a new user with empty first last name.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "testemail.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
+        }
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_invalid_second_last_name_error(self):
+        """
+        Test creating a new user with invalid second last name.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "testemail.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "second last name with numbers 123",
+            "phone": "1234567890",
+        }
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_empty_second_last_name_error(self):
+        """
+        Test creating a new user with empty second last name.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "testemail.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "",
+            "phone": "1234567890",
+        }
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_invalid_phone_error(self):
+        """
+        Test creating a new user with invalid phone.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "testemail.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890invalid",
+        }
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_empty_phone_error(self):
+        """
+        Test creating a new user with empty phone.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "testemail.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "",
+        }
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.admin_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_user_unauthorized_user_error(self):
+        """
+        Test creating a new user with unauthorized user.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "test@email.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "1234567890",
+        }
+
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.maintainer_token)
+        res = self.client.post(USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_user_unauthenticated_user_error(self):
+        """
+        Test creating a new user with unauthenticated user.
+        """
+        payload = {
+            "rfc": "TEST000000RFC",
+            "email": "testemail.com",
+            "password": "TestPassword123$",
+            "name": "Test name",
+            "first_last_name": "Test first last name",
+            "second_last_name": "Test second last name",
+            "phone": "",
+        }
+
+        res = self.client.post(USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class PrivateUserApiTest(TestCase):
-    """Test API requests that require authentication"""
-    def setUp(self):
-        self.user = create_user(
-            email='test@example.com',
-            password='test-password123',
-            name='Test Name',
-        )
-        self.client = APIClient()
-        self.client.force_authenticate(user=self.user)
-
-    def test_retrieve_profile_success(self):
-        """Test retrieving profile for logged in user."""
-        res = self.client.get(ME_URL)
-
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data, {
-            'name': self.user.name,
-            'email': self.user.email,
-        })
-
-    def test_post_me_not_allowed(self):
-        """Test POST is not allowed for the endpoint"""
-        res = self.client.post(ME_URL, {})
-
-        self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def test_update_user_profile(self):
-        """Test updating the user profile for the authenticated user."""
-        payload = {
-            'name': 'Updated Name',
-            'password': 'new-password123'
-        }
-        res = self.client.patch(ME_URL, payload)
-
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.name, payload['name'])
-        self.assertTrue(self.user.check_password(payload['password']))
-        self.assertEqual(res.status_code, status.HTTP_200_OK)

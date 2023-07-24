@@ -1,54 +1,32 @@
 from rest_framework import serializers
 from core.models import (
     DataType,
-    ConfigFields,
+    Validator,
 )
 
-from .utils import (
-    validate_name,
-    format_name,
-)
+
+class ValidatorSerializer(serializers.ModelSerializer):
+    """Serializer for validator objects"""
+
+    class Meta:
+        model = Validator
+        fields = ('id', 'name',
+                  'description')
 
 
 class DataTypeSerializer(serializers.ModelSerializer):
     """Serializer for data type objects"""
-    input_type = serializers.ChoiceField(choices=DataType.INPUT_TYPE_CHOICES)
 
     class Meta:
         model = DataType
         fields = ('id', 'name',
-                  'description', 'input_type')
+                  'description')
 
 
-class DataTypeMinimalSerializer(serializers.ModelSerializer):
+class FullDataTypeSerializer(serializers.ModelSerializer):
     """Serializer for data type objects"""
-    input_type = serializers.ChoiceField(choices=DataType.INPUT_TYPE_CHOICES)
+    validators = ValidatorSerializer(many=True)
 
     class Meta:
         model = DataType
-        fields = ('id', 'name', 'input_type')
-
-
-class ConfigFieldsSerializer(serializers.ModelSerializer):
-    """Serializer for config fields objects"""
-
-    class Meta:
-        model = ConfigFields
-        fields = ('id', 'name',
-                  'description', 'value_type', 'data_type')
-
-    def validate_name(self, value):
-        """Validate name"""
-        if not validate_name(value):
-            raise serializers.ValidationError('El campo de configuracion debe comenzar y terminar con una letra,' +
-                  ' y solo puede contener letras, guiones medios y espacios.')
-
-        return format_name(value)
-
-
-class ConfigFieldsMinimalSerializer(serializers.ModelSerializer):
-    """Serializer for config fields objects"""
-
-    class Meta:
-        model = ConfigFields
-        fields = ('id', 'name', 'value_type',)
+        fields = ('id', 'name', 'validators')

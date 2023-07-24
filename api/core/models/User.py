@@ -45,8 +45,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     rfc = models.CharField(max_length=13, unique=True, null=False)
     email = models.EmailField(max_length=255, unique=True, null=False)
     name = models.CharField(max_length=255, null=False)
-    first_last_name = models.CharField(max_length=255, null=True)
-    second_last_name = models.CharField(max_length=255, null=True)
+    first_last_name = models.CharField(max_length=255, null=False)
+    second_last_name = models.CharField(max_length=255, null=False)
     phone = models.CharField(max_length=20, null=True)
     password = models.CharField(max_length=255, null=False)
     profile_image = models.ImageField(upload_to=profile_image_file_path, null=True)
@@ -57,7 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'first_last_name', 'second_last_name', 'phone', 'rfc',]
+    REQUIRED_FIELDS = ['name', 'rfc',]
 
 
     class Meta:

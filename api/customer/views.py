@@ -1,11 +1,9 @@
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
+
 from core.models import Customer
 from customer.serializers import CustomerSerializer
-from core.permissions import (
-    isActiveUser,
-    isMaintainer,
-)
+from core import permissions as custom_permissions
 
 from knox.auth import TokenAuthentication
 from rest_framework import (
@@ -21,8 +19,8 @@ class CustomerViewSet(viewsets.ModelViewSet):
     """Viewset for active customers"""
     serializer_class = CustomerSerializer
     queryset = Customer.objects.all()
-    authentication_classes = [TokenAuthentication, ]
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
 
     def list(self, request, *args, **kwargs):
         """List all customers filtered by RFC, email, and is_active."""
@@ -52,7 +50,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
 class ChangeCustomerStatus(views.APIView):
     """Change customer status"""
     authentication_classes = [TokenAuthentication, ]
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser]
+    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
     serializer_class = CustomerSerializer
 
     def post(self, request, *args, **kwargs):

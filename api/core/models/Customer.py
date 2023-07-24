@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Customer(models.Model):
+    """Model for customers."""
     rfc = models.CharField(max_length=13, null=False, unique=True)
     name = models.CharField(max_length=255, null=False)
     phone = models.CharField(max_length=10, null=True)

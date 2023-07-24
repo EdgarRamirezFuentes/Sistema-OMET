@@ -2,10 +2,11 @@ from django.db import models
 
 
 class ProjectModel(models.Model):
+    """Model for project models."""
     name = models.CharField(max_length=255, null=False)
+    project = models.ForeignKey('Project', on_delete=models.CASCADE, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
-    project = models.ForeignKey('Project', on_delete=models.CASCADE, null=False)
 
     class Meta:
         db_table = 'ProjectModel'

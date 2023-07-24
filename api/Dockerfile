@@ -15,7 +15,7 @@ ARG DEV=false
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     apk add --no-cache gnupg && \
-    apk add --update --no-cache postgresql-client geos proj gdal binutils jpeg-dev && \
+    apk add --update --no-cache postgresql-client geos proj gdal binutils jpeg-dev make && \
     apk add --update --virtual .tmp-build-deps \
         build-base postgresql-dev musl-dev zlib zlib-dev && \
     /py/bin/pip install -r /tmp/requirements.txt && \
@@ -30,9 +30,9 @@ RUN python -m venv /py && \
     mkdir -p /vol/web/media && \
     mkdir -p /vol/web/static && \
     chown -R sistema-omet-user:sistema-omet-user /vol/ && \
-    chmod -R 755 /vol
-
-
+    chmod -R 755 /vol && \
+    chmod +x entrypoint.sh && \
+    chmod +x populate_db.sh
 
 ENV PATH="/py/bin:$PATH"
 USER sistema-omet-user

@@ -1,0 +1,24 @@
+[
+    {
+        "model": "core.Customer",
+        "pk": 1,
+        "fields": {
+            "rfc": "AAAA000000AAA",
+            "name": "John Doe",
+            "email": "john@email.com",
+            "phone": "1234567890",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.Customer",
+        "pk": 2,
+        "fields": {
+            "rfc": "BBBB000000BBB",
+            "name": "Doña Juana",
+            "email": "jane@email.com",
+            "phone": "1234567890",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    }
+]

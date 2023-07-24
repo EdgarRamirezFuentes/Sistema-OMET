@@ -12,7 +12,7 @@ from user import views
 
 router = routers.SimpleRouter()
 
-router.register('', views.UserViewSet)
+router.register('', views.UserViewSet, basename='user')
 
 app_name = 'user'
 

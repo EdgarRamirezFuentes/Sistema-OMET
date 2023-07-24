@@ -32,7 +32,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         return format_data(phone)
 
 
-class CustomerMinimalSerializer(serializers.ModelSerializer):
+class MinimalCustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ('id', 'name',)

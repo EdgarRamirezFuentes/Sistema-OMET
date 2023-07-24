@@ -37,6 +37,11 @@ class UserSerializer(serializers.ModelSerializer):
         Returns:
             str: Formatted name.
         """
+        if not name:
+            raise serializers.ValidationError(
+                _('Nombre es requerido.')
+            )
+
         if not validate_name(name):
             raise serializers.ValidationError(
                 _('El nombre solo debe contener letras y espacios.')
@@ -52,6 +57,11 @@ class UserSerializer(serializers.ModelSerializer):
         Returns:
             str: Formatted first last name.
         """
+        if not first_last_name:
+            return serializers.ValidationError(
+                _('Apellido paterno es requerido.')
+            )
+
         if not validate_name(first_last_name):
             raise serializers.ValidationError(
                 _('El apellido paterno solo debe contener letras y espacios.')
@@ -67,6 +77,11 @@ class UserSerializer(serializers.ModelSerializer):
         Returns:
             str: Formatted second last name.
         """
+        if not second_last_name:
+            return serializers.ValidationError(
+                _('Apellido materno es requerido.')
+            )
+
         if not validate_name(second_last_name):
             raise serializers.ValidationError(
                 _('El apellido materno solo debe contener letras y espacios.')
@@ -153,7 +168,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class FullUserSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
     profile_image = Base64ImageField(required=False)
     class Meta:
@@ -163,7 +178,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
                   'is_superuser', 'is_staff')
 
 
-class UserMinimalSerializer(serializers.ModelSerializer):
+class MinimalUserSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
     class Meta:
         model = get_user_model()

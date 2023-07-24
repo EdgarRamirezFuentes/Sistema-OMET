@@ -1,0 +1,155 @@
+[
+    {
+        "model": "core.DataType",
+        "pk": 1,
+        "fields": {
+          "name": "CharField",
+          "description": "Tipo de dato utilizado para almacenar cadenas de caracteres.",
+          "validators": [1, 2, 3, 4, 5, 6, 7, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 2,
+        "fields": {
+            "name": "TextField",
+            "description": "Tipo de dato utilizado para almacenar cadenas de caracteres largas.",
+            "validators": [1, 2, 3, 4, 5, 6, 7, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 3,
+        "fields": {
+            "name": "EmailField",
+            "description": "Tipo de dato utilizado para almacenar direcciones de correo electrónico.",
+            "validators": [1, 2, 3, 4, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 4,
+        "fields": {
+            "name": "URLField",
+            "description": "Tipo de dato utilizado para almacenar direcciones web.",
+            "validators": [1, 2, 3, 4, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 5,
+        "fields": {
+            "name": "IntegerField",
+            "description": "Tipo de dato utilizado para almacenar números enteros con valores desde -2147483648 a 2147483647.",
+            "validators": [1, 2, 3, 4, 8, 9, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 6,
+        "fields": {
+            "name": "BigIntegerField",
+            "description": "Tipo de dato utilizado para almacenar números enteros con valores desde -9223372036854775808 a 9223372036854775807.",
+            "validators": [1, 2, 3, 4, 8, 9, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 7,
+        "fields": {
+            "name": "PositiveIntegerField",
+            "description": "Tipo de dato utilizado para almacenar números enteros positivos con valores desde 0 a 2147483647.",
+            "validators": [1, 2, 3, 4, 9, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 8,
+        "fields": {
+            "name": "PositiveBigIntegerField",
+            "description": "Tipo de dato utilizado para almacenar números enteros positivos con valores desde 0 a 9223372036854775807.",
+            "validators": [1, 2, 3, 4, 9, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 9,
+        "fields": {
+            "name": "FloatField",
+            "description": "Tipo de dato utilizado para almacenar números decimales.",
+            "validators": [1, 2, 3, 4, 7, 8, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 10,
+        "fields": {
+            "name": "DecimalField",
+            "description": "Tipo de dato utilizado para almacenar números decimales con una precisión determinada.",
+            "validators": [1, 2, 3, 4, 7, 8, 12, 13, 14, 15]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 11,
+        "fields": {
+            "name": "BooleanField",
+            "description": "Tipo de dato utilizado para almacenar valores booleanos.",
+            "validators": [1, 2, 3, 4, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 12,
+        "fields": {
+            "name": "DateField",
+            "description": "Tipo de dato utilizado para almacenar fechas.",
+            "validators": [1, 2, 3, 4, 10, 11, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 13,
+        "fields": {
+            "name": "DateTimeField",
+            "description": "Tipo de dato utilizado para almacenar fechas y horas.",
+            "validators": [1, 2, 3, 4, 10, 11, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 14,
+        "fields": {
+            "name": "TimeField",
+            "description": "Tipo de dato utilizado para almacenar horas.",
+            "validators": [1, 2, 3, 4, 10, 11, 12, 13]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 15,
+        "fields": {
+            "name": "OnetoOneForeignKey",
+            "description": "Tipo de dato utilizado para realizar una relación uno a uno con otro modelo.",
+            "validators": [16]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 16,
+        "fields": {
+            "name": "OnetoManyForeignKey",
+            "description": "Tipo de dato utilizado para realizar una relación uno a muchos con otro modelo.",
+            "validators": [16]
+        }
+    },
+    {
+        "model": "core.DataType",
+        "pk": 17,
+        "fields": {
+            "name": "ManytoManyForeignKey",
+            "description": "Tipo de dato utilizado para realizar una relación muchos a muchos con otro modelo.",
+            "validators": [16]
+        }
+    }
+]

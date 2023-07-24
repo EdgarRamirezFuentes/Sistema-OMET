@@ -1,29 +1,34 @@
 from django.utils.translation import gettext as _
+
 from user.serializers import (
-    UserMinimalSerializer,
+    MinimalUserSerializer,
 )
+
+from dataType.serializers import (
+    DataTypeSerializer,
+    ValidatorSerializer
+)
+
+from customer.serializers import MinimalCustomerSerializer
 
 from .utils import (
     validate_name,
     format_name,
 )
 
-from customer.serializers import CustomerMinimalSerializer
-
-
-from rest_framework import serializers
-
-from dataType.serializers import DataTypeSerializer
 from core.models import (
     Project,
     ProjectModel,
     ModelField,
     Maintenance,
-    ConfigValues,
+    ValidatorValue,
 )
+
+from rest_framework import serializers
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    """Default serializer for project model."""
 
     class Meta:
         model = Project
@@ -31,15 +36,18 @@ class ProjectSerializer(serializers.ModelSerializer):
                   'customer')
 
 
-class ProjectMinimalSerializer(serializers.ModelSerializer):
-    customer = CustomerMinimalSerializer()
+class MinimalProjectSerializer(serializers.ModelSerializer):
+    """Serielizer for project model with minimal fields."""
+    customer = MinimalCustomerSerializer()
+
     class Meta:
         model = Project
         fields = ('id', 'name', 'customer')
 
 
-class ProjectDataSerializer(serializers.ModelSerializer):
-    customer = CustomerMinimalSerializer()
+class FullProjectSerializer(serializers.ModelSerializer):
+    """Serializer for project model with all fields and its full data."""
+    customer = MinimalCustomerSerializer()
 
     class Meta:
         model = Project
@@ -48,15 +56,16 @@ class ProjectDataSerializer(serializers.ModelSerializer):
 
 
 class MaintenanceSerializer(serializers.ModelSerializer):
-
+    """Default serializer for maintenance model."""
     class Meta:
         model = Maintenance
         fields = ('id', 'project', 'user',)
 
 
-class MaintenanceMinimalSerializer(serializers.ModelSerializer):
-    project = ProjectMinimalSerializer()
-    user = UserMinimalSerializer()
+class MinimalMaintenanceSerializer(serializers.ModelSerializer):
+    """Serializer for maintenance model with minimal fields."""
+    project = MinimalProjectSerializer()
+    user = MinimalUserSerializer()
 
     class Meta:
         model = Maintenance
@@ -64,7 +73,8 @@ class MaintenanceMinimalSerializer(serializers.ModelSerializer):
 
 
 class ProjectMaintainersSerializer(serializers.ModelSerializer):
-    user = UserMinimalSerializer()
+    """Serializer for project maintainers."""
+    user = MinimalUserSerializer()
 
     class Meta:
         model = Maintenance
@@ -72,13 +82,24 @@ class ProjectMaintainersSerializer(serializers.ModelSerializer):
 
 
 class ProjectModelSerializer(serializers.ModelSerializer):
+    """Default serializer for project model."""
 
     class Meta:
         model = ProjectModel
         fields = ('id', 'name', 'project')
 
     def validate_name(self, name):
-        # Validate model name
+        """Validate model name.
+
+        Args:
+            name (str): Model name.
+
+        Raises:
+            serializers.ValidationError: If model name is not valid.
+
+        Returns:
+            str: Formatted model name.
+        """
         is_valid_name = validate_name(name)
 
         if not is_valid_name:
@@ -90,15 +111,17 @@ class ProjectModelSerializer(serializers.ModelSerializer):
         return format_name(name)
 
 
-class ProjectModelMinimalSerializer(serializers.ModelSerializer):
+class MinimalProjectModelSerializer(serializers.ModelSerializer):
+    """Serializer for project model with minimal fields."""
 
     class Meta:
         model = ProjectModel
         fields = ('id', 'name')
 
 
-class ProjectModelDataSerializer(serializers.ModelSerializer):
-    project = ProjectMinimalSerializer()
+class FullProjectModelSerializer(serializers.ModelSerializer):
+    """Serializer for project model with all fields and its full data."""
+    project = MinimalProjectSerializer()
 
     class Meta:
         model = ProjectModel
@@ -107,15 +130,26 @@ class ProjectModelDataSerializer(serializers.ModelSerializer):
 
 
 class ModelFieldSerializer(serializers.ModelSerializer):
+    """Default serializer for model field model."""
 
     class Meta:
         model = ModelField
         fields = ('id', 'name', 'data_type',
-                  'order', 'caption', 'is_required',
+                  'order', 'caption',
                    'project_model')
 
     def validate_name(self, name):
-        # Validate model field name
+        """Validate model field name.
+
+        Args:
+            name (str): Model field name.
+
+        Raises:
+            serializers.ValidationError: If model field name is not valid.
+
+        Returns:
+            str: Formatted model field name.
+        """
         is_valid_name = validate_name(name)
 
         if not is_valid_name:
@@ -127,7 +161,8 @@ class ModelFieldSerializer(serializers.ModelSerializer):
         return format_name(name)
 
 
-class ModelFieldMinimalSerializer(serializers.ModelSerializer):
+class MinimalModelFieldSerializer(serializers.ModelSerializer):
+    """Serializer for model field model with minimal fields."""
     data_type = DataTypeSerializer()
 
     class Meta:
@@ -135,8 +170,9 @@ class ModelFieldMinimalSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'data_type')
 
 
-class ModelFieldDataSerializer(serializers.ModelSerializer):
-    project_model = ProjectModelMinimalSerializer()
+class FullModelFieldSerializer(serializers.ModelSerializer):
+    """Serializer for model field model with all fields and its full data."""
+    project_model = MinimalProjectModelSerializer()
     data_type = DataTypeSerializer()
 
     class Meta:
@@ -145,19 +181,21 @@ class ModelFieldDataSerializer(serializers.ModelSerializer):
                   'project_model', 'created_at')
 
 
-class ConfigValuesSerializer(serializers.ModelSerializer):
+class ValidatorValueSerializer(serializers.ModelSerializer):
+    """Default serializer for validator value model."""
 
     class Meta:
-        model = ConfigValues
-        fields = ('id', 'config_field', 'model_field',
+        model = ValidatorValue
+        fields = ('id', 'validator', 'model_field',
                   'value')
 
 
-class ConfigValuesMinimalSerializer(serializers.ModelSerializer):
-    config_field = ModelFieldMinimalSerializer()
-    model_field = ModelFieldMinimalSerializer()
+class FullValidatorValueSerializer(serializers.ModelSerializer):
+    """Serializer for validator value model with all fields and its full data."""
+    validator = ValidatorSerializer()
+    model_field = MinimalModelFieldSerializer()
 
     class Meta:
-        model = ConfigValues
-        fields = ('id', 'config_field', 'value',
+        model = ValidatorValue
+        fields = ('id', 'validator', 'value',
                   'model_field')

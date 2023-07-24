@@ -32,20 +32,21 @@ from core.schemes import KnoxTokenScheme
 
 from user.serializers import (
     UserSerializer,
-    UserProfileSerializer,
-    UserMinimalSerializer,
+    FullUserSerializer,
+    MinimalUserSerializer,
     UserLoginSerializer,
     UserChangePasswordSerializer,
     UserResetPasswordSerializer,
 )
 
 from core.tasks import send_reset_password_email
-from core.signals import user_insertion_signal
+from core import permissions as custom_permissions
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """Viewset for users."""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
     serializer_class = UserSerializer
     queryset = get_user_model().objects.all()
 
@@ -69,7 +70,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 is_superuser = False if is_superuser.lower().strip() != 'true' else True
                 queryset = queryset.filter(is_superuser=is_superuser)
 
-            serializer = UserMinimalSerializer(queryset, many=True)
+            serializer = MinimalUserSerializer(queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
@@ -80,7 +81,7 @@ class UserViewSet(viewsets.ModelViewSet):
         """Retrieve a user by id."""
         try:
             instance = self.get_object()
-            serializer = UserProfileSerializer(instance)
+            serializer = FullUserSerializer(instance)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
@@ -90,8 +91,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class ChangeUserStatusView(views.APIView):
     """Change a user's status."""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
     serializer_class = UserSerializer
 
     def post(self, request, *args, **kwargs):
@@ -110,11 +111,11 @@ class ChangeUserStatusView(views.APIView):
 
 class LoginView(KnoxLoginView):
     """Authenticate a user and return a token."""
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = [permissions.AllowAny,]
     serializer_class = UserLoginSerializer
 
     def get_user_serializer_class(self):
-        return UserProfileSerializer
+        return FullUserSerializer
 
     def post(self, request, format=None):
         serializer = UserLoginSerializer(data=request.data)
@@ -141,8 +142,8 @@ class LogoutAllView(KnoxLogoutAllView):
 
 class ChangePasswordView(generics.UpdateAPIView):
     """Change a user's password."""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated,]
     serializer_class = UserChangePasswordSerializer
 
     def get_object(self):
@@ -164,8 +165,8 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 class ResetPasswordView(views.APIView):
     """Reset a user's password."""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAdminUser,)
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [custom_permissions.isAdminUser,]
     serializer_class = UserResetPasswordSerializer
 
     def post(self, request, *args, **kwargs):

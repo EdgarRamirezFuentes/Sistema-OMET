@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class AbstractToken(models.Model):
+    """Abstract model for tokens."""
     digest = models.CharField(
         max_length=128, primary_key=True)
     token_key = models.CharField(

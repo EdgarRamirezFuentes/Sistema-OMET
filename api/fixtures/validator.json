@@ -1,0 +1,130 @@
+[
+    {
+        "model": "core.Validator",
+        "pk": 1,
+        "fields": {
+            "name": "required",
+            "description": "Establece si un campo es requerido."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 2,
+        "fields": {
+            "name": "null",
+            "description": "Establece si un campo puede ser nulo."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 3,
+        "fields": {
+            "name": "unique",
+            "description": "Establece si un campo debe ser único."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 4,
+        "fields": {
+            "name": "db_index",
+            "description": "Establece si un campo debe ser indexado en la base de datos."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 5,
+        "fields": {
+            "name": "min_length",
+            "description": "Establece la longitud mínima de un campo."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 6,
+        "fields": {
+            "name": "max_length",
+            "description": "Establece la longitud máxima de un campo."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 7,
+        "fields": {
+            "name": "regex",
+            "description": "Establece una expresión regular que debe cumplir un campo de texto."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 8,
+        "fields": {
+            "name": "min_value",
+            "description": "Establece el valor mínimo de un campo numérico."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 9,
+        "fields": {
+            "name": "max_value",
+            "description": "Establece el valor máximo de un campo numérico."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 10,
+        "fields": {
+            "name": "auto_now",
+            "description": "Establece si un campo debe ser actualizado con la fecha actual cada vez que se modifica el objeto."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 11,
+        "fields": {
+            "name": "auto_now_add",
+            "description": "Establece si un campo debe ser actualizado con la fecha actual cuando se crea el objeto."
+        }
+    },
+    {
+        "model":"core.Validator",
+        "pk": 12,
+        "fields": {
+            "name": "unique_for_month",
+            "description": "Establece si un campo debe ser único para un mes específico."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 13,
+        "fields": {
+            "name": "unique_for_year",
+            "description": "Establece si un campo debe ser único para un año específico."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 14,
+        "fields": {
+            "name": "max_digits",
+            "description": "Establece el número máximo de dígitos de un campo decimal."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 15,
+        "fields": {
+            "name": "decimal_places",
+            "description": "Establece el número de decimales de un campo decimal."
+        }
+    },
+    {
+        "model": "core.Validator",
+        "pk": 16,
+        "fields": {
+            "name": "model",
+            "description": "Establece el nombre del modelo con el que se relaciona un campo."
+        }
+    }
+]

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
-from glob import glob
+import sys
 
 from rest_framework.settings import api_settings
 
@@ -109,6 +109,7 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD'),
     },
 }
+
 
 
 # Password validation

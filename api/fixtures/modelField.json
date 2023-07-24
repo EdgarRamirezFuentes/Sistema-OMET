@@ -1,0 +1,74 @@
+[
+    {
+        "model": "core.ModelField",
+        "pk": 1,
+        "fields": {
+            "name": "nombre",
+            "caption": "Ingresa el nombre del producto",
+            "order": 0,
+            "data_type": 1,
+            "project_model": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 2,
+        "fields": {
+            "name": "descripcion",
+            "caption": "Ingresa la descripcion del producto",
+            "order": 1,
+            "data_type": 1,
+            "project_model": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 3,
+        "fields": {
+            "name": "precio",
+            "caption": "Ingresa el precio del producto",
+            "order": 2,
+            "data_type": 7,
+            "project_model": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 4,
+        "fields": {
+            "name": "stock",
+            "caption": "Ingresa el stock del producto",
+            "order": 3,
+            "data_type": 7,
+            "project_model": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 5,
+        "fields": {
+            "name": "marca",
+            "caption": "Ingresa la marca del producto",
+            "order": 4,
+            "data_type": 16,
+            "project_model": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 6,
+        "fields": {
+            "name": "nombre",
+            "caption": "Ingresa el nombre de la marca",
+            "order": 0,
+            "data_type": 1,
+            "project_model": 2,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    }
+]

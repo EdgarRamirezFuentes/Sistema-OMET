@@ -23,4 +23,3 @@ def format_name(name:str)->str:
         str: Formatted name.
     """
     return name.title().replace(' ', '').strip()
-

@@ -1,25 +1,19 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
-from user.serializers import (
-    UserMinimalSerializer,
-)
-
 from project.serializers import (
     ProjectSerializer,
-    ProjectMinimalSerializer,
-    ProjectDataSerializer,
+    MinimalProjectSerializer,
+    FullProjectSerializer,
     MaintenanceSerializer,
-    MaintenanceMinimalSerializer,
+    MinimalMaintenanceSerializer,
     ProjectMaintainersSerializer,
     ProjectModelSerializer,
-    ProjectModelMinimalSerializer,
-    ProjectModelDataSerializer,
-    ProjectModelDataSerializer,
+    MinimalProjectModelSerializer,
+    FullProjectModelSerializer,
     ModelFieldSerializer,
-    ModelFieldMinimalSerializer,
-    ConfigValuesSerializer,
-    ConfigValuesMinimalSerializer,
+    MinimalModelFieldSerializer,
+    ValidatorValueSerializer,
 )
 
 from core.models import (
@@ -27,13 +21,10 @@ from core.models import (
     Maintenance,
     ProjectModel,
     ModelField,
-    ConfigValues
+    ValidatorValue
 )
 
-from core.permissions import (
-    isActiveUser,
-    isMaintainer,
-)
+from core import permissions as custom_permissions
 
 from rest_framework import permissions
 from knox.auth import TokenAuthentication
@@ -48,8 +39,8 @@ from rest_framework import (
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """Viewset for active projects"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
@@ -73,7 +64,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
                 customer_id = int(customer_id)
                 queryset = queryset.filter(customer=customer_id)
 
-            serializer = ProjectMinimalSerializer(queryset, many=True)
+            serializer = MinimalProjectSerializer(queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
@@ -121,9 +112,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
         try:
             response_data = {}
             instance = self.get_object()
-            serializer = ProjectDataSerializer(instance)
+            serializer = FullProjectSerializer(instance)
             project_models = ProjectModel.objects.filter(project=instance, is_active=True)
-            project_models_serializer = ProjectModelMinimalSerializer(project_models, many=True)
+            project_models_serializer = MinimalProjectModelSerializer(project_models, many=True)
 
             # Gettng the project data
             response_data['project'] = serializer.data
@@ -147,8 +138,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class ChangeProjectStatusView(views.APIView):
     """View for changing the status (is_active) of the project"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
     serializer_class = ProjectSerializer
 
     def post(self, request, *args, **kwargs):
@@ -175,8 +166,8 @@ class MaintenanceViewSet(mixins.CreateModelMixin,
                          mixins.DestroyModelMixin,
                          viewsets.GenericViewSet):
     """Viewset for maintenance"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
     queryset = Maintenance.objects.all()
     serializer_class = MaintenanceSerializer
 
@@ -194,7 +185,7 @@ class MaintenanceViewSet(mixins.CreateModelMixin,
             if maintainer_id:
                 queryset = queryset.filter(user=int(maintainer_id))
 
-            serializer = MaintenanceMinimalSerializer(queryset, many=True)
+            serializer = MinimalMaintenanceSerializer(queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
@@ -204,8 +195,8 @@ class MaintenanceViewSet(mixins.CreateModelMixin,
 
 class ProjectModelViewSet(viewsets.ModelViewSet):
     """Viewset for project models"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, isActiveUser)
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated,]
     queryset = ProjectModel.objects.all()
     serializer_class = ProjectModelSerializer
 
@@ -223,7 +214,7 @@ class ProjectModelViewSet(viewsets.ModelViewSet):
             if model_name:
                 queryset = queryset.filter(name=model_name)
 
-            serializer = ProjectModelMinimalSerializer(queryset, many=True)
+            serializer = MinimalProjectModelSerializer(queryset, many=True)
 
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
@@ -235,12 +226,12 @@ class ProjectModelViewSet(viewsets.ModelViewSet):
         """Retrieve a project model"""
         try:
             instance = self.get_object()
-            serializer = ProjectModelDataSerializer(instance)
-            response = serializer.data
+            serializer = FullProjectModelSerializer(instance)
+            response_data = serializer.data
             model_fields = ModelField.objects.filter(project_model=instance)
-            model_fields_serializer = ModelFieldMinimalSerializer(model_fields, many=True)
-            response['model_fields'] = model_fields_serializer.data
-            return response.Response(response, status=status.HTTP_200_OK)
+            model_fields_serializer = MinimalModelFieldSerializer(model_fields, many=True)
+            response_data['model_fields'] = model_fields_serializer.data
+            return response.Response(response_data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
@@ -249,8 +240,8 @@ class ProjectModelViewSet(viewsets.ModelViewSet):
 
 class ChangeProjectModelStatusView(views.APIView):
     """View for changing the status (is_active) of the model field"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
     serializer_class = ProjectModelSerializer
 
     def post(self, request, *args, **kwargs):
@@ -274,8 +265,8 @@ class ChangeProjectModelStatusView(views.APIView):
 
 class ModelFieldViewSet(viewsets.ModelViewSet):
     """Viewset for model fields"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, isActiveUser)
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated,]
     queryset = ModelField.objects.all()
     serializer_class = ModelFieldSerializer
 
@@ -294,7 +285,7 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         """List the all the model fields"""
         try:
-            serializer = ModelFieldMinimalSerializer(self.queryset, many=True)
+            serializer = MinimalModelFieldSerializer(self.queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
@@ -304,8 +295,8 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
 
 class ChangeModelFieldStatusView(views.APIView):
     """View for changing the status (is_active) of the model field"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser,]
     serializer_class = ModelFieldSerializer
 
     def post(self, request, *args, **kwargs):
@@ -327,18 +318,18 @@ class ChangeModelFieldStatusView(views.APIView):
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class ConfigValuesViewSet(viewsets.ModelViewSet):
+class ValidatorValueViewSet(viewsets.ModelViewSet):
     """Viewset for config values"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, isActiveUser)
-    queryset = ConfigValues.objects.all()
-    serializer_class = ConfigValuesSerializer
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated,]
+    queryset = ValidatorValue.objects.all()
+    serializer_class = ValidatorValueSerializer
 
     def create(self, request, *args, **kwargs):
         """Create a list of config values"""
         try:
             data = request.data
-            serializer = ConfigValuesSerializer(data=data, many=True)
+            serializer = ValidatorValueSerializer(data=data, many=True)
             if serializer.is_valid():
                 serializer.save()
                 return response.Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -361,7 +352,7 @@ class ConfigValuesViewSet(viewsets.ModelViewSet):
                 is_active = True if is_active.lower() == 'true' else False
                 queryset = queryset.filter(is_active=is_active)
 
-            serializer = ConfigValuesMinimalSerializer(queryset, many=True)
+            serializer = ValidatorValueSerializer(queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
@@ -369,21 +360,21 @@ class ConfigValuesViewSet(viewsets.ModelViewSet):
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class ChangeConfigValuesStatusView(views.APIView):
+class ChangeValidatorValueStatusView(views.APIView):
     """View for changing the status (is_active) of the config value"""
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser, isActiveUser)
-    serializer_class = ConfigValuesSerializer
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser,]
+    serializer_class = ValidatorValueSerializer
 
     def post(self, request, *args, **kwargs):
         """Change the status of the config value"""
         try:
-            config_value_id = kwargs.get('pk', None)
+            validator_value_id = kwargs.get('pk', None)
 
-            if not config_value_id :
+            if not validator_value_id :
                 return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
-            config_value = ConfigValues.objects.get(id=config_value_id)
+            config_value = ValidatorValue.objects.get(id=validator_value_id)
             config_value.is_active = not config_value.is_active
             config_value.save()
 
@@ -392,6 +383,3 @@ class ChangeConfigValuesStatusView(views.APIView):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-

@@ -23,8 +23,3 @@ from .ModelFieldLogs import (
     model_field_insertion_log,
     model_field_update_log,
 )
-
-from .DataTypeLogs import (
-    data_type_insertion_log,
-    data_type_update_log,
-)

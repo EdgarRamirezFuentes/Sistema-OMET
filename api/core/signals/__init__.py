@@ -17,8 +17,3 @@ from .ProjectModelSignals import (
     project_model_insertion_signal,
     project_model_pre_insertion_signal,
 )
-
-from .DataTypeSignals import (
-    data_type_insertion_signal,
-    data_type_pre_insertion_signal,
-)
