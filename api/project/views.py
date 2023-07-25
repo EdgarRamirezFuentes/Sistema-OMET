@@ -14,6 +14,7 @@ from project.serializers import (
     ModelFieldSerializer,
     MinimalModelFieldSerializer,
     ValidatorValueSerializer,
+    ModelFieldValidatorValueSerializer
 )
 
 from core.models import (
@@ -287,6 +288,21 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
         try:
             serializer = MinimalModelFieldSerializer(self.queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
+        except (ObjectDoesNotExist, Http404):
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, *args, **kwargs):
+        """Retrieve a model field"""
+        try:
+            instance = self.get_object()
+            serializer = ModelFieldSerializer(instance)
+            model_field_validators = ValidatorValue.objects.filter(model_field=instance)
+            model_field_validators_serializer = ModelFieldValidatorValueSerializer(model_field_validators, many=True)
+            response_data = serializer.data
+            response_data['validators'] = model_field_validators_serializer.data
+            return response.Response(response_data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:

@@ -199,3 +199,12 @@ class FullValidatorValueSerializer(serializers.ModelSerializer):
         model = ValidatorValue
         fields = ('id', 'validator', 'value',
                   'model_field')
+
+
+class ModelFieldValidatorValueSerializer(serializers.ModelSerializer):
+    """Serializer for model field validators."""
+    validator = ValidatorSerializer()
+
+    class Meta:
+        model = ValidatorValue
+        fields = ('id', 'validator', 'value')
