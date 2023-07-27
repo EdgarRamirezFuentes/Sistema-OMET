@@ -7,6 +7,7 @@ app_name = 'project'
 router = routers.SimpleRouter()
 
 router.register('maintenance', views.MaintenanceViewSet, basename='maintenance')
+router.register('apps', views.ProjectAppViewSet, basename='project-app')
 router.register('models', views.ProjectModelViewSet, basename='project-model')
 router.register('fields', views.ModelFieldViewSet, basename='model-field')
 router.register('validator-value', views.ValidatorValueViewSet, basename='validator-value')
@@ -18,5 +19,6 @@ urlpatterns = [
     path('models/change-status/<int:pk>/', views.ChangeProjectModelStatusView.as_view(), name='project-model-change-status'),
     path('fields/change-status/<int:pk>/', views.ChangeModelFieldStatusView.as_view(), name='model-field-change-status'),
     path('validator-value/change-status/<int:pk>/', views.ChangeValidatorValueStatusView.as_view(), name='validator-value-change-status'),
+    path('export/<int:pk>/', views.ExportProjectApiView.as_view(), name='project-export'),
     path('', include(router.urls)),
 ]

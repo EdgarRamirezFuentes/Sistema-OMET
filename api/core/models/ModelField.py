@@ -21,4 +21,4 @@ class ModelField(models.Model):
                            ('order', 'project_model'))
 
     def __str__(self):
-        return f'{self.id}. {self.name} - {self.project_model.name} - {self.project_model.project.name}'
+        return f'{self.id}. {self.name}'

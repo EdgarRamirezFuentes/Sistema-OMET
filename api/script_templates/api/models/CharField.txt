@@ -1,0 +1,1 @@
+{{FIELD_NAME}} = models.CharField({{ATTRIBUTES}}, validators=[{{VALIDATORS}}, ])

@@ -1,0 +1,13 @@
+"""
+Serializers for the MODEL_NAME API View.
+"""
+from rest_framework import serializers
+
+from core.models import MODEL_NAME
+
+class MODEL_NAMESerializer(serializers.ModelSerializer):
+    """Serializer for the MODEL_NAME object."""
+
+    class Meta:
+        model = MODEL_NAME
+        fields = '__all__'

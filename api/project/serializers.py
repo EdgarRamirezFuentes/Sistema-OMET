@@ -18,6 +18,7 @@ from .utils import (
 
 from core.models import (
     Project,
+    ProjectApp,
     ProjectModel,
     ModelField,
     Maintenance,
@@ -55,6 +56,53 @@ class FullProjectSerializer(serializers.ModelSerializer):
                   'customer')
 
 
+class ProjectAppSerializer(serializers.ModelSerializer):
+    """Default serializer for project app model."""
+
+    class Meta:
+        model = ProjectApp
+        fields = ('id', 'name', 'description',
+                  'project')
+
+    def validate_name(self, name):
+        """Validate the project app name contains only letters.
+
+        Args:
+            name (str): Project app name.
+
+        Raises:
+            serializers.ValidationError: If project app name is not valid.
+
+        Returns:
+            str: Formatted project app name.
+        """
+        if not name.strip().isalpha():
+            raise serializers.ValidationError(
+                _('El nombre de una aplicación debe contener solo letras.')
+            )
+
+        return format_name(name)
+
+
+class MinimalProjectAppSerializer(serializers.ModelSerializer):
+    """Serializer for project app model with minimal fields."""
+    project = MinimalProjectSerializer()
+
+    class Meta:
+        model = ProjectApp
+        fields = ('id', 'name', 'project')
+
+
+class FullProjectAppSerializer(serializers.ModelSerializer):
+    """Serializer for project app model with all fields and its full data."""
+    project = MinimalProjectSerializer()
+
+    class Meta:
+        model = ProjectApp
+        fields = ('id', 'name', 'description',
+                  'project')
+
+
 class MaintenanceSerializer(serializers.ModelSerializer):
     """Default serializer for maintenance model."""
     class Meta:
@@ -86,7 +134,7 @@ class ProjectModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectModel
-        fields = ('id', 'name', 'project')
+        fields = ('id', 'name', 'project_app')
 
     def validate_name(self, name):
         """Validate model name.
@@ -121,12 +169,12 @@ class MinimalProjectModelSerializer(serializers.ModelSerializer):
 
 class FullProjectModelSerializer(serializers.ModelSerializer):
     """Serializer for project model with all fields and its full data."""
-    project = MinimalProjectSerializer()
+    project_app = MinimalProjectAppSerializer()
 
     class Meta:
         model = ProjectModel
         fields = ('id', 'name',
-                  'project', 'is_active')
+                  'project_app', 'is_active')
 
 
 class ModelFieldSerializer(serializers.ModelSerializer):

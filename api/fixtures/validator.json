@@ -88,24 +88,8 @@
         }
     },
     {
-        "model":"core.Validator",
+        "model": "core.Validator",
         "pk": 12,
-        "fields": {
-            "name": "unique_for_month",
-            "description": "Establece si un campo debe ser único para un mes específico."
-        }
-    },
-    {
-        "model": "core.Validator",
-        "pk": 13,
-        "fields": {
-            "name": "unique_for_year",
-            "description": "Establece si un campo debe ser único para un año específico."
-        }
-    },
-    {
-        "model": "core.Validator",
-        "pk": 14,
         "fields": {
             "name": "max_digits",
             "description": "Establece el número máximo de dígitos de un campo decimal."
@@ -113,7 +97,7 @@
     },
     {
         "model": "core.Validator",
-        "pk": 15,
+        "pk": 13,
         "fields": {
             "name": "decimal_places",
             "description": "Establece el número de decimales de un campo decimal."
@@ -121,7 +105,7 @@
     },
     {
         "model": "core.Validator",
-        "pk": 16,
+        "pk": 14,
         "fields": {
             "name": "model",
             "description": "Establece el nombre del modelo con el que se relaciona un campo."

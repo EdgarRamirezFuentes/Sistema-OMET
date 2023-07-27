@@ -1,0 +1,7 @@
+"""{{MODEL_NAME}} Database Model."""
+from django.db import models
+
+{{VALIDATOR_IMPORTS}}
+
+class {{MODEL_NAME}}(models.Model):
+    {{MODEL_FIELDS}}

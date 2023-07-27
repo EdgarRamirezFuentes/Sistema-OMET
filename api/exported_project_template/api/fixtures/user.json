@@ -1,0 +1,17 @@
+[
+    {
+        "model": "core.User",
+        "pk": 1,
+        "fields": {
+            "rfc": "AAAA000000AAA",
+            "name": "Admin",
+            "first_last_name": "",
+            "second_last_name": "",
+            "email": "admin@admin.com",
+            "password": "pbkdf2_sha256$260000$pIG2e2199wjv28GXVoKURF$8YaXyRAWMk4OqW99eI+ULwwJ4+mmxl6aqym7fLK4TKo=",
+            "is_superuser": true,
+            "is_staff": true,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    }
+]

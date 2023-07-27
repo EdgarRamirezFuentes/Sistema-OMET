@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "name": "producto",
-            "project": 1,
+            "project_app": 1,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -13,7 +13,25 @@
         "pk": 2,
         "fields": {
             "name": "marca",
-            "project": 1,
+            "project_app": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ProjectModel",
+        "pk": 3,
+        "fields": {
+            "name": "cliente",
+            "project_app": 2,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ProjectModel",
+        "pk": 4,
+        "fields": {
+            "name": "proveedor",
+            "project_app": 3,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     }

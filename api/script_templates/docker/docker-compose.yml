@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+  postgresql:
+    container_name: {{PROJECT_NAME}}-postgresql
+    image: 'postgres:14.7-alpine'
+    ports:
+      - '5432:5432'
+    env_file: ./env_files/postgresql/.env
+    volumes:
+      - 'dev-db-data:/var/lib/postgresql/data'
+  api:
+    container_name: {{PROJECT_NAME}}-api
+    build:
+      context: ./api
+      args:
+        - DEV=true
+    ports:
+      - '8000:8000'
+    env_file: ./env_files/api/.env
+    entrypoint: sh -c "sh ./entrypoint.sh"
+    volumes:
+      - './api:/api'
+      - dev-static-data:/vol/web
+    depends_on:
+      - rabbitmq
+      - postgresql
+  rabbitmq:
+    container_name: {{PROJECT_NAME}}-rabbitmq
+    image: 'rabbitmq:3.8.9-management-alpine'
+    ports:
+      - '5672:5672'
+    env_file: ./env_files/rabbitmq/.env
+    volumes:
+      - 'dev-rabbitmq-data:/var/lib/rabbitmq'
+volumes:
+  dev-db-data:
+  dev-static-data:
+  dev-rabbitmq-data:

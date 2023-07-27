@@ -13,4 +13,4 @@ class DataType(models.Model):
         verbose_name_plural = 'Data Types'
 
     def __str__(self):
-        return self.name
+        return f'{self.id}. {self.name}'
