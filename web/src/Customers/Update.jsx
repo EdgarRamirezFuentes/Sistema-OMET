@@ -4,7 +4,6 @@ import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
-import { createCustomer } from '../api/controller/CustomersController';
 import { useParams } from 'react-router-dom';
 import { getCustomer, updateCustomer } from '../api/controller/CustomersController'
 
@@ -22,16 +21,12 @@ function UpdateCustomer() {
     const [rfc, setRfc] = useState('');
     const [email, setEmail] = useState('');
 
-    const [selectedUser, setSelectedUser] = useState('');
-    const [allClients, setAllClients] = useState([])
     const [rfcError, setRfcError] = useState(false);
     const [customer, setCustomer] = useState(null);
 
     const getClientData = async (userId)=>{
         await getCustomer(session.token, userId).then(async(client)=>{
             client = await client.json();
-            console.log("===client===");
-            console.log(client);
             setCustomer(client);
             setName(client?.name);
             setEmail(client?.email||'');
@@ -61,11 +56,6 @@ function UpdateCustomer() {
             setRfcError(false);
         }
     },[user])
-    const handleChange = (event) => {
-      setSelectedUser(event.target.value);
-      console.log("===selectedUser===");
-      console.log(event.target.value);
-    };
 
     const onCloseHandler = () => {
         setError(null)
@@ -125,7 +115,7 @@ function UpdateCustomer() {
                         </div>
                     </div>
                     <div className='mt-3 ml-5 flex justify-center'>
-                        <p className='text-3xl font-bold'>Actualizar customer</p>
+                        <p className='text-3xl font-bold'>Actualizar cliente</p>
                     </div>
                     <div className='flex flex-col justify-between'>
                     <div className='mt-5 p-5 flex flex-col items-center m-auto w-1/2 rounded-2xl bg-white'>

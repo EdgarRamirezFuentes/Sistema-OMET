@@ -70,7 +70,7 @@ function CreateCustomer() {
           setAlertMessage('Customer creado correctamente.')
           setTimeout(() => {
             history('/customers/get');
-          }, 1000);
+          }, 2000);
           setError(true);
           return;
         }else{
@@ -96,7 +96,7 @@ function CreateCustomer() {
                         </div>
                     </div>
                     <div className='mt-3 ml-5 flex justify-center'>
-                        <p className='text-3xl font-bold'>Crear customer</p>
+                        <p className='text-3xl font-bold'>Crear cliente</p>
                     </div>
                     <div className='flex flex-col justify-between'>
                     <div className='mt-5 p-5 flex flex-col items-center m-auto w-1/2 rounded-2xl bg-white'>

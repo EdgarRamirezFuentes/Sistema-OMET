@@ -2,7 +2,6 @@ import '../App.css'
 import Timer from '../Components/Timer/Timer'
 import SideBar from '../Components/Sidebar/Sidebar'
 import Table from '../Components/tailwindUI/Table'
-import { getAllClients, resetPassword, deleteUser } from '../api/controller/ClientsController'
 import { getDataTypes, deleteDataType } from '../api/controller/DataTypeController'
 import { useEffect, useState } from 'react'
 import { TrashIcon, ClipboardIcon, EyeIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
@@ -129,7 +128,7 @@ function DataTypes() {
         <div className='w-full'>
           <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
             <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-            <p className='w-full font-sans text-xl text-black'>/ Data Type</p>
+            <p className='w-full font-sans text-xl text-black'>/ Tipo de dato</p>
             <div className='w-full mr-5'>
                 <Timer/>
             </div>

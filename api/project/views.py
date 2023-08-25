@@ -386,7 +386,12 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         """List the all the model fields"""
         try:
-            serializer = MinimalModelFieldSerializer(self.queryset, many=True)
+            project_model_id = request.query_params.get('project_model_id', None)
+
+            if project_model_id:
+                self.queryset = self.queryset.filter(project_model=int(project_model_id))
+                
+            serializer = ModelFieldSerializer(self.queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)

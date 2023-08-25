@@ -2,20 +2,13 @@ import '../App.css'
 import Timer from '../Components/Timer/Timer'
 import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
-import Alert from '../Components/Alert/Alert'
-import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { getCustomer, updateCustomer } from '../api/controller/CustomersController'
+import { getCustomer } from '../api/controller/CustomersController'
 
 function SeeCustomer() {
     const params = useParams();
-    const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'))
     const user = session.user;
-
-    const [error, setError] = useState(null);
-    const [alertMessage, setAlertMessage] = useState('');
-    const [alertType, setAlertType] = useState('Error');
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [rfc, setRfc] = useState('');
@@ -55,13 +48,7 @@ function SeeCustomer() {
         }else{
             setRfcError(false);
         }
-    },[user])
-
-    const onCloseHandler = () => {
-        setError(null)
-        setAlertType('Error');
-        setAlertMessage('')
-    }
+    },[user]);
   
     return (
         <div className="w-full h-full bg-slate-100">
@@ -76,7 +63,7 @@ function SeeCustomer() {
                         </div>
                     </div>
                     <div className='mt-3 ml-5 flex justify-center'>
-                        <p className='text-3xl font-bold'>Customer info</p>
+                        <p className='text-3xl font-bold'>Información del cliente</p>
                     </div>
                     <div className='flex flex-col justify-between'>
                     <div className='mt-5 p-5 flex flex-col items-center m-auto w-1/2 rounded-2xl bg-white'>

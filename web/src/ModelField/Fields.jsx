@@ -1,13 +1,14 @@
-import '../../App.css'
-import Timer from '../../Components/Timer/Timer'
-import SideBar from '../../Components/Sidebar/Sidebar'
-import Table from '../../Components/tailwindUI/Table'
-import { deleteProject, getProjectModels, deleteProjectModel } from '../../api/controller/ProjectsController'
+import '../App.css'
+import Timer from '../Components/Timer/Timer'
+import SideBar from '../Components/Sidebar/Sidebar'
+import Table from '../Components/tailwindUI/Table'
+import { deleteProject, getProjectModels, deleteProjectModel } from '../api/controller/ProjectsController'
 import { useEffect, useState } from 'react'
 import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
-import Alert from '../../Components/Alert/Alert'
+import Alert from '../Components/Alert/Alert'
 import { useParams, useLocation } from 'react-router-dom'
+import { getModelFields, deleteModelField } from '../api/controller/ModelFieldsController'
 
 function Models() {
     const params = useParams();
@@ -30,8 +31,9 @@ function Models() {
   }, [deletedProject]);
 
   const getModels = async ()=>{
-    await getProjectModels(session.token, params.id).then(async (models)=>{
+    await getModelFields(params.id, session.token).then(async (models)=>{
       let modelList = await models.json()
+      console.log("modelList",modelList);
       if (modelList.length > 0){
         setAllModels(modelList)
         setIsLoadingData(false)
@@ -45,35 +47,32 @@ function Models() {
   const tableColumns = [
     { heading: 'Id', value: 'id',align: 'center' },
     { heading: 'Nombre', value: 'name' , main: true},
-    { heading: 'Customer', value: 'customer.name'}
+    { heading: 'Descripción', value: 'data_type.description'},
+    { heading: 'Tipo de dato', value: 'data_type.name'},
   ];
 
   const handleView = item => {
-    history(`/projects/model/view/${item.id}`,{
-            item: item,
-            model: params.id
+    console.log("item",item);
+    history(`/model/view/${item.id}`,{
+              state:{
+                item: item,
+                model: params.id
+              }
         }
     )
   }
   const handleUpdate = item => {
-    history(`/projects/model/update/${item.id}`,{
-                state: {
-                    item: item,
-                    model: params.id
-                }
-        }
-    )
-  }
-  
-  const handleUpdateMaintainer = item => {
-    history(`/projects/update/maintainer/${item.id}`,{
-            item: item,
+    history(`/model/update/${item.id}`,{
+              state: {
+                  item: item,
+                  model: params.id
+              }
         }
     )
   }
   
   const handleDelete = async (item) => {
-    await deleteProjectModel(session.token, item.id).then((response)=>{
+    await deleteModelField(item.id, session.token).then((response)=>{
 
       if(response.status === 204){
         setAlertType('Success');
@@ -94,21 +93,21 @@ function Models() {
   const columnActions = [
     {
         id: 1,
-        name: 'Ver modelo',
+        name: 'Ver campo',
         type: 'primary',
         icon: <EyeIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleView,
     },
     {
         id: 2,
-        name: 'Project Model',
+        name: 'Actualizar campo',
         type: 'primary',
-        icon: <AdjustmentsHorizontalIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
-        action: handleProjectModel,
+        icon: <ClipboardIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
+        action: handleUpdate,
     },
     {
         id: 3,
-        name: 'Eliminar modelo',
+        name: 'Eliminar campo',
         type: 'primary',
         icon: <TrashIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleDelete,
@@ -135,8 +134,8 @@ function Models() {
           </div>
           <div>
             <div className='mt-3 ml-5 flex flex-row justify-between items-center '>
-                <p className='text-3xl font-bold'>Modelos</p>
-                <button onClick={()=>{history('/projects/model/create/'+params.id)}} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear Modelo</button>
+                <p className='text-3xl font-bold'>Campos</p>
+                <button onClick={()=>{history('/model/create/'+params.id)}} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear campo</button>
             </div>
             <div className="mt-5 w-full overflow-hidden">
               <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />

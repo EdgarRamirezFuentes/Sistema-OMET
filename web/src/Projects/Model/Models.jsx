@@ -51,9 +51,11 @@ function Models() {
 
   const handleView = item => {
     history(`/projects/model/view/${item.id}`,{
-            item: item,
-            model: params.id
-        }
+      state: {
+          item: item,
+          model: params.id
+      }
+}
     )
   }
   const handleUpdate = item => {
@@ -68,6 +70,8 @@ function Models() {
 
   const handleDelete = async (item) => {
     await deleteProjectModel(session.token, item.id).then((response)=>{
+      console.log("response");
+      console.log(response);
 
       if(response.status === 204){
         setAlertType('Success');
@@ -79,8 +83,11 @@ function Models() {
   }
 
   const handleProjectModel = item => {
-    history(`/projects/create/model/${item.id}`,{
-            client: item,
+    history(`/model/get/${item.id}`,{
+            state: {
+              item: item,
+              model: params.id
+          }
         }
     )
   }
@@ -139,7 +146,7 @@ function Models() {
                 <p className='text-3xl font-bold'>Modelos</p>
                 <button onClick={()=>{history('/projects/model/create/'+params.id)}} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear Modelo</button>
             </div>
-            <div className="mt-5 w-full overflow-hidden">
+            <div className="w-full overflow-hidden">
               <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
             </div>
             <div className='mt-5'>

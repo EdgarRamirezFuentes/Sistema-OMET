@@ -26,12 +26,15 @@ function UpdateProjectModel() {
     }
 
     useEffect(() => {
-      getModelData();
+      console.log("location.state");
+      console.log(location.state); 
+      setName(location.state.item.name)
     }, []);
 
     const getModelData = async ()=>{
       await getProjectModel(session.token, params.id).then(async (model)=>{
         let modelData = await model.json()
+        console.log("modelData",modelData);
         if (modelData){
           setModelData(modelData)
           setName(modelData.name)

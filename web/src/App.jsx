@@ -23,6 +23,7 @@ import UpdateMaintainersProject from "./Projects/Maintainers";
 import SeeProject from "./Projects/See";
 
 import Models from "./Projects/Model/Models";
+import SeeProjectModel from "./Projects/Model/See";
 import CreateProjectModel from "./Projects/Model/Create";
 import UpdateProjectModel from "./Projects/Model/Update";
 
@@ -30,6 +31,11 @@ import CreateDataType from "./DataType/Create";
 import DataTypes from "./DataType/Types";
 import SeeDataType from "./DataType/See";
 import UpdateDataType from "./DataType/Update";
+
+import CreateModel from "./ModelField/Create";
+import ModelFields from "./ModelField/Fields";
+import SeeModel from "./ModelField/See";
+import UpdateModel from "./ModelField/Update";
 function App() {
 
   return (
@@ -42,6 +48,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/home" element={<Dashboard />} />
               <Route path="/profile" element={<Profile />} />
+              
               <Route path="/clients/get" element={<Clients />} />
               <Route path="/clients/view/:id" element={<See />} />
               <Route path="/clients/update/:id" element={<Update />} />
@@ -56,6 +63,7 @@ function App() {
 
               <Route path="/projects/model/:id" element={<Models />} />
               <Route path="/projects/model/create/:id" element={<CreateProjectModel />} />
+              <Route path="/projects/model/view/:id" element={<SeeProjectModel />} />
               <Route path="/projects/model/update/:id" element={<UpdateProjectModel />} />
 
               <Route path="/customers/create" element={<CreateCustomer />} />
@@ -67,6 +75,12 @@ function App() {
               <Route path="/data-type/get" element={<DataTypes />} />
               <Route path="/data-type/update/:id" element={<UpdateDataType />} />
               <Route path="/data-type/view/:id" element={<SeeDataType />} />
+
+              <Route path="/model/create/:id" element={<CreateModel />} />
+              <Route path="/model/view/:id" element={<SeeModel />} />
+              <Route path="/model/update/:id" element={<UpdateModel />} />
+              <Route path="/model/get/:id" element={<ModelFields />} />
+              
             </Routes>
         </div>
       </div>

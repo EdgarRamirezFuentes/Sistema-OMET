@@ -31,7 +31,7 @@ function UpdateMaintainersProject() {
 
     const tableColumns = [
       { heading: 'Id', value: 'id',align: 'center' },
-      { heading: 'Nombre', value: 'name' , main: true},
+      { heading: 'Nombre', value: 'user.name' , main: true},
     ];
 
     const handleView = item => {
@@ -129,9 +129,7 @@ function UpdateMaintainersProject() {
 
     const getProjectData = async () => {
         await getProject(session.token, params.id).then(async(response)=>{
-          
               let projectArray = await response.json()
-              console.log("projectArray", projectArray);
               let project  = projectArray.project;
               let mainteiner = projectArray.maintainers;
               setMaintainers(mainteiner);
@@ -174,7 +172,7 @@ function UpdateMaintainersProject() {
                               <div className='mt-5'>
                                   <Table title='Clientes' data={ maintainers } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
                               </div>
-                              {allClients.length >0 ?<div className='mt-10 mb-10 w-full flex flex-row justify-center'>
+                              {allClients.length > 0 ? <div className='mt-10 mb-10 w-full flex flex-row justify-center'>
                                 <p className='font-bold mr-10'>Asignar:</p>
                                 <div className="mt-1 relative rounded-md shadow-sm">
                                   <select className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'

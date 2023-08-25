@@ -94,7 +94,7 @@ function UpdateDataType() {
                 <div className='w-full'>
                     <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
                         <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-                        <p className='w-full font-sans text-xl text-black'>/ Data Type</p>
+                        <p className='w-full font-sans text-xl text-black'>/ Tipo de dato</p>
                         <div className='w-full mr-5'>
                             <Timer/>
                         </div>
