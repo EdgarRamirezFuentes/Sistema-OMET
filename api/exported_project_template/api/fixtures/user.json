@@ -1,6 +1,6 @@
 [
     {
-        "model": "core.User",
+        "model": "user.User",
         "pk": 1,
         "fields": {
             "rfc": "AAAA000000AAA",

@@ -4,7 +4,7 @@ from .Customer import Customer
 from .Project import Project
 from .ProjectApp import ProjectApp
 from .Maintenance import Maintenance
-from .ProjectModel import ProjectModel
+from .AppModel import AppModel
 from .DataType import DataType
 from .ModelField import ModelField
 from .Validator import Validator

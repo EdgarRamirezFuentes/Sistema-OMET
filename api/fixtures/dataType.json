@@ -129,15 +129,6 @@
         "model": "core.DataType",
         "pk": 15,
         "fields": {
-            "name": "OnetoOneForeignKey",
-            "description": "Tipo de dato utilizado para realizar una relación uno a uno con otro modelo.",
-            "validators": [16]
-        }
-    },
-    {
-        "model": "core.DataType",
-        "pk": 16,
-        "fields": {
             "name": "OnetoManyForeignKey",
             "description": "Tipo de dato utilizado para realizar una relación uno a muchos con otro modelo.",
             "validators": [16]
@@ -145,7 +136,7 @@
     },
     {
         "model": "core.DataType",
-        "pk": 17,
+        "pk": 16,
         "fields": {
             "name": "ManytoManyForeignKey",
             "description": "Tipo de dato utilizado para realizar una relación muchos a muchos con otro modelo.",

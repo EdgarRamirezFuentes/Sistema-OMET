@@ -8,6 +8,7 @@
             "order": 0,
             "data_type": 1,
             "project_model": 1,
+            "foreign_key_relation": null,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -20,6 +21,7 @@
             "order": 1,
             "data_type": 1,
             "project_model": 1,
+            "foreign_key_relation": null,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -32,6 +34,7 @@
             "order": 2,
             "data_type": 7,
             "project_model": 1,
+            "foreign_key_relation": null,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -44,6 +47,7 @@
             "order": 3,
             "data_type": 7,
             "project_model": 1,
+            "foreign_key_relation": null,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -56,6 +60,7 @@
             "order": 4,
             "data_type": 16,
             "project_model": 1,
+            "foreign_key_relation": null,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -68,6 +73,7 @@
             "order": 0,
             "data_type": 1,
             "project_model": 2,
+            "foreign_key_relation": null,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     }

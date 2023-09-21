@@ -1,34 +1,17 @@
 """
-Views for the MODEL_NAME API.
+Views for the {{MODEL_NAME}} API.
 """
-
-from django.shortcuts import render
+from knox.auth import TokenAuthentication
 from rest_framework import (
-    authentication,
     viewsets,
     permissions,
-    generics,
+    response,
     status
 )
 
-from rest_framework.response import Response
-from core.models import MODEL_NAME
-from core.serializers import MODEL_NAMESerializer
+from {{APP_NAME}}.models import {{MODEL_NAME}}
+from {{APP_NAME}}.serializers import {{MODEL_NAME}}Serializer
+{{FOREIGN_KEY_SERIALIZER_IMPORT}}
 
-EXTERNAL_SERIALIZERS
+{{VIEWSET}}
 
-class MODEL_NAMEViewSet(viewsets.ModelViewSet):
-    authentication_classes = [authentication.TokenAuthentication, ]
-    permission_classes = [permissions.IsAuthenticated, ]
-    serializer_class = MODEL_NAMESerializer
-    queryset = MODEL_NAME.objects.all()
-
-    def create(self, request, *args, **kwargs):
-        for item in request.data:
-            item['updated_by'] = request.user.id
-            serializer = self.get_serializer(data=item)
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
-        return Response(status=status.HTTP_201_CREATED)
-
-FIELD_VIEWS

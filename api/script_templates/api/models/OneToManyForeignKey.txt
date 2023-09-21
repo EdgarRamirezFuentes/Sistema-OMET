@@ -1,0 +1,1 @@
+{{FIELD_NAME}} = models.ForeignKey({{FOREIGN_KEY_MODEL}}, on_delete=models.CASCADE)

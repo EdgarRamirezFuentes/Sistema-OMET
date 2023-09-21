@@ -19,7 +19,7 @@ from .utils import (
 from core.models import (
     Project,
     ProjectApp,
-    ProjectModel,
+    AppModel,
     ModelField,
     Maintenance,
     ValidatorValue,
@@ -129,11 +129,11 @@ class ProjectMaintainersSerializer(serializers.ModelSerializer):
         fields = ('id', 'user')
 
 
-class ProjectModelSerializer(serializers.ModelSerializer):
+class AppModelSerializer(serializers.ModelSerializer):
     """Default serializer for project model."""
 
     class Meta:
-        model = ProjectModel
+        model = AppModel
         fields = ('id', 'name', 'project_app')
 
     def validate_name(self, name):
@@ -159,20 +159,20 @@ class ProjectModelSerializer(serializers.ModelSerializer):
         return format_name(name)
 
 
-class MinimalProjectModelSerializer(serializers.ModelSerializer):
+class MinimalAppModelSerializer(serializers.ModelSerializer):
     """Serializer for project model with minimal fields."""
 
     class Meta:
-        model = ProjectModel
+        model = AppModel
         fields = ('id', 'name')
 
 
-class FullProjectModelSerializer(serializers.ModelSerializer):
+class FullAppModelSerializer(serializers.ModelSerializer):
     """Serializer for project model with all fields and its full data."""
     project_app = MinimalProjectAppSerializer()
 
     class Meta:
-        model = ProjectModel
+        model = AppModel
         fields = ('id', 'name',
                   'project_app', 'is_active')
 
@@ -184,7 +184,7 @@ class ModelFieldSerializer(serializers.ModelSerializer):
         model = ModelField
         fields = ('id', 'name', 'data_type',
                   'order', 'caption',
-                   'project_model')
+                   'app_model', 'model_field_relation')
 
     def validate_name(self, name):
         """Validate model field name.
@@ -220,13 +220,13 @@ class MinimalModelFieldSerializer(serializers.ModelSerializer):
 
 class FullModelFieldSerializer(serializers.ModelSerializer):
     """Serializer for model field model with all fields and its full data."""
-    project_model = MinimalProjectModelSerializer()
+    project_model = MinimalAppModelSerializer()
     data_type = DataTypeSerializer()
 
     class Meta:
         model = ModelField
         fields = ('id', 'name', 'data_type',
-                  'project_model', 'created_at')
+                  'app_model', 'created_at')
 
 
 class ValidatorValueSerializer(serializers.ModelSerializer):

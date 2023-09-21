@@ -35,3 +35,19 @@ def format_project_name(name:str)->str:
     """
     project_name = [word.title() for word in name.split(' ') if word]
     return ''.join(project_name)
+
+def get_template_file_content(file_path):
+    """Get the content of a template file
+
+    Args:
+        file_path (str): The path of the file
+
+    Returns:
+        str: The content of the file
+    """
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+            return content
+    except Exception as e:
+        raise ValueError(f'No se pudo leer el archivo {file_path}')

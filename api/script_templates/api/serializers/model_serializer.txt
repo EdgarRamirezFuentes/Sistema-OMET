@@ -1,0 +1,6 @@
+class {{MODEL_NAME}}Serializer(serializers.ModelSerializer):
+    """Serializer for the {{MODEL_NAME}} object."""
+
+    class Meta:
+        model = {{MODEL_NAME}}
+        fields = '__all__'

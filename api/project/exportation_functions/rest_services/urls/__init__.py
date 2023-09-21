@@ -1,0 +1,1 @@
+from .urls import create_project_app_urls_script

@@ -1,0 +1,1 @@
+{{FIELD_NAME}} = {{MODEL_NAME}}{{MODEL_FIELD_RELATION_NAME}}FieldSerializer(many={{MANY_VALUE}})

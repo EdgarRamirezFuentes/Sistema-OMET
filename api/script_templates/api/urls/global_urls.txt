@@ -25,14 +25,14 @@ from drf_spectacular.views import (
 
 urlpatterns = [
     # Swagger endpoints
-    path('api/v1/schema/', SpectacularAPIView.as_view(), name='api-schema'),
+    path('schema/', SpectacularAPIView.as_view(), name='api-schema'),
     path(
-        'api/v1/docs/',
+        'docs/',
         SpectacularSwaggerView.as_view(url_name='api-schema'),
         name='api-docs'
     ),
     {{APPS_URLS}}
-    path('api/v1/user/', include('user.urls')),
+    path('user/', include('user.urls')),
     path('admin/', admin.site.urls),
 ]
 

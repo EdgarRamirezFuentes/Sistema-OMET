@@ -1,13 +1,11 @@
 """
-Serializers for the MODEL_NAME API View.
+Serializers for the {{MODEL_NAME}} API View.
 """
 from rest_framework import serializers
 
-from core.models import MODEL_NAME
+from {{APP_NAME}}.models import {{MODEL_NAME}}
+{{FOREIGN_KEY_IMPORTS}}
 
-class MODEL_NAMESerializer(serializers.ModelSerializer):
-    """Serializer for the MODEL_NAME object."""
+{{MODEL_SERIALIZER}}
 
-    class Meta:
-        model = MODEL_NAME
-        fields = '__all__'
+{{FOREIGN_KEY_SERIALIZERS}}

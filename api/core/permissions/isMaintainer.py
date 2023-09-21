@@ -1,6 +1,6 @@
 from rest_framework import permissions
 from core.models import (
-    ProjectModel,
+    AppModel,
     Maintenance,
     ModelField,
     Maintenance
@@ -16,16 +16,16 @@ class isMaintainer(permissions.BasePermission):
         if request.user.is_superuser:
             return True
 
-        if object is ProjectModel:
+        if object is AppModel:
             return Maintenance.objects.filter(
-                project_model=obj,
+                app_model=obj,
                 user=request.user,
                 is_active=True
             ).exists()
 
         if object is ModelField:
             return Maintenance.objects.filter(
-                project_model=obj.project_model,
+                app_model=obj.app_model,
                 user=request.user,
                 is_active=True
             ).exists()

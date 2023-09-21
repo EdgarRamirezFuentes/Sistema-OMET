@@ -1,15 +1,15 @@
 """
-URL mappings for the APP_NAME API.
+URL mappings for the {{APP_NAME}} API.
 """
 from rest_framework import routers
 from django.urls import path, include
-from APP_NAME import views
+from {{APP_NAME}} import views
 
 router = routers.SimpleRouter()
 
-ROUTER_URLS
+{{ROUTER_URLS}}
 
-app_name = 'APP_NAME'
+app_name = '{{APP_NAME}}'
 
 
 urlpatterns = [

@@ -1,7 +1,8 @@
 """{{MODEL_NAME}} Database Model."""
 from django.db import models
-
 {{VALIDATOR_IMPORTS}}
+{{FOREIGN_KEY_IMPORTS}}
 
 class {{MODEL_NAME}}(models.Model):
+    """Model for {{MODEL_NAME}}"""
     {{MODEL_FIELDS}}

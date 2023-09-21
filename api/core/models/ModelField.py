@@ -8,7 +8,8 @@ class ModelField(models.Model):
     caption = models.CharField(max_length=255, null=False)
     order = models.IntegerField(default=0, null=False, validators=[MinValueValidator(0),])
     data_type = models.ForeignKey('DataType', on_delete=models.SET_NULL, null=True)
-    project_model = models.ForeignKey('ProjectModel', on_delete=models.CASCADE, null=False)
+    app_model = models.ForeignKey('AppModel', on_delete=models.CASCADE, null=False)
+    model_field_relation = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
@@ -17,8 +18,8 @@ class ModelField(models.Model):
         db_table = 'ModelField'
         verbose_name = 'Model Field'
         verbose_name_plural = 'Model Fields'
-        unique_together = (('name', 'project_model'),
-                           ('order', 'project_model'))
+        unique_together = (('name', 'app_model'),
+                           ('order', 'app_model'))
 
     def __str__(self):
         return f'{self.id}. {self.name}'
