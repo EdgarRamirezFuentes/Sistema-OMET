@@ -36,6 +36,9 @@ import CreateModel from "./ModelField/Create";
 import ModelFields from "./ModelField/Fields";
 import SeeModel from "./ModelField/See";
 import UpdateModel from "./ModelField/Update";
+
+
+import CreateApp from "./Apps/Create";
 function App() {
 
   return (
@@ -80,6 +83,11 @@ function App() {
               <Route path="/model/view/:id" element={<SeeModel />} />
               <Route path="/model/update/:id" element={<UpdateModel />} />
               <Route path="/model/get/:id" element={<ModelFields />} />
+              
+              <Route path="/app/create/:id" element={<CreateApp />} />
+              <Route path="/app/view/:id" element={<SeeModel />} />
+              <Route path="/app/update/:id" element={<UpdateModel />} />
+              <Route path="/app/get/:id" element={<ModelFields />} />
               
             </Routes>
         </div>

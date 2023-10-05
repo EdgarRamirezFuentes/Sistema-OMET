@@ -78,7 +78,7 @@ function Projects() {
   }
 
   const handleProjectModel = item => {
-    history(`/projects/model/${item.id}`,{
+    history(`/app/create/${item.id}`,{
             client: item,
         }
     )

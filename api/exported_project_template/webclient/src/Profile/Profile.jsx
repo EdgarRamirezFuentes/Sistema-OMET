@@ -90,11 +90,8 @@ function Profile() {
   }
 
   useEffect(() => {
-
     if (userData === null){
       getClientData();
-    }else{
-      console.log(userData.profile_image);
     }
 
     if(rfc.length<12 || rfc.length > 13){
@@ -120,6 +117,7 @@ function Profile() {
       return;
     }
     let userData = {
+      rfc: rfc,
       email: email,
       name: name,
       first_last_name: first_last_name,
@@ -130,8 +128,6 @@ function Profile() {
 
     await updateClient(userData, session.token, user.id).then(async (response)=>{
       let res = await response.json();
-      console.log("=====res=====");
-      console.log(res);
       if(res.non_field_errors){
         setError(true);
         setAlertMessage(res.non_field_errors[0]);
@@ -239,7 +235,7 @@ function Profile() {
                           <p className='ml-5 text-red-700 text-xs'>El RFC debe tener de 12 a 13 caracteres.</p>
                         </div>:null}
                       </div>
-                      <input readOnly onChange={(event) => {setRfc(event.target.value)}} className='w-full my-2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='RFC' value={rfc} type="text" id="rfc" name="rfc"/><br/><br/>
+                      <input onChange={(event) => {setRfc(event.target.value)}} className='w-full my-2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='RFC' value={rfc} type="text" id="rfc" name="rfc"/><br/><br/>
                       <p className='font-bold'>Número telefónico:</p>
                       <input onChange={(event) => {setPhone(event.target.value)}} className='w-full my-2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Número telefónico:' value={phone} type="text" id="phone" name="phone"/><br/><br/>
                       <p className='font-bold'>Email:</p>

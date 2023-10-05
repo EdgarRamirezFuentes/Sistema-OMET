@@ -62,18 +62,6 @@ function SideBar({ user }) {
             ],
             general : true
         },
-        /*{
-            id: 5,
-            name: 'Apps',
-            icon: IdentificationIcon,
-            current: true,
-            paths: [ '/app/create', '/app/view'],
-            children: [
-                { id: 1, name: 'Crear', current: true, route: '/app/create', paths: ['/app/create'], superuser: true  },
-                { id: 2, name: 'Ver', current: false, route: '/app/get', paths: ['/app/get'], superuser: false, general: true } ,
-            ],
-            general : true
-        },
         {
             id: 4,
             name: 'Tipos de datos',
@@ -85,7 +73,7 @@ function SideBar({ user }) {
                 { id: 2, name: 'Ver', current: false, route: '/data-type/get', paths: ['/data-type/get'], superuser: false, general: true } ,
             ],
             general : true
-        },*/
+        },
     ]);
 
     const changeCurrentNavigation = () => {
