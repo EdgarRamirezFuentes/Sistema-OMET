@@ -43,33 +43,3 @@ export const deleteProjectMaintenance = async (maintenanceId, token) => {
 }
 
 
-export const getProjectModels = async (token, projectId) => {
-    return await projectsAction.getProjectModels(token, projectId).then((response) => {
-        return response;
-    })
-}
-
-
-export const createProjectModel = async (formData, token) => {
-    return await projectsAction.createProjectModel(formData, token).then((response) => {
-        return response;
-    })
-}
-
-export const getProjectModel = async (token, modelId) => {
-    return await projectsAction.getProjectModel(token, modelId).then((response) => {
-        return response;
-    })
-}
-
-export const updateProjectModel = async (modelId, formData, token) => {
-    return await projectsAction.updateProjectModel(modelId, formData, token).then((response) => {
-        return response;
-    })
-}
-
-export const deleteProjectModel = async (token, modelId) => {
-    return await projectsAction.deleteProjectModel(token, modelId).then((response) => {
-        return response;
-    })
-}

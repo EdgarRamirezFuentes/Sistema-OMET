@@ -2,7 +2,6 @@ import '../App.css'
 import Timer from '../Components/Timer/Timer'
 import SideBar from '../Components/Sidebar/Sidebar'
 import Table from '../Components/tailwindUI/Table'
-import { deleteProject, getProjectModels, deleteProjectModel } from '../api/controller/ProjectsController'
 import { useEffect, useState } from 'react'
 import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';

@@ -4,7 +4,7 @@ import SideBar from '../../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
-import { createProjectModel } from '../../api/controller/ProjectsController'
+import { createProjectModel } from '../../api/controller/ProjetModelController'
 import { useParams, useLocation } from 'react-router-dom';
 
 function SeeProjectModel() {

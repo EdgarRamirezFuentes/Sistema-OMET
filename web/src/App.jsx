@@ -39,6 +39,9 @@ import UpdateModel from "./ModelField/Update";
 
 
 import CreateApp from "./Apps/Create";
+import SeeApps from "./Apps/Apps";
+import SeeApp from "./Apps/See";
+import UpdateApp from "./Apps/Update";
 function App() {
 
   return (
@@ -85,8 +88,9 @@ function App() {
               <Route path="/model/get/:id" element={<ModelFields />} />
               
               <Route path="/app/create/:id" element={<CreateApp />} />
-              <Route path="/app/view/:id" element={<SeeModel />} />
-              <Route path="/app/update/:id" element={<UpdateModel />} />
+              <Route path="/apps/" element={<SeeApps />} />
+              <Route path="/app/view/:id" element={<SeeApp />} />
+              <Route path="/app/update/:id" element={<UpdateApp />} />
               <Route path="/app/get/:id" element={<ModelFields />} />
               
             </Routes>

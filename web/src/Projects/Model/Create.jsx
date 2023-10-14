@@ -4,7 +4,7 @@ import SideBar from '../../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
-import { createProjectModel } from '../../api/controller/ProjectsController'
+import { createProjectModel } from '../../api/controller/ProjetModelController'
 import { useParams } from 'react-router-dom';
 
 function CreateProjectModel() {
@@ -33,11 +33,12 @@ function CreateProjectModel() {
 
       let data = {
         name: name,
-        project: params.id,
+        project_app: params.id,
       }
 
       await createProjectModel(data, session.token).then(async (response) => {
         let res = await response.json();
+        console.log(res)
         if (response.status === 201){
           setAlertType('Success');
           setAlertMessage('Modelo creado correctamente.')

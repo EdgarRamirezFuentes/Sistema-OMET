@@ -6,7 +6,7 @@ import Alert from '../Components/Alert/Alert'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { updateApp, getApps } from '../api/controller/AppController'
-function UpdateApp() {
+function SeeApp() {
     const history = useNavigate();
     const params = useParams();
     const location = useLocation();
@@ -17,6 +17,8 @@ function UpdateApp() {
     const [alertType, setAlertType] = useState('Error');
     const [name, setName] = useState('');
     const [caption, setCaption] = useState('');
+    const [appData, setAppData] = useState(null);
+    const [flag, setFlag] = useState(false);
     
 
 
@@ -37,12 +39,14 @@ function UpdateApp() {
         let data = {
             name: name,
             description: caption,
+            project: parseInt(params.id)
         }
 
-        await updateApp(params.id, data, session.token).then(async (response)=>{
-            if (response.status === 200){
+        /*await createApp(data, session.token).then(async (response)=>{
+            let responseJson = await response.json()
+            if (response.status === 201){
             setAlertType('Success');
-            setAlertMessage('App actualizada correctamente.')
+            setAlertMessage('App creada correctamente.')
             setError(true);
             setTimeout(() => {
                 history(`/apps/`,{
@@ -54,19 +58,23 @@ function UpdateApp() {
             }, 1500);
             }else{
             setAlertType('Error');
-            setAlertMessage('Error al actualizar la app.')
+            setAlertMessage('Error al crear la app.')
             setError(true);
             }
-        });
+        });*/
     }
 
     const getAppData = async () => {
-        await getApps(params.id, session.token).then(async(response)=>{
-                let responseJson = await response.json()
-                setName(responseJson.name)
-                setCaption(responseJson.description)
-            }
-        )
+        if (appData == null && !flag){
+            await getApps(params.id, session.token).then(async(response)=>{
+                    let responseJson = await response.json()
+                    console.log("===responseJson===")
+                    console.log(responseJson)
+                    setName(responseJson.name)
+                    setCaption(responseJson.description)
+                }
+            )
+        }
     }
 
     useEffect(() => {
@@ -113,9 +121,7 @@ function UpdateApp() {
 
                         </div>
                         </div>
-                        <div className='w-1/4'>
-                        <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Actualizar"/><br/><br/>
-                        </div>
+                        
                     </div>
                     </div>
                 </div>
@@ -124,4 +130,4 @@ function UpdateApp() {
     )
 }
 
-export default UpdateApp
+export default SeeApp

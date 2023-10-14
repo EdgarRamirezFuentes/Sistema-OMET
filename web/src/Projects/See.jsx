@@ -24,6 +24,7 @@ function SeeProject() {
     const [allClients, setAllClients] = useState([])
     const [isLoadingData, setIsLoadingData] = useState(true)
     const [allModels, setAllModels] = useState([])
+    const [allApps, setAllApps] = useState([])
 
     const handleChange = (event) => {
       setSelectedUser(event.target.value);
@@ -33,23 +34,6 @@ function SeeProject() {
       { heading: 'Id', value: 'id',align: 'center' },
       { heading: 'Nombre', value: 'name' , main: true},
     ];
-
-    const handleView = item => {
-      /*history(`/clients/view/${item.id}`,{
-              client: item,
-          }
-      )*/
-    }
-    const handleUpdate = item => {
-      history(`/projects/update/${item.id}`,{
-              client: item,
-          }
-      )
-    }
-    
-    const handleDelete = async (item) => {
-      //setDeletedUser(true);
-    }
 
     const columnActions = [
     ];
@@ -112,12 +96,13 @@ function SeeProject() {
               setName(project.name);
               setDescription(project.description);
               setSelectedUser(project.customer.id);
+              setAllApps(projectArray.project_apps)
          })
     }
   
     return (
         <div className="w-full h-full bg-slate-100">
-            <div className='flex flex-row h-screen'>
+            <div className='flex flex-row h-full'>
                 <SideBar/>
                 <div className='w-full'>
                     <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
@@ -151,15 +136,15 @@ function SeeProject() {
                               <div className='mb-10 w-full flex flex-row justify-center'>
                                 <input disabled value={description} onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="description" name="description"/><br/><br/>
                               </div>
-
-                              <p className='font-bold'>Maintainers:</p>
+                              
+                              <p className='mt-5 font-bold'>Apps:</p>
                               <div className='mt-5'>
-                                  <Table title='Clientes' data={ allClients } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
+                                  <Table title='Apps' data={ allApps } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
                               </div>
                               
                               <p className='mt-10 font-bold'>Modelos:</p>
                               <div className='mt-5'>
-                                  <Table title='Clientes' data={ allModels } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
+                                  <Table title='Modelos' data={ allModels } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
                               </div>
                               
                           </div>

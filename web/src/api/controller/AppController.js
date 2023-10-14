@@ -12,14 +12,14 @@ export const createApp = async (formData, token) =>{
     })
 }
 
-export const updateApp = async (model_id, formData, token) =>{
-    return await appActions.updateApp(model_id, formData, token).then((response) => {
+export const updateApp = async (app_id, formData, token) =>{
+    return await appActions.updateApp(app_id, formData, token).then((response) => {
         return response;
     })
 }
 
-export const deleteApp = async (field_id, token) =>{
-    return await appActions.deleteApp(field_id, token).then((response) => {
+export const deleteApp = async (app_id, token) =>{
+    return await appActions.deleteApp(app_id, token).then((response) => {
         return response;
     })
 }

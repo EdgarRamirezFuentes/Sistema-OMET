@@ -77,10 +77,17 @@ function Projects() {
     })
   }
 
-  const handleProjectModel = item => {
-    history(`/app/create/${item.id}`,{
+  const handleApps = item => {
+    /*history(`/app/create/${item.id}`,{
             client: item,
         }
+    )*/
+    history(`/apps/`,{
+        state:{
+
+          project: item,
+        }
+      }
     )
   }
 
@@ -108,10 +115,10 @@ function Projects() {
     },
     {
         id: 4,
-        name: 'Project Model',
+        name: 'Apps',
         type: 'primary',
         icon: <CircleStackIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
-        action: handleProjectModel,
+        action: handleApps,
     },
     {
         id: 3,

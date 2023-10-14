@@ -45,7 +45,12 @@ function CreateApp() {
             setAlertMessage('App creada correctamente.')
             setError(true);
             setTimeout(() => {
-                history(`/projects/app/`)
+                history(`/apps/`,{
+                    state:{
+                      project: location.state.project,
+                    }
+                  }
+                )
             }, 1500);
             }else{
             setAlertType('Error');

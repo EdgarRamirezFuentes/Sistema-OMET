@@ -32,10 +32,10 @@ export const updateApp = async (app_id, formData, token) =>{
     }
 }
 
-export const deleteApp = async (field_id, token) =>{
+export const deleteApp = async (app_id, token) =>{
     const objApi = apiClient('project/apps');
     try {
-        var response = await objApi.del(field_id, token);
+        var response = await objApi.del(app_id, token);
         return response;
     } catch (e) {
         console.log("Error ===>", e);

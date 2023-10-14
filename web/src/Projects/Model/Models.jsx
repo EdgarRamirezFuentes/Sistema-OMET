@@ -2,7 +2,7 @@ import '../../App.css'
 import Timer from '../../Components/Timer/Timer'
 import SideBar from '../../Components/Sidebar/Sidebar'
 import Table from '../../Components/tailwindUI/Table'
-import { deleteProject, getProjectModels, deleteProjectModel } from '../../api/controller/ProjectsController'
+import { getProjectModels, deleteProjectModel } from '../../api/controller/ProjetModelController'
 import { useEffect, useState } from 'react'
 import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
@@ -143,7 +143,7 @@ function Models() {
           </div>
           <div>
             <div className='mt-3 ml-5 flex flex-row justify-between items-center '>
-                <p className='text-3xl font-bold'>Modelos</p>
+                <p className='text-3xl font-bold'>Modelos de la app: {location.state.project.name}</p>
                 <button onClick={()=>{history('/projects/model/create/'+params.id)}} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear Modelo</button>
             </div>
             <div className="w-full overflow-hidden">
