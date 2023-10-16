@@ -15,7 +15,7 @@ def create_project_app_urls_script(main_directory, project_app):
         if not project_models:
             raise ValueError(f'La app {project_app.name} debe tener al menos un modelo.')
 
-        project_app_name = format_project_name(project_app.name).lower()
+        project_app_name = project_app.name.lower()
         urls_template_content = get_template_file_content(SCRIPT_TEMPLATE_URLS['api_urls'])
         urls_template_content = urls_template_content.replace('{{APP_NAME}}', project_app_name)
 
@@ -23,7 +23,7 @@ def create_project_app_urls_script(main_directory, project_app):
         router_urls = ''
 
         for project_model in project_models:
-            project_model_name = format_project_name(project_model.name)
+            project_model_name = project_model.name
             model_urls = router_url
             model_urls = model_urls.replace('{{MODEL_NAME}}', project_model_name)
             model_urls = model_urls.replace('{{MODEL_NAME_URL}}', project_model_name.lower())

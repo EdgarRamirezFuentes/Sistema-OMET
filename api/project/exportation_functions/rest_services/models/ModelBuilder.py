@@ -21,7 +21,7 @@ from project.utils import (
 class ModelBuilder():
     def __init__(self, app_model):
         self.__app_model = app_model
-        self.__model_name = format_project_name(app_model.name)
+        self.__model_name = app_model.name
         self.__app_model_script = get_template_file_content(SCRIPT_TEMPLATE_URLS['api_models'])
         self.__validator_imports = set()
         self.__foreign_key_imports = set()
@@ -63,7 +63,7 @@ class ModelBuilder():
         model_field_body = get_template_file_content(MODEL_FIELD_TEMPLATE_URLS[model_field_data_type])
         model_field_body = model_field_body.replace('{{FIELD_NAME}}', model_field_name) + '    '
 
-        if model_field_data_type in ['onetomanyforeignkey', 'manytomanyforeignkey']:
+        if model_field_data_type in ['onetooneforeignkey', 'onetomanyforeignkey', 'manytomanyforeignkey']:
             self.__add_foreign_key(model_field, model_field_body)
         else:
             self.__add_validators(model_field, model_field_body)

@@ -32,6 +32,20 @@ services:
     env_file: ./env_files/rabbitmq/.env
     volumes:
       - 'dev-rabbitmq-data:/var/lib/rabbitmq'
+  web:
+    container_name: {{PROJECT_NAME}}-web
+    build:
+      context: ./web
+      args:
+        - DEV=true
+    ports:
+      - '3000:3000'
+    command: sh -c "npm install --dev --silent && npm start"
+    stdin_open: true
+    volumes:
+      - './web:/web'
+    depends_on:
+      - api
 volumes:
   dev-db-data:
   dev-static-data:

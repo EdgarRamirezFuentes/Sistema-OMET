@@ -14,6 +14,6 @@ python manage.py loaddata ./fixtures/dataType.json
 python manage.py loaddata ./fixtures/customer.json
 python manage.py loaddata ./fixtures/project.json
 python manage.py loaddata ./fixtures/projectApp.json
-python manage.py loaddata ./fixtures/projectModel.json
+python manage.py loaddata ./fixtures/appModel.json
 python manage.py loaddata ./fixtures/modelField.json
 python manage.py loaddata ./fixtures/validatorValue.json

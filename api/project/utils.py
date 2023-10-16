@@ -22,7 +22,9 @@ def format_name(name:str)->str:
     Returns:
         str: Formatted name.
     """
-    return name.title().replace(' ', '').strip()
+    new_name = name.replace('_', ' ').replace('-', ' ')
+    new_name = [word.title() for word in name.split(' ') if word]
+    return ''.join(new_name)
 
 def format_project_name(name:str)->str:
     """Format a project name.

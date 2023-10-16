@@ -1,0 +1,74 @@
+[
+    {
+        "model": "core.AppModel",
+        "pk": 1,
+        "fields": {
+            "name": "Clinica",
+            "project_app": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 2,
+        "fields": {
+            "name": "Consultorio",
+            "project_app": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 3,
+        "fields": {
+            "name": "Farmacia",
+            "project_app": 2,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 4,
+        "fields": {
+            "name": "Medicamento",
+            "project_app": 2,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 5,
+        "fields": {
+            "name": "Paciente",
+            "project_app": 3,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 6,
+        "fields": {
+            "name": "ExpedienteMedico",
+            "project_app": 3,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 7,
+        "fields": {
+            "name": "Medico",
+            "project_app": 4,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 8,
+        "fields": {
+            "name": "Cita",
+            "project_app": 5,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    }
+]

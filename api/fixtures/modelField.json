@@ -4,11 +4,11 @@
         "pk": 1,
         "fields": {
             "name": "nombre",
-            "caption": "Ingresa el nombre del producto",
+            "caption": "Ingresa el nombre de la clínica",
             "order": 0,
             "data_type": 1,
-            "project_model": 1,
-            "foreign_key_relation": null,
+            "app_model": 1,
+            "model_field_relation": null,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -16,12 +16,12 @@
         "model": "core.ModelField",
         "pk": 2,
         "fields": {
-            "name": "descripcion",
-            "caption": "Ingresa la descripcion del producto",
+            "name": "direccion",
+            "caption": "Ingresa la dirección de la clínica",
             "order": 1,
             "data_type": 1,
-            "project_model": 1,
-            "foreign_key_relation": null,
+            "app_model": 1,
+            "model_field_relation": null,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -29,12 +29,12 @@
         "model": "core.ModelField",
         "pk": 3,
         "fields": {
-            "name": "precio",
-            "caption": "Ingresa el precio del producto",
+            "name": "telefono",
+            "caption": "Ingresa el teléfono de la clínica",
             "order": 2,
-            "data_type": 7,
-            "project_model": 1,
-            "foreign_key_relation": null,
+            "data_type": 1,
+            "app_model": 1,
+            "model_field_relation": null,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -42,12 +42,12 @@
         "model": "core.ModelField",
         "pk": 4,
         "fields": {
-            "name": "stock",
-            "caption": "Ingresa el stock del producto",
-            "order": 3,
-            "data_type": 7,
-            "project_model": 1,
-            "foreign_key_relation": null,
+            "name": "nombre",
+            "caption": "Ingresa el nombre del consultorio",
+            "order": 0,
+            "data_type": 1,
+            "app_model": 2,
+            "model_field_relation": null,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -55,12 +55,12 @@
         "model": "core.ModelField",
         "pk": 5,
         "fields": {
-            "name": "marca",
-            "caption": "Ingresa la marca del producto",
-            "order": 4,
-            "data_type": 16,
-            "project_model": 1,
-            "foreign_key_relation": null,
+            "name": "clinica",
+            "caption": "Ingresa la clínica a la que pertenece el consultorio",
+            "order": 1,
+            "data_type": 15,
+            "app_model": 2,
+            "model_field_relation": 1,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -69,11 +69,258 @@
         "pk": 6,
         "fields": {
             "name": "nombre",
-            "caption": "Ingresa el nombre de la marca",
+            "caption": "Ingresa el nombre de la farmacia",
             "order": 0,
             "data_type": 1,
-            "project_model": 2,
-            "foreign_key_relation": null,
+            "app_model": 3,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 7,
+        "fields": {
+            "name": "clinica",
+            "caption": "Ingresa la clínica a la que pertenece la farmacia",
+            "order": 1,
+            "data_type": 15,
+            "app_model": 3,
+            "model_field_relation": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 8,
+        "fields": {
+            "name": "nombre",
+            "caption": "Ingresa el nombre del medicamento",
+            "order": 0,
+            "data_type": 1,
+            "app_model": 4,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 9,
+        "fields": {
+            "name": "existencia",
+            "caption": "Ingresa la existencia del medicamento",
+            "order": 1,
+            "data_type": 7,
+            "app_model": 4,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 10,
+        "fields": {
+            "name": "farmacia",
+            "caption": "Ingresa la farmacia a la que pertenece el medicamento",
+            "order": 2,
+            "data_type": 15,
+            "app_model": 4,
+            "model_field_relation": 6,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 11,
+        "fields": {
+            "name": "curp",
+            "caption": "Ingresa el curp del paciente",
+            "order": 0,
+            "data_type": 1,
+            "app_model": 5,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 12,
+        "fields": {
+            "name": "nombre",
+            "caption": "Ingresa el nombre paciente",
+            "order": 1,
+            "data_type": 1,
+            "app_model": 5,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 13,
+        "fields": {
+            "name": "fecha_nacimiento",
+            "caption": "Ingresa la fecha de nacimiento del paciente",
+            "order": 2,
+            "data_type": 12,
+            "app_model": 5,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 14,
+        "fields": {
+            "name": "direccion",
+            "caption": "Ingresa la dirección del paciente",
+            "order": 3,
+            "data_type": 1,
+            "app_model": 5,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 15,
+        "fields": {
+            "name": "telefono",
+            "caption": "Ingresa el teléfono del paciente",
+            "order": 4,
+            "data_type": 1,
+            "app_model": 5,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 16,
+        "fields": {
+            "name": "telefono_emergencia",
+            "caption": "Ingresa el teléfono de emergencia del paciente",
+            "order": 5,
+            "data_type": 1,
+            "app_model": 5,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 17,
+        "fields": {
+            "name": "paciente",
+            "caption": "Ingresa el paciente al que pertenece el expediente médico",
+            "order": 0,
+            "data_type": 15,
+            "app_model": 6,
+            "model_field_relation": 11,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 18,
+        "fields": {
+            "name": "descripcion",
+            "caption": "Ingresa la descripción del expediente médico",
+            "order": 1,
+            "data_type": 2,
+            "app_model": 6,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 19,
+        "fields": {
+            "name": "nombre",
+            "caption": "Ingresa el nombre del médico",
+            "order": 0,
+            "data_type": 1,
+            "app_model": 7,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 20,
+        "fields": {
+            "name": "cedula_profesional",
+            "caption": "Ingresa la cédula profesional del médico",
+            "order": 1,
+            "data_type": 1,
+            "app_model": 7,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 21,
+        "fields": {
+            "name": "clinica",
+            "caption": "Ingresa la clínica a la que pertenece el médico",
+            "order": 2,
+            "data_type": 15,
+            "app_model": 7,
+            "model_field_relation": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 22,
+        "fields": {
+            "name": "paciente",
+            "caption": "Ingresa el paciente al que pertenece la cita",
+            "order": 0,
+            "data_type": 15,
+            "app_model": 8,
+            "model_field_relation": 12,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 23,
+        "fields": {
+            "name": "medico",
+            "caption": "Ingresa el médico al que pertenece la cita",
+            "order": 1,
+            "data_type": 15,
+            "app_model": 8,
+            "model_field_relation": 20,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 24,
+        "fields": {
+            "name": "fecha",
+            "caption": "Ingresa la fecha de la cita",
+            "order": 2,
+            "data_type": 12,
+            "app_model": 8,
+            "model_field_relation": null,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 25,
+        "fields": {
+            "name": "hora",
+            "caption": "Ingresa la hora de la cita",
+            "order": 3,
+            "data_type": 14,
+            "app_model": 8,
+            "model_field_relation": null,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     }

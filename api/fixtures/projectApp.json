@@ -3,8 +3,8 @@
         "model": "core.ProjectApp",
         "pk": 1,
         "fields": {
-            "name": "productos",
-            "description": "Project App 1 description",
+            "name": "clinicas",
+            "description": "App para la gestion de clinicas",
             "project": 1,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
@@ -13,8 +13,8 @@
         "model": "core.ProjectApp",
         "pk": 2,
         "fields": {
-            "name": "clientes",
-            "description": "Project App 2 description",
+            "name": "farmacias",
+            "description": "App para la gestion de farmacias",
             "project": 1,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
@@ -23,8 +23,28 @@
         "model": "core.ProjectApp",
         "pk": 3,
         "fields": {
-            "name": "proveedores",
-            "description": "Project App 3 description",
+            "name": "pacientes",
+            "description": "App para la gestion de pacientes",
+            "project": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ProjectApp",
+        "pk": 4,
+        "fields": {
+            "name": "medicos",
+            "description": "App para la gestion de medicos",
+            "project": 1,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ProjectApp",
+        "pk": 5,
+        "fields": {
+            "name": "citas",
+            "description": "App para la gestion de citas",
             "project": 1,
             "created_at": "2023-07-23T20:00:00.000Z"
         }

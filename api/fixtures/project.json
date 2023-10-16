@@ -3,8 +3,8 @@
         "model": "core.Project",
         "pk": 1,
         "fields": {
-            "name": "Administrador de almacen de productos",
-            "description": "Sistema de administracion de almacen de productos de una tienda.",
+            "name": "Sistema Gestor de Hospitales",
+            "description": "Sistema que ayuda a gestionar los hospitales del John Doe.",
             "customer": 1,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
