@@ -390,6 +390,38 @@ class ValidatorValueViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
+class ProjectStructureApiView(views.APIView):
+    """View for getting the project structure"""
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def get(self, request, pk=None, *args, **kwargs,):
+        """Get the project structure"""
+        try:
+            if not pk:
+                raise ValueError('The project id is required.')
+
+            project_apps = ProjectApp.objects.filter(project=pk)
+            project_apps_serializer = MinimalProjectAppSerializer(project_apps, many=True)
+            project_apps = project_apps_serializer.data
+
+            for project_app in project_apps:
+                app_models = AppModel.objects.filter(project_app=project_app['id'])
+                app_models_serializer = MinimalAppModelSerializer(app_models, many=True)
+                project_app['app_models'] = app_models_serializer.data
+
+                for app_model in project_app['app_models']:
+                    # Getting the fields that are not foreign keys
+                    model_fields = ModelField.objects.filter(app_model=app_model['id']).exclude(data_type__name__contains='ForeignKey')
+                    model_fields_serializer = MinimalModelFieldSerializer(model_fields, many=True)
+                    app_model['model_fields'] = model_fields_serializer.data
+            return response.Response(project_apps, status=status.HTTP_200_OK)
+        except (ObjectDoesNotExist, Http404):
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print(e)
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 ############################
 # Exportation of a project #

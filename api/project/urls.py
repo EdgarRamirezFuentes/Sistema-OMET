@@ -15,6 +15,7 @@ router.register('', views.ProjectViewSet, basename='project')
 
 
 urlpatterns = [
+    path('structure/<int:pk>/', views.ProjectStructureApiView.as_view(), name='project-structure'),
     path('export/<int:pk>/', views.ExportProjectApiView.as_view(), name='project-export'),
     path('', include(router.urls)),
 ]
