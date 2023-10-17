@@ -10,7 +10,7 @@ def create_project_app_urls_script(main_directory, project_app):
         project_app (ProjectApp): The project app object
     """
     try:
-        project_models = AppModel.objects.filter(project_app=project_app, is_active=True)
+        project_models = AppModel.objects.filter(project_app=project_app)
 
         if not project_models:
             raise ValueError(f'La app {project_app.name} debe tener al menos un modelo.')
