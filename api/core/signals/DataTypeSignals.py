@@ -21,7 +21,6 @@ def data_type_insertion_signal(sender, instance, created, **kwargs):
             name=instance.name,
             description=instance.description,
             input_type=instance.input_type,
-            is_active=instance.is_active
         )
 
         data_type_insertion_log.delay(inserted_data_type.get_json())

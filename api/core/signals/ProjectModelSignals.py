@@ -19,7 +19,6 @@ def project_model_insertion_signal(sender, instance, created, **kwargs):
     if created:
         inserted_project_model = ProjectModelInsertionLog(
             name=instance.name,
-            is_active=instance.is_active,
             project_id=instance.project.id,
             project_name=instance.project.name,
             customer_rfc=instance.project.customer.rfc,

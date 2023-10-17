@@ -2,11 +2,9 @@ import datetime
 
 
 class ProjectModelInsertionLog:
-    def __init__(self, name, is_active,
-                 project_id, project_name,
+    def __init__(self, name, project_id, project_name,
                  customer_rfc):
         self.name = name
-        self.is_active = is_active
         self.project_id = project_id
         self.project_name = project_name
         self.customer_rfc = customer_rfc
@@ -14,11 +12,9 @@ class ProjectModelInsertionLog:
     def get_json(self):
         return {
             'name_registered': self.name,
-            'is_active': self.is_active,
             'project_id_registered': self.project_id,
             'project_name_registered': self.project_name,
             'customer_rfc_registered': self.customer_rfc,
-            'is_active': self.is_active,
             'insertion_date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
 
@@ -34,21 +30,18 @@ class ProjectModelUpdateLog:
         self.updated_project_id = 0
         self.updated_project_name = ''
         self.updated_customer_rfc = ''
-        self.updated_is_active = None
 
     def set_previous_data(self, previous_data):
         self.previous_name = previous_data['name']
         self.previous_project_id = previous_data['project'].id
         self.previous_project_name = previous_data['project'].name
         self.previous_customer_rfc = previous_data['project'].customer.rfc
-        self.previous_is_active = previous_data['is_active']
 
     def set_updated_data(self, updated_data):
         self.updated_name = updated_data['name']
         self.updated_project_id = updated_data['project'].id
         self.updated_project_name = updated_data['project'].name
         self.updated_customer_rfc = updated_data['project'].customer.rfc
-        self.updated_is_active = updated_data['is_active']
 
     def get_json(self):
         return {
@@ -61,6 +54,5 @@ class ProjectModelUpdateLog:
             'updated_project_id': self.updated_project_id,
             'updated_project_name': self.updated_project_name,
             'updated_customer_rfc': self.updated_customer_rfc,
-            'updated_is_active': self.updated_is_active,
             'updated_date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }

@@ -22,7 +22,6 @@ def customer_insertion_signal(sender, instance, created, **kwargs):
             name=instance.name,
             phone=instance.phone,
             email=instance.email,
-            is_active=instance.is_active
         )
 
         customer_insertion_log.delay(inserted_customer.get_json())

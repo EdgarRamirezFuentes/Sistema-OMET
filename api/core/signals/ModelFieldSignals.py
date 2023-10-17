@@ -19,7 +19,6 @@ def model_field_post_save(sender, instance, created, **kwargs):
         log = ModelFieldInsertionLog(
             name=instance.name,
             caption=instance.caption,
-            is_active=instance.is_active,
             is_required=instance.is_required,
             order=instance.order,
             data_type_id=instance.data_type.id,

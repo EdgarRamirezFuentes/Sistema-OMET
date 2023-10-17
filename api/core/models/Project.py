@@ -8,7 +8,6 @@ class Project(models.Model):
     customer = models.ForeignKey('Customer', on_delete=models.CASCADE, null=False)
     maintainers = models.ManyToManyField('User', through='Maintenance')
     created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'Project'

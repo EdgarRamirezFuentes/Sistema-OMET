@@ -3,18 +3,16 @@ import datetime
 
 class DataTypeInsertionLog:
     def __init__(self, name, description,
-                 input_type, is_active):
+                 input_type):
         self.name = name
         self.description = description
         self.input_type = input_type
-        self.is_active = is_active
 
     def get_json(self):
         return {
             'name': self.name,
             'description': self.description,
             'input_type': self.input_type,
-            'is_active': self.is_active,
             'insertion_date': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
 

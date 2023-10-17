@@ -174,7 +174,7 @@ class FullAppModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppModel
         fields = ('id', 'name',
-                  'project_app', 'is_active')
+                  'project_app')
 
 
 class ModelFieldSerializer(serializers.ModelSerializer):

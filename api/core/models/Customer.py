@@ -7,7 +7,6 @@ class Customer(models.Model):
     name = models.CharField(max_length=255, null=False)
     phone = models.CharField(max_length=10, null=True)
     email = models.EmailField(max_length=255, null=False)
-    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

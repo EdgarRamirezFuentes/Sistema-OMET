@@ -2,14 +2,12 @@ import datetime
 
 
 class ModelFieldInsertionLog:
-    def __init__(self, name, caption,
-                 is_active, is_required, order,
+    def __init__(self, name, caption, is_required, order,
                  data_type_id, data_type_name,
                  project_model_id, project_model_name,
                  project_id, project_name, customer_rfc):
         self.name = name
         self.caption = caption
-        self.is_active = is_active
         self.is_required = is_required
         self.order = order
         self.data_type_id = data_type_id
@@ -24,7 +22,6 @@ class ModelFieldInsertionLog:
         return {
             'name_registered': self.name,
             'caption_registered': self.caption,
-            'is_active_registered': self.is_active,
             'is_required_registered': self.is_required,
             'order_registered': self.order,
             'data_type_id_registered': self.data_type_id,
@@ -42,7 +39,6 @@ class ModelFieldUpdateLog:
     def __init__(self):
         self.previous_name = ''
         self.previous_caption = ''
-        self.previous_is_active = False
         self.previous_is_required = False
         self.previous_order = 0
         self.previous_data_type_id = 0
@@ -56,7 +52,6 @@ class ModelFieldUpdateLog:
     def set_previous_data(self, previous_data):
         self.previous_name = previous_data['name']
         self.previous_caption = previous_data['caption']
-        self.previous_is_active = previous_data['is_active']
         self.previous_is_required = previous_data['is_required']
         self.previous_order = previous_data['order']
         self.previous_data_type_id = previous_data['data_type_id']
@@ -70,7 +65,6 @@ class ModelFieldUpdateLog:
     def set_updated_data(self, updated_data):
         self.updated_name = updated_data['name']
         self.updated_caption = updated_data['caption']
-        self.updated_is_active = updated_data['is_active']
         self.updated_is_required = updated_data['is_required']
         self.updated_order = updated_data['order']
         self.updated_data_type_id = updated_data['data_type_id']
@@ -85,7 +79,6 @@ class ModelFieldUpdateLog:
         return {
             'previous_name': self.previous_name,
             'previous_caption': self.previous_caption,
-            'previous_is_active': self.previous_is_active,
             'previous_is_required': self.previous_is_required,
             'previous_order': self.previous_order,
             'previous_data_type_id': self.previous_data_type_id,
@@ -97,7 +90,6 @@ class ModelFieldUpdateLog:
             'previous_customer_rfc': self.previous_customer_rfc,
             'updated_name': self.updated_name,
             'updated_caption': self.updated_caption,
-            'updated_is_active': self.updated_is_active,
             'updated_is_required': self.updated_is_required,
             'updated_order': self.updated_order,
             'updated_data_type_id': self.updated_data_type_id,

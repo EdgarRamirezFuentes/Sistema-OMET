@@ -54,20 +54,15 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
 
     def list(self, request, *args, **kwargs):
-        """List the all the projects filtered by name, is_active, and customer"""
+        """List the all the projects filtered by name and customer"""
         try:
             name = request.query_params.get('name', None)
-            is_active = request.query_params.get('is_active', None)
             customer_id = request.query_params.get('customer_id', None)
 
             queryset = self.queryset
 
             if name:
                 queryset = queryset.filter(name=name)
-
-            if is_active and is_active in ['true', 'false']:
-                is_active = True if is_active == 'true' else False
-                queryset = queryset.filter(is_active=is_active)
 
             if customer_id:
                 customer_id = int(customer_id)
@@ -145,31 +140,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class ChangeProjectStatusView(views.APIView):
-    """View for changing the status (is_active) of the project"""
-    authentication_classes = [TokenAuthentication,]
-    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
-    serializer_class = ProjectSerializer
-
-    def post(self, request, *args, **kwargs):
-        """Change the status of the project"""
-        try:
-            project_id = kwargs.get('pk', None)
-
-            if not project_id :
-                return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-            project = Project.objects.get(id=project_id)
-            project.is_active = not project.is_active
-            project.save()
-
-            return response.Response(status=status.HTTP_200_OK)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-
 class ProjectAppViewSet(viewsets.ModelViewSet):
     """Viewset for project apps"""
     authentication_classes = [TokenAuthentication,]
@@ -178,11 +148,10 @@ class ProjectAppViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectAppSerializer
 
     def list(self, request, *args, **kwargs):
-        """List the all the project apps filtered by project id, name, and is_active"""
+        """List the all the project apps filtered by project id and name """
         try:
             project_id = request.query_params.get('project_id', None)
             name = request.query_params.get('name', None)
-            is_active = request.query_params.get('is_active', None)
 
             queryset = self.queryset
 
@@ -191,10 +160,6 @@ class ProjectAppViewSet(viewsets.ModelViewSet):
 
             if name:
                 queryset = queryset.filter(name=name)
-
-            if is_active and is_active in ['true', 'false']:
-                is_active = True if is_active == 'true' else False
-                queryset = queryset.filter(is_active=is_active)
 
             serializer = MinimalProjectAppSerializer(queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
@@ -246,14 +211,14 @@ class ProjectAppViewSet(viewsets.ModelViewSet):
         try:
             instance = self.get_object()
             serializer = FullProjectAppSerializer(instance)
-            project_models = AppModel.objects.filter(project_app=instance, is_active=True)
-            project_models_serializer = MinimalAppModelSerializer(project_models, many=True)
+            app_models = AppModel.objects.filter(project_app=instance)
+            app_models_serializer = MinimalAppModelSerializer(app_models, many=True)
 
             # Gettng the project app data
             response_data = serializer.data
 
             # Getting the models of the project app
-            response_data['project_models'] = project_models_serializer.data
+            response_data['app_models'] = app_models_serializer.data
 
             return response.Response(response_data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
@@ -330,7 +295,7 @@ class AppModelViewSet(viewsets.ModelViewSet):
             instance = self.get_object()
             serializer = FullAppModelSerializer(instance)
             response_data = serializer.data
-            model_fields = ModelField.objects.filter(project_model=instance)
+            model_fields = ModelField.objects.filter(app_model=instance)
             model_fields_serializer = MinimalModelFieldSerializer(model_fields, many=True)
             response_data['model_fields'] = model_fields_serializer.data
             return response.Response(response_data, status=status.HTTP_200_OK)
@@ -338,32 +303,6 @@ class AppModelViewSet(viewsets.ModelViewSet):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class ChangeAppModelStatusView(views.APIView):
-    """View for changing the status (is_active) of the model field"""
-    authentication_classes = [TokenAuthentication,]
-    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
-    serializer_class = AppModelSerializer
-
-    def post(self, request, *args, **kwargs):
-        """Change the status of the model field"""
-        try:
-            project_model_id = kwargs.get('pk', None)
-
-            if not project_model_id :
-                return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-            project_model = AppModel.objects.get(id=project_model_id)
-            project_model.is_active = not project_model.is_active
-            project_model.save()
-
-            return response.Response(status=status.HTTP_200_OK)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
 
 class ModelFieldViewSet(viewsets.ModelViewSet):
     """Viewset for model fields"""
@@ -387,10 +326,10 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         """List the all the model fields"""
         try:
-            project_model_id = request.query_params.get('project_model_id', None)
+            app_model_id = request.query_params.get('app_model_id', None)
 
-            if project_model_id:
-                self.queryset = self.queryset.filter(project_model=int(project_model_id))
+            if app_model_id:
+                self.queryset = self.queryset.filter(app_model=int(app_model_id))
 
             serializer = ModelFieldSerializer(self.queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
@@ -409,31 +348,6 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
             response_data = serializer.data
             response_data['validators'] = model_field_validators_serializer.data
             return response.Response(response_data, status=status.HTTP_200_OK)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class ChangeModelFieldStatusView(views.APIView):
-    """View for changing the status (is_active) of the model field"""
-    authentication_classes = [TokenAuthentication,]
-    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser,]
-    serializer_class = ModelFieldSerializer
-
-    def post(self, request, *args, **kwargs):
-        """Change the status of the model field"""
-        try:
-            model_field_id = kwargs.get('pk', None)
-
-            if not model_field_id :
-                return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-            model_field = ModelField.objects.get(id=model_field_id)
-            model_field.is_active = not model_field.is_active
-            model_field.save()
-
-            return response.Response(status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
@@ -463,16 +377,11 @@ class ValidatorValueViewSet(viewsets.ModelViewSet):
         """List the all the config values filtered by model field id and is active"""
         try:
             model_field_id = request.query_params.get('model_field_id', None)
-            is_active = request.query_params.get('is_active', None)
 
             queryset = self.queryset
 
             if model_field_id:
                 queryset = queryset.filter(model_field=int(model_field_id))
-
-            if is_active:
-                is_active = True if is_active.lower() == 'true' else False
-                queryset = queryset.filter(is_active=is_active)
 
             serializer = ValidatorValueSerializer(queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
@@ -480,32 +389,6 @@ class ValidatorValueViewSet(viewsets.ModelViewSet):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class ChangeValidatorValueStatusView(views.APIView):
-    """View for changing the status (is_active) of the config value"""
-    authentication_classes = [TokenAuthentication,]
-    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser,]
-    serializer_class = ValidatorValueSerializer
-
-    def post(self, request, *args, **kwargs):
-        """Change the status of the config value"""
-        try:
-            validator_value_id = kwargs.get('pk', None)
-
-            if not validator_value_id :
-                return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-            config_value = ValidatorValue.objects.get(id=validator_value_id)
-            config_value.is_active = not config_value.is_active
-            config_value.save()
-
-            return response.Response(status=status.HTTP_200_OK)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
 
 
 ############################
@@ -520,7 +403,7 @@ class ExportProjectApiView(views.APIView):
     def post(self, request, pk=None, *args, **kwargs,):
         """Export a project"""
         try:
-            project = Project.objects.get(id=pk, is_active=True)
+            project = Project.objects.get(id=pk)
 
             # Building the project directory
             with tempfile.SpooledTemporaryFile() as tmp:

@@ -7,7 +7,6 @@ class ValidatorValue(models.Model):
     model_field = models.ForeignKey('ModelField', on_delete=models.CASCADE, null=False)
     value = models.CharField(max_length=255, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'ValidatorValue'

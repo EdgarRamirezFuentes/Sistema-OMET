@@ -23,7 +23,6 @@ def project_insertion_signal(sender, instance, created, **kwargs):
             name=instance.name,
             description=instance.description,
             customer_rfc=instance.customer.rfc,
-            is_active=instance.is_active,
         )
 
         project_insertion_log.delay(inserted_project.get_json())
