@@ -4,10 +4,10 @@ import SideBar from '../Components/Sidebar/Sidebar'
 import Table from '../Components/tailwindUI/Table'
 import { getAllProjects, deleteProject } from '../api/controller/ProjectsController'
 import { useEffect, useState } from 'react'
-import { TrashIcon, ClipboardIcon, EyeIcon, WrenchScrewdriverIcon, CircleStackIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, ClipboardIcon, EyeIcon, WrenchScrewdriverIcon, CircleStackIcon, ArrowDownOnSquareIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../Components/Alert/Alert'
-
+import { exportProject } from '../api/controller/ExportController'
 function Projects() {
   const history = useNavigate();
   const session = JSON.parse(localStorage.getItem('session'));
@@ -91,38 +91,77 @@ function Projects() {
     )
   }
 
+  const handleDownloadProject = async(item) => {
+    console.log(item)
+    await exportProject(item.id, session.token).then(async (response)=>{
+      if(response.status === 200){
+        const blob = await response.blob();
+        const newBlob = new Blob([blob]);
+
+        const blobUrl = window.URL.createObjectURL(newBlob);
+
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.setAttribute('download', `${item.name.replaceAll(" ",'_')}.zip`);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+
+        // clean up Url
+        window.URL.revokeObjectURL(blobUrl);
+        setAlertType('Success');
+        setAlertMessage('Proyecto exportado correctamente.')
+        setError(true);
+        setDeletedProject(true);
+     }else{
+      let res = await response.json()
+      setAlertType('Error');
+      setAlertMessage(res.error)
+      setError(true);
+     }
+
+    })
+  }
+
   const columnActions = [
     {
         id: 1,
-        name: 'Ver cliente',
+        name: 'Ver Proyecto',
         type: 'primary',
         icon: <EyeIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleView,
     },
     {
         id: 2,
-        name: 'Actualizar projecto',
+        name: 'Actualizar Proyecto',
         type: 'primary',
         icon: <ClipboardIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleUpdate,
     },
     {
-        id: 2,
-        name: 'Actualizar maintainers',
+        id: 3,
+        name: 'Actualizar Mantenedores',
         type: 'primary',
         icon: <WrenchScrewdriverIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleUpdateMaintainer,
     },
     {
         id: 4,
-        name: 'Apps',
+        name: 'Consultar Apps',
         type: 'primary',
         icon: <CircleStackIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleApps,
     },
     {
-        id: 3,
-        name: 'Eliminar cliente',
+        id: 5,
+        name: 'Exportar Proyecto',
+        type: 'primary',
+        icon: <ArrowDownOnSquareIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
+        action: handleDownloadProject,
+    },
+    {
+        id: 6,
+        name: 'Eliminar Proyecto',
         type: 'primary',
         icon: <TrashIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleDelete,

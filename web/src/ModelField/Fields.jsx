@@ -15,7 +15,7 @@ function Models() {
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'));
     const [allModels, setAllModels] = useState([])
-    const [isLoadingData, setIsLoadingData] = useState(true)
+    const [isLoadingData, setIsLoadingData] = useState(false)
 
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
@@ -27,18 +27,17 @@ function Models() {
       getModels()
       setDeletedProject(false);
     }
-  }, [deletedProject]);
+  }, [allModels]);
 
   const getModels = async ()=>{
     await getModelFields(params.id, session.token).then(async (models)=>{
       let modelList = await models.json()
       console.log("modelList",modelList);
-      if (modelList.length > 0){
+      if (modelList.length != []){
         setAllModels(modelList)
         setIsLoadingData(false)
       }else{
         setAllModels([])
-        setIsLoadingData(true)
       }
     })
   }
@@ -46,8 +45,7 @@ function Models() {
   const tableColumns = [
     { heading: 'Id', value: 'id',align: 'center' },
     { heading: 'Nombre', value: 'name' , main: true},
-    { heading: 'Descripción', value: 'data_type.description'},
-    { heading: 'Tipo de dato', value: 'data_type.name'},
+    { heading: 'Descripción', value: 'caption'},
   ];
 
   const handleView = item => {
@@ -121,7 +119,7 @@ function Models() {
 
   return (
     <div className="w-full h-full bg-slate-100">
-      <div className='flex flex-row h-screen'>
+      <div className='flex flex-row h-full'>
       <SideBar/>
         <div className='w-full'>
           <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>

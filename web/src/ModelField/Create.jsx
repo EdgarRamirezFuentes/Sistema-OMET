@@ -62,9 +62,9 @@ function CreateModel() {
             name: name,
             caption: caption,
             order: order,
-            is_required: isRequired,
+            //is_required: isRequired,
             data_type: selectedType,
-            project_model: params.id
+            app_model: params.id
         }]
 
         await createModel(data, session.token).then(async (response)=>{
@@ -125,18 +125,7 @@ function CreateModel() {
                               <p className='font-bold'>Orden:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
                                 <input min={0} onChange={(event) => {setOrder(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='0' type="number" id="order" name="order"/><br/><br/>
-                              </div>
-                              
-                              <p className='font-bold'>¿Es requerido?:</p>
-                              <div className='mb-10 w-full flex flex-row justify-center'>
-                                <div className="mt-1 relative rounded-md shadow-sm">
-                                    <select className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'
-                                        value={isRequired} onChange={handleChangeRequired}>
-                                        <option value="false">Falso</option>
-                                        <option value="true">Verdadero</option>
-                                    </select>
-                                </div>
-                                </div>
+                              </div>                    
 
                               <p className='font-bold'>Tipo de dato:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>

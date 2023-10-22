@@ -42,6 +42,7 @@ import CreateApp from "./Apps/Create";
 import SeeApps from "./Apps/Apps";
 import SeeApp from "./Apps/See";
 import UpdateApp from "./Apps/Update";
+import ValidatorsModel from "./ModelField/Validators";
 function App() {
 
   return (
@@ -86,6 +87,7 @@ function App() {
               <Route path="/model/view/:id" element={<SeeModel />} />
               <Route path="/model/update/:id" element={<UpdateModel />} />
               <Route path="/model/get/:id" element={<ModelFields />} />
+              <Route path="/model/validators/:id" element={<ValidatorsModel />} />
               
               <Route path="/app/create/:id" element={<CreateApp />} />
               <Route path="/apps/" element={<SeeApps />} />

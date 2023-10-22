@@ -115,28 +115,28 @@ function Clients() {
   const columnActions = [
     {
         id: 1,
-        name: 'Ver cliente',
+        name: 'Ver Usuario',
         type: 'primary',
         icon: <EyeIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleView,
     },
     {
         id: 2,
-        name: 'Actualizar cliente',
+        name: 'Actualizar Usuario',
         type: 'primary',
         icon: <ClipboardIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleUpdate,
     },
     {
         id: 3,
-        name: 'Eliminar cliente',
+        name: 'Eliminar Usuario',
         type: 'primary',
         icon: <TrashIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleDelete,
     },
     {
         id: 4,
-        name: 'Resetear password',
+        name: 'Resetear Contraseña',
         type: 'primary',
         icon: <PaperAirplaneIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleResetPassword,

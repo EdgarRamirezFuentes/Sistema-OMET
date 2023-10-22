@@ -102,7 +102,7 @@ function SeeApps() {
         },
         {
             id: 3,
-            name: 'Project Model',
+            name: 'Consultar modelos',
             type: 'primary',
             icon: <CircleStackIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
             action: handleProjectModel,

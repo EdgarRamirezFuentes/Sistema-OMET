@@ -3,7 +3,7 @@ import apiClient from '../client';
 
 export const getModelFields = async (project_id, token) =>{
     console.log("token", token);
-    const objApi = apiClient('project/fields?project_model_id='+project_id);
+    const objApi = apiClient('project/fields?app_model_id='+project_id);
     try {
         var response = await objApi.get(undefined, token);
         return response;

@@ -73,21 +73,21 @@ function Customers() {
   const columnActions = [
     {
         id: 1,
-        name: 'Ver customer',
+        name: 'Ver Cliente',
         type: 'primary',
         icon: <EyeIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleView,
     },
     {
         id: 2,
-        name: 'Actualizar customer',
+        name: 'Actualizar Cliente',
         type: 'primary',
         icon: <ClipboardIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleUpdate,
     },
     {
         id: 3,
-        name: 'Eliminar customer',
+        name: 'Eliminar Cliente',
         type: 'primary',
         icon: <TrashIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleDelete,

@@ -195,9 +195,9 @@ const TableRow = ({ item, column, isLast, setShowTooltip, actions, actionItems }
         { actions.length > 0 && <td className={`${isLast ? 'relative' : 'z-1 flex justify-start sm:justify-end items-start'} hidden lg:table-cell`}>
             <div className='flex gap-3 justify-center'>
                 {actions.map((btn) => (
-                    <div key={btn.name}>
+                    <div key={btn.name} title={btn.name}>
                         {btn.icon ? (
-                            <div key={btn.name}>
+                            <div key={btn.name} title={btn.name}>
                                 {btn.type === 'primary' ?
                                     <PrimaryButton onClick={() => btn.action(item)}>
                                         { btn.icon }
@@ -218,7 +218,7 @@ const TableRow = ({ item, column, isLast, setShowTooltip, actions, actionItems }
                                 }
                             </div>
                         ) : (
-                            <div key={btn.name} className='underline text-button-orange text-sm font-medium cursor-pointer' onClick={() => btn.action(item)}>
+                            <div key={btn.name} title={btn.name} className='underline text-button-orange text-sm font-medium cursor-pointer' onClick={() => btn.action(item)}>
                                 { btn.name }
                             </div>
                         )}
@@ -231,7 +231,7 @@ const TableRow = ({ item, column, isLast, setShowTooltip, actions, actionItems }
         { actions.length == 1 &&
             <td className={`rounded-lg z-1 flex justify-end items-start pt-4 px-3.5 text-sm font-medium block lg:hidden`}>
                 { actions.map((btn) => (
-                    <div key={btn.name} className='underline text-button-orange text-sm font-medium cursor-pointer' onClick={() => btn.action(item)}>
+                    <div key={btn.name} title={btn.name} className='underline text-button-orange text-sm font-medium cursor-pointer' onClick={() => btn.action(item)}>
                         { btn.name }
                     </div>
                 ))}

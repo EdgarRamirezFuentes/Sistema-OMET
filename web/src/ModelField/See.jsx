@@ -25,13 +25,13 @@ function SeeModel() {
     const [selectedType, setSelectedType] = useState('');
 
     useEffect(() => {
-          console.log("location")
-          console.log(location.state);
+        console.log("location.state.item",location.state.item);
           setName(location.state.item.name)
-          setCaption(location.state.item.data_type.description)
+          setCaption(location.state.item.caption)
           setIsRequired(false)
-          setSelectedType(location.state.item.data_type.name)
-
+          setOrder(location.state.item.order)
+          setSelectedType(location.state.item.data_type)
+          dataTypes()
       }, []);
 
     const dataTypes = async ()=>{
@@ -125,22 +125,25 @@ function SeeModel() {
                               
                               <p className='font-bold'>Descripción:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input value={caption} disabled onChange={(event) => {setCaption(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="caption" name="caption"/><br/><br/>
+                                <textarea value={caption} disabled onChange={(event) => {setCaption(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="caption" name="caption"/><br/><br/>
                               </div>
                               <p className='font-bold'>Orden:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input value={1} disabled min={0} onChange={(event) => {setOrder(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='0' type="number" id="order" name="order"/><br/><br/>
-                              </div>
-                              
-                              <p className='font-bold'>¿Es requerido?:</p>
-                              <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input value={isRequired} disabled onChange={(event) => {setCaption(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Falso' type="text" id="is_required" name="is_required"/><br/><br/>
+                                <input value={order} disabled min={0} onChange={(event) => {setOrder(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='0' type="number" id="order" name="order"/><br/><br/>
                               </div>
 
                               <p className='font-bold'>Tipo de dato:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input value={selectedType} disabled onChange={(event) => {setCaption(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Tipo de dato' type="text" id="data_type" name="data_type"/><br/><br/>
+                              <div className="mt-1 relative rounded-md shadow-sm">
+                                <select disabled className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'
+                                 value={selectedType} onChange={handleChange}>
+                                  <option value="">Selecciona un tipo de dato</option>
+                                  {allDataTypes.map((option, i) => (
+                                      <option key={i} value={option.id}>{option.name}</option>
+                                  ))}
+                                </select>
                               </div>
+                            </div>
                           </div>
 
                         </div>

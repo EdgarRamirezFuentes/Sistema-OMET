@@ -5,10 +5,9 @@ import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { getDataTypes } from '../api/controller/DataTypeController'
-import { createModel, updateModel } from '../api/controller/ModelFieldsController'
+import { getDataTypes, getDataType } from '../api/controller/DataTypeController'
 
-function UpdateModel() {
+function ValidatorsModel() {
     const history = useNavigate();
     const params = useParams();
     const location = useLocation();
@@ -19,24 +18,16 @@ function UpdateModel() {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
     const [name, setName] = useState('');
-    const [caption, setCaption] = useState('');
-    const [order, setOrder] = useState(0);
     const [isRequired, setIsRequired] = useState(false);
+    const [validators, setValidators] = useState([]);
 
     const [selectedType, setSelectedType] = useState('');
 
     useEffect(() => {
             console.log(("location.state",location.state));
-
-            console.log(("location.state",location.state));
-            console.log(("location.state",location.state.item.name));
-            setName(location.state.item.name)
-            setName(location.state.item?.name)
-            setCaption(location.state.item.caption)
-            setOrder(location.state.item?.order||0)
-            setIsRequired(location.state.item?.is_required||false)
-            setSelectedType(location.state.item.data_type)
+            console.log(("params",params));
           dataTypes()
+          getValidators()
       }, []);
 
     const dataTypes = async ()=>{
@@ -58,6 +49,15 @@ function UpdateModel() {
         setError(null)
         setAlertType('Error');
         setAlertMessage('')
+    }
+
+    const getValidators = async () => {
+        getDataType(params.id, session.token).then(async (response)=>{
+            const res = await response.json()
+            console.log("====response====");
+            console.log(res);
+            setValidators(res.validators)
+        })
     }
 
     const buttonHandler = async () => {
@@ -112,7 +112,7 @@ function UpdateModel() {
                         </div>
                     </div>
                     <div className='mt-3 ml-5 flex justify-center'>
-                        <p className='text-3xl font-bold'>Actualizar campo</p>
+                        <p className='text-3xl font-bold'>Validadores del campo</p>
                     </div>
                     <div className='flex flex-col justify-between'>
                     <div className='mt-5 p-5 flex flex-col items-center m-auto w-1/2 rounded-2xl bg-white'>
@@ -128,38 +128,38 @@ function UpdateModel() {
                             <div className='w-full flex flex-col justify-between'>
                               <p className='font-bold'>Nombre:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input value={name} onChange={(event) => {setName(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="project_name" name="project_name"/><br/><br/>
+                                <input value={name} disabled onChange={(event) => {setName(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="project_name" name="project_name"/><br/><br/>
                               </div>
-                              
-                              <p className='font-bold'>Descripción:</p>
-                              <div className='mb-10 w-full flex flex-row justify-center'>
-                                <textarea value={caption} onChange={(event) => {setCaption(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="caption" name="caption"/><br/><br/>
-                              </div>
-                              <p className='font-bold'>Orden:</p>
-                              <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input value={order} min={0} onChange={(event) => {setOrder(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='0' type="number" id="order" name="order"/><br/><br/>
-                              </div>
-                              
-                              
 
                               <p className='font-bold'>Tipo de dato:</p>
-                              <div className='mb-10 w-full flex flex-row justify-center'>
-                              <div className="mt-1 relative rounded-md shadow-sm">
-                                <select className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'
-                                 value={selectedType} onChange={handleChange}>
-                                  <option value="">Selecciona un tipo de dato</option>
-                                  {allDataTypes.map((option, i) => (
-                                      <option key={i} value={option.id}>{option.name}</option>
-                                  ))}
-                                </select>
-                              </div>
+                                <div className='mb-10 w-full flex flex-row justify-center'>
+                                    <div className="mt-1 relative rounded-md shadow-sm">
+                                        <select disabled className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'
+                                        value={selectedType} onChange={handleChange}>
+                                        <option value="">Selecciona un tipo de dato</option>
+                                        {allDataTypes.map((option, i) => (
+                                            <option key={i} value={option.id}>{option.name}</option>
+                                        ))}
+                                        </select>
+                                    </div>
+                                </div>
+                                <p className='font-bold'>Validadores:</p>
+                                {validators.map((validator) => (
+                                    <>
+                                        <div className="flex items-center">
+                                                <p className='font-light'>
+                                                    { validator.name }
+                                                </p>
+                                        </div>
+                                    </>
+                                ))}
+                                
                             </div>
-                          </div>
 
                         </div>
                         </div>
                         <div className='w-1/4'>
-                        <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Actualizar"/><br/><br/>
+                            <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Actualizar"/><br/><br/>
                         </div>
                     </div>
                     </div>
@@ -169,4 +169,4 @@ function UpdateModel() {
     )
 }
 
-export default UpdateModel
+export default ValidatorsModel
