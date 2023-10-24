@@ -124,3 +124,13 @@ export const deleteProjectModel = async (token, modelId) => {
         console.log("Error ===>", e)
     }
 }
+
+export const getProjectStructure = async (token, projectId) => {
+    const objApi = apiClient('project/structure/'+projectId+'/');
+    try {
+        var response = await objApi.get(undefined, token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+}

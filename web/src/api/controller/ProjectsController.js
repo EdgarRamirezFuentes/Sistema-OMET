@@ -42,4 +42,10 @@ export const deleteProjectMaintenance = async (maintenanceId, token) => {
     })
 }
 
+export const getProjectStructure = async (token, projectId) => {
+    return await projectsAction.getProjectStructure(token, projectId).then((response) => {
+        return response;
+    })
+}
+
 

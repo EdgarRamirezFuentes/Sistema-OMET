@@ -1,7 +1,7 @@
 import axolote from '../../assets/axolote.png'
 import React, { useState, useEffect, useMemo } from 'react';
 import { Disclosure } from '@headlessui/react';
-import { HomeIcon, ArrowRightOnRectangleIcon, ClipboardDocumentListIcon, UserGroupIcon, ChevronDownIcon, IdentificationIcon, ListBulletIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, ArrowRightOnRectangleIcon, ClipboardDocumentListIcon, UserGroupIcon, ChevronDownIcon, IdentificationIcon, MinusSmallIcon } from '@heroicons/react/24/outline';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -28,7 +28,7 @@ function SideBar({ user }) {
         {
             id: 2,
             name: 'Usuarios',
-            icon: UserGroupIcon,
+            icon: MinusSmallIcon,
             current: true,
             paths: ['/clients/create', '/clients/get'],
             children: [
@@ -41,7 +41,7 @@ function SideBar({ user }) {
         {
             id: 3,
             name: 'Proyectos',
-            icon: ClipboardDocumentListIcon,
+            icon: MinusSmallIcon,
             current: true,
             paths: [ '/projects/create', '/projects/get'],
             children: [
@@ -53,7 +53,7 @@ function SideBar({ user }) {
         {
             id: 4,
             name: 'Clientes',
-            icon: IdentificationIcon,
+            icon: MinusSmallIcon,
             current: true,
             paths: [ '/customers/create', '/customers/get'],
             children: [

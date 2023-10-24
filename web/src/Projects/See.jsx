@@ -23,7 +23,6 @@ function SeeProject() {
     const [selectedUser, setSelectedUser] = useState('');
     const [allClients, setAllClients] = useState([])
     const [isLoadingData, setIsLoadingData] = useState(true)
-    const [allModels, setAllModels] = useState([])
     const [allApps, setAllApps] = useState([])
 
     const handleChange = (event) => {
@@ -89,9 +88,6 @@ function SeeProject() {
         await getProject(session.token, params.id).then(async(response)=>{
               let projectArray = await response.json()
               let project  = projectArray.project;
-              let mainteiner = projectArray.maintainers;
-              setAllClients(mainteiner);
-              setAllModels(projectArray.project_models)
               setIsLoadingData(false)
               setName(project.name);
               setDescription(project.description);
@@ -107,7 +103,7 @@ function SeeProject() {
                 <div className='w-full'>
                     <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
                         <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-                        <p className='w-full font-sans text-xl text-black'>/ Profile</p>
+                        <p className='w-full font-sans text-xl text-black'>/ Perfil</p>
                         <div className='w-full mr-5'>
                             <Timer/>
                         </div>
@@ -140,11 +136,6 @@ function SeeProject() {
                               <p className='mt-5 font-bold'>Apps:</p>
                               <div className='mt-5'>
                                   <Table title='Apps' data={ allApps } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
-                              </div>
-                              
-                              <p className='mt-10 font-bold'>Modelos:</p>
-                              <div className='mt-5'>
-                                  <Table title='Modelos' data={ allModels } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
                               </div>
                               
                           </div>

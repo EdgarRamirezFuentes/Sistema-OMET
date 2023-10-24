@@ -360,18 +360,6 @@ class ValidatorValueViewSet(viewsets.ModelViewSet):
     queryset = ValidatorValue.objects.all()
     serializer_class = ValidatorValueSerializer
 
-    def create(self, request, *args, **kwargs):
-        """Create a list of config values"""
-        try:
-            data = request.data
-            serializer = ValidatorValueSerializer(data=data, many=True)
-            if serializer.is_valid():
-                serializer.save()
-                return response.Response(serializer.data, status=status.HTTP_201_CREATED)
-            return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
     def list(self, request, *args, **kwargs):
         """List the all the config values filtered by model field id and is active"""
         try:

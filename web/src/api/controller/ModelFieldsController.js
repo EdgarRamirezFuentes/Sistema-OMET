@@ -6,6 +6,12 @@ export const getModelFields = async (project_id, token) =>{
     })
 }
 
+export const getModelField = async (project_id, token) =>{
+    return await modelActions.getModelField(project_id, token).then((response) => {
+        return response;
+    })
+}
+
 export const createModel = async (formData, token) =>{
     return await modelActions.createModel(formData, token).then((response) => {
         return response;

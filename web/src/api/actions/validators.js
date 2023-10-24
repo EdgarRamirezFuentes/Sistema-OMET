@@ -1,28 +1,17 @@
 import apiClient from '../client';
 
 
-export const getModelFields = async (project_id, token) =>{
-    console.log("token", token);
-    const objApi = apiClient('project/fields?app_model_id='+project_id);
+export const createValidator = async (formData, token) =>{
+    const objApi = apiClient('project/validator-value/');
     try {
-        var response = await objApi.get(undefined, token);
+        var response = await objApi.post(formData, token);
         return response;
     } catch (e) {
         console.log("Error ===>", e);
     }
-}
 
-export const getModelField = async (project_id, token) =>{
-    console.log("token", token);
-    const objApi = apiClient('project/fields/'+project_id);
-    try {
-        var response = await objApi.get(undefined, token);
-        return response;
-    } catch (e) {
-        console.log("Error ===>", e);
-    }
-}
 
+}
 export const createModel = async (formData, token) =>{
     const objApi = apiClient('project/fields/');
     try {

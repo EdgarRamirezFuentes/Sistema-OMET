@@ -6,12 +6,11 @@ import { useEffect, useState } from 'react'
 import { TrashIcon, ClipboardIcon, EyeIcon, Bars3CenterLeftIcon, Bars4Icon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../../Components/Alert/Alert'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { getModelFields, deleteModelField } from '../../api/controller/ModelFieldsController'
 
 function Models() {
     const params = useParams();
-    const location = useLocation();
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'));
     const [allModels, setAllModels] = useState([])
