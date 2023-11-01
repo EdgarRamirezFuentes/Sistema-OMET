@@ -1,0 +1,11 @@
+{
+    id: {{ITEM_ID}},
+    name: {{ITEM_NAME}},
+    icon: MinusSmallIcon,
+    current: false,
+    paths: [{{ITEM_PATHS}}],
+    children: [
+{{MODEL_ITEMS}}
+    ],
+    general : true
+},

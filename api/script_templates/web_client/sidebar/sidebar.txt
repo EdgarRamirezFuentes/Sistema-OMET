@@ -1,7 +1,7 @@
 import axolote from '../../assets/axolote.png'
 import React, { useState, useEffect, useMemo } from 'react';
 import { Disclosure } from '@headlessui/react';
-import { HomeIcon, ArrowRightOnRectangleIcon, ClipboardDocumentListIcon, UserGroupIcon, ChevronDownIcon, IdentificationIcon, ListBulletIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, ArrowRightOnRectangleIcon, ChevronDownIcon, MinusSmallIcon } from '@heroicons/react/24/outline';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -25,55 +25,7 @@ function SideBar({ user }) {
             paths: ['/home'],
             general : true
         },
-        {
-            id: 2,
-            name: 'Usuarios',
-            icon: UserGroupIcon,
-            current: true,
-            paths: ['/clients/create', '/clients/get'],
-            children: [
-                { id: 1, name: 'Crear', current: true, route: '/clients/create', paths: ['/clients/create'], superuser: true},
-                { id: 2, name: 'Ver', current: false, route: '/clients/get', paths: ['/clients/get'], superuser: true},
-            ],
-            general : false,
-            superuser: true
-        },
-        {
-            id: 3,
-            name: 'Proyectos',
-            icon: ClipboardDocumentListIcon,
-            current: true,
-            paths: [ '/projects/create', '/projects/get'],
-            children: [
-                { id: 1, name: 'Crear', current: true, route: '/projects/create', paths: ['/projects/create'], superuser: true  },
-                { id: 2, name: 'Ver', current: false, route: '/projects/get', paths: ['/projects/get'], superuser: false, general: true } ,
-            ],
-            general : true
-        },
-        {
-            id: 4,
-            name: 'Clientes',
-            icon: IdentificationIcon,
-            current: true,
-            paths: [ '/customers/create', '/customers/get'],
-            children: [
-                { id: 1, name: 'Crear', current: true, route: '/customers/create', paths: ['/customers/create'], superuser: true  },
-                { id: 2, name: 'Ver', current: false, route: '/customers/get', paths: ['/customers/get'], superuser: false, general: true } ,
-            ],
-            general : true
-        },
-        {
-            id: 4,
-            name: 'Tipos de datos',
-            icon: ListBulletIcon,
-            current: true,
-            paths: [ '/data-type/create', '/data-type/get'],
-            children: [
-                { id: 1, name: 'Crear', current: true, route: '/data-type/create', paths: ['/data-type/create'], superuser: true  },
-                { id: 2, name: 'Ver', current: false, route: '/data-type/get', paths: ['/data-type/get'], superuser: false, general: true } ,
-            ],
-            general : true
-        },
+{{APP_ITEMS}}
     ]);
 
     const changeCurrentNavigation = () => {
@@ -104,6 +56,7 @@ function SideBar({ user }) {
         localStorage.removeItem('session');
         history('/')
     }
+
     useEffect(() => {
         changeCurrentNavigation()
     }, [location.pathname]);
@@ -181,7 +134,6 @@ function SideBar({ user }) {
                                                                 {subItem.name}
                                                             </div>
                                                         </Link>:null
-
                                                 ))}
                                             </Disclosure.Panel>
                                         </>

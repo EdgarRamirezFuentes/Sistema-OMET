@@ -5,6 +5,8 @@ from core.models import (
     ProjectApp
 )
 
+from .sidebar.sidebar import create_sidebar_component
+
 
 def create_web_client_directory(main_directory, project):
     """Create the web client directory in the zip file.
@@ -16,6 +18,7 @@ def create_web_client_directory(main_directory, project):
     try:
         create_web_client_base_directories(main_directory)
         create_project_app_directories(main_directory, project)
+        create_sidebar_component(main_directory, project)
     except ValueError as e:
         raise e
 

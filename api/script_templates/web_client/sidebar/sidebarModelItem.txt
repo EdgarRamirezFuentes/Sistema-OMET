@@ -1,0 +1,1 @@
+{ id: {{ITEM_ID}}, name: {{ITEM_NAME}}, current: false, route: '/{{APP_NAME}}/{{MODEL_NAME}}/get', paths: ['/projects/get'], superuser: true},
