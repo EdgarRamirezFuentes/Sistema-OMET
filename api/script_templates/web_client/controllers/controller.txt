@@ -1,0 +1,25 @@
+import * as actions from '../../actions/{{PROJECT_APP}}/{{APP_MODEL}}.js'
+
+export const create{{APP_MODEL}} = async (formData, token) =>{
+    return await actions.create{{APP_MODEL}}(formData, token).then((response) => {
+        return response;
+    })
+}
+
+export const get{{APP_MODEL}} = async (id, token) =>{
+    return await actions.get{{APP_MODEL}}(id, token).then((response) => {
+        return response;
+    })
+}
+
+export const update{{APP_MODEL}} = async (id, formData, token) =>{
+    return await actions.update{{APP_MODEL}}(id, formData, token).then((response) => {
+        return response;
+    })
+}
+
+export const delete{{APP_MODEL}} = async (id, token) =>{
+    return await actions.delete{{APP_MODEL}}(id, token).then((response) => {
+        return response;
+    })
+}

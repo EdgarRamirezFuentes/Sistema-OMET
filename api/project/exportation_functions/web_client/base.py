@@ -8,6 +8,8 @@ from core.models import (
 )
 
 from .sidebar.sidebar import create_sidebar_component
+from .controllers.controller import create_app_controllers
+from .actions.action import create_app_actions
 
 
 def create_web_client_directory(main_directory, project):
@@ -23,6 +25,8 @@ def create_web_client_directory(main_directory, project):
         create_sidebar_component(main_directory, project)
         create_login_component(main_directory, project)
         create_index_page(main_directory, project)
+        create_project_controllers(main_directory, project)
+        create_project_actions(main_directory, project)
     except ValueError as e:
         raise e
 
@@ -87,5 +91,33 @@ def create_index_page(main_directory, project):
         index_page = get_template_file_content(SCRIPT_TEMPLATE_URLS['web_client_index'])
         index_page = index_page.replace('{{PROJECT_NAME}}', project_name)
         main_directory.writestr(f'web/index.html', index_page)
+    except ValueError as e:
+        raise e
+
+def create_project_controllers(main_directory, project):
+    """Create the controllers of the project.
+
+    Args:
+        project (Project): The project object
+    """
+    try:
+        project_apps = ProjectApp.objects.filter(project=project)
+
+        for project_app in project_apps:
+            create_app_controllers(main_directory, project_app)
+    except ValueError as e:
+        raise e
+
+def create_project_actions(main_directory, project):
+    """Create the actions of the project.
+
+    Args:
+        project (Project): The project object
+    """
+    try:
+        project_apps = ProjectApp.objects.filter(project=project)
+
+        for project_app in project_apps:
+            create_app_actions(main_directory, project_app)
     except ValueError as e:
         raise e
