@@ -1,21 +1,21 @@
-import escom from '../assets/escom.png'
 import axolote from '../assets/axolote.png'
-import ipn from '../assets/ipn.png'
 
 import '../App.css'
-import Timer from '../Components/Timer/Timer'
-import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useRef, useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { getClient, updateClient } from '../api/controller/ClientsController'
 import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function See() {
+function See({userId}) {
     const params = useParams();
     const session = JSON.parse(localStorage.getItem('session'))
+    console.log("userId");
+    console.log(userId);
     const [user, setUser] = useState(null)
 
     const [image, setImage] = useState(axolote);
@@ -51,25 +51,16 @@ function See() {
 
     useEffect(() => {
         if (user === null){
-            getClientData(params.id);
+            getClientData(userId);
         }
     },[user]);
     
     return (
         <div className="w-full h-full bg-slate-100">
         <div className='flex flex-row h-screen'>
-        <SideBar/>
             <div className='w-full'>
-            <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
-                <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-                <p className='w-full font-sans text-xl text-black'>/ Perfil</p>
-                <div className='w-full mr-5'>
-                    <Timer/>
-                </div>
-            </div>
-            <div>
-                <div className='mt-3 ml-5 flex flex-row items-center '>
-                    <p className='text-3xl font-bold' >Perfil</p>
+            <div className='mt-3 ml-5 flex flex-row items-center justify-center'>
+                    <p className='text-3xl font-bold'> Datos del perfil</p>
                 </div>
                 <div className='flex flex-col justify-between'>
                 <div className='flex items-center justify-center h-full w-full rounded-full'>
@@ -119,8 +110,11 @@ function See() {
             </div>
             </div>
         </div>
-        </div>
     )
-    }
+}
+
+See.propTypes = {
+    userId : PropTypes.number
+}
 
 export default See

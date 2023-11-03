@@ -6,7 +6,8 @@ import Alert from '../Components/Alert/Alert'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { updateApp, getApps } from '../api/controller/AppController'
-function UpdateApp() {
+import PropTypes from 'prop-types';
+function UpdateApp({appId}) {
     const history = useNavigate();
     const params = useParams();
     const location = useLocation();
@@ -39,7 +40,7 @@ function UpdateApp() {
             description: caption,
         }
 
-        await updateApp(params.id, data, session.token).then(async (response)=>{
+        await updateApp(appId, data, session.token).then(async (response)=>{
             if (response.status === 200){
             setAlertType('Success');
             setAlertMessage('App actualizada correctamente.')
@@ -61,7 +62,7 @@ function UpdateApp() {
     }
 
     const getAppData = async () => {
-        await getApps(params.id, session.token).then(async(response)=>{
+        await getApps(appId, session.token).then(async(response)=>{
                 let responseJson = await response.json()
                 setName(responseJson.name)
                 setCaption(responseJson.description)
@@ -76,15 +77,7 @@ function UpdateApp() {
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-screen'>
-                <SideBar/>
                 <div className='w-full'>
-                    <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
-                        <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-                        <p className='w-full font-sans text-xl text-black'>/ Perfil</p>
-                        <div className='w-full mr-5'>
-                            <Timer/>
-                        </div>
-                    </div>
                     <div className='mt-3 ml-5 flex justify-center'>
                         <p className='text-3xl font-bold'>App</p>
                     </div>
@@ -122,6 +115,10 @@ function UpdateApp() {
             </div>
         </div>
     )
+}
+
+UpdateApp.propTypes = {
+    appId : PropTypes.number
 }
 
 export default UpdateApp

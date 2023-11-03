@@ -63,7 +63,7 @@ function ValidatorsModel() {
         const models = await getModelField(params.id, session.token);
         const modelList = await models.json();
         console.log("modelList", modelList);
-        if (modelList.length !== []) {
+        if (modelList.length !== 0) {
             setValidatorsUsed(modelList.validators);
             setModel(modelList);
             setIsLoadingData(false);

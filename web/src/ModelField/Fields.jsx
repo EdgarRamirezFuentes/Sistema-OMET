@@ -3,11 +3,18 @@ import Timer from '../Components/Timer/Timer'
 import SideBar from '../Components/Sidebar/Sidebar'
 import Table from '../Components/tailwindUI/Table'
 import { useEffect, useState } from 'react'
-import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, ClipboardIcon, EyeIcon, XMarkIcon, CircleStackIcon} from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../Components/Alert/Alert'
 import { useParams, useLocation } from 'react-router-dom'
-import { getModelFields, deleteModelField } from '../api/controller/ModelFieldsController'
+import { getModels, delete_ } from '../api/controller/ModelFieldsController'
+
+import Modal from '../Components/tailwindUI/Modal';
+import ModalDelete from '../Components/ModalDelete/ModalDelete';
+
+import See from "./See";
+import Update from "./Update";
+import Create from "./Create";
 
 function Models() {
     const params = useParams();
@@ -22,15 +29,23 @@ function Models() {
     const [alertType, setAlertType] = useState('Error');
     const [deletedProject, setDeletedProject] = useState(null);
 
+    const [selectedModel, setSelectedModel] = useState(null);
+
+    //Modales
+    const [openModal, setOpenModal] = useState(false);
+    const [openModalDelete, setOpenModalDelete] = useState(false);
+    const [openModalUpdate, setOpenModalUpdate] = useState(false);
+    const [openModalCreate, setOpenModalCreate] = useState(false);
+
   useEffect(() => {
     if (deletedProject == null || deletedProject){
-      getModels()
+      getModelsFields()
       setDeletedProject(false);
     }
   }, [allModels]);
 
-  const getModels = async ()=>{
-    await getModelFields(params.id, session.token).then(async (models)=>{
+  const getModelsFields = async ()=>{
+    await getModels(params.id, session.token).then(async (models)=>{
       let modelList = await models.json()
       console.log("modelList",modelList);
       if (modelList.length != []){
@@ -44,32 +59,52 @@ function Models() {
 
   const tableColumns = [
     { heading: 'Id', value: 'id',align: 'center' },
-    { heading: 'Nombre', value: 'name' , main: true},
-    { heading: 'Descripción', value: 'caption'},
+    { heading: 'Nombre', value: 'name' , main: true}
   ];
 
   const handleView = item => {
+    setOpenModal(true)
+    setSelectedModel(item)
     console.log("item",item);
-    history(`/model/view/${item.id}`,{
-              state:{
-                item: item,
-                model: params.id
-              }
-        }
-    )
+    /*history(`/model/view/${item.id}`,{
+      state:{
+        item: item,
+        model: params.id
+      }
+    })*/
   }
   const handleUpdate = item => {
-    history(`/model/update/${item.id}`,{
-              state: {
-                  item: item,
-                  model: params.id
-              }
-        }
-    )
+
+    setSelectedModel(item)
+    setOpenModalUpdate(true)
+    console.log("item",item);
+    /*history(`/model/update/${item.id}`,{
+      state: {
+        item: item,
+        model: params.id
+      }
+    })*/
   }
   
   const handleDelete = async (item) => {
-    await deleteModelField(item.id, session.token).then((response)=>{
+    setOpenModalDelete(true)
+    setSelectedModel(item)
+    
+  }
+
+
+  const handleProjectModel = item => {
+    history(`/projects/model/${item.id}`,{
+        state:{
+
+          project: item,
+        }
+      }
+    )
+  }
+
+  const handleDeleteModel = async () => {
+    await delete_(selectedModel.id, session.token).then((response)=>{
 
       if(response.status === 204){
         setAlertType('Success');
@@ -78,13 +113,6 @@ function Models() {
         setDeletedProject(true);
      }
     })
-  }
-
-  const handleProjectModel = item => {
-    history(`/projects/create/model/${item.id}`,{
-            client: item,
-        }
-    )
   }
 
   const columnActions = [
@@ -103,7 +131,14 @@ function Models() {
         action: handleUpdate,
     },
     {
-        id: 3,
+      id: 3,
+      name: 'Consultar modelos',
+      type: 'primary',
+      icon: <CircleStackIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
+      action: handleProjectModel,
+    },
+    {
+        id: 4,
         name: 'Eliminar campo',
         type: 'primary',
         icon: <TrashIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
@@ -116,6 +151,14 @@ function Models() {
     setAlertType('Error');
     setAlertMessage('Ingresa tus datos.')
   }
+  const handlerCreateApp = () => {
+    setOpenModalCreate(true)
+    /*history('/app/create/'+location.state.project.id,{
+        state:{
+            project: location.state.project,
+        }
+    })*/
+}
 
   return (
     <div className="w-full h-full bg-slate-100">
@@ -131,8 +174,8 @@ function Models() {
           </div>
           <div>
             <div className='mt-3 ml-5 flex flex-row justify-between items-center '>
-                <p className='text-3xl font-bold'>Campos</p>
-                <button onClick={()=>{history('/model/create/'+params.id)}} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear campo</button>
+                <p className='text-3xl font-bold'>Modelos</p>
+                <button onClick={handlerCreateApp} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear modelo</button>
             </div>
             <div className="mt-5 w-full overflow-hidden">
               <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
@@ -143,6 +186,26 @@ function Models() {
           </div>
         </div>
       </div>
+
+      <Modal show={ openModal } setShow={ setOpenModal } className='min-w-full sm:min-w-[1200px]'>
+          <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModal(false) }/></div>
+          <See model={selectedModel}/>
+      </Modal>
+
+      <Modal show={ openModalUpdate } setShow={ setOpenModalUpdate } className='min-w-full sm:min-w-[1200px]'>
+          <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalUpdate(false) }/></div>
+          <Update model={selectedModel}/>
+          
+      </Modal>
+      <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>
+          <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalCreate(false) }/></div>
+          <Create projectAppId={location?.state?.project?.id}/>
+      </Modal>
+
+      <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>
+          <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalDelete(false) }/></div>
+          <ModalDelete onDelete={handleDeleteModel}/>
+      </Modal>
     </div>
   )
 }

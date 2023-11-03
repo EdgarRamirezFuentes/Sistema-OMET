@@ -2,12 +2,20 @@ import '../App.css'
 import Timer from '../Components/Timer/Timer'
 import SideBar from '../Components/Sidebar/Sidebar'
 import Table from '../Components/tailwindUI/Table'
-import { getAllClients, resetPassword, deleteUser } from '../api/controller/ClientsController'
 import { useEffect, useState } from 'react'
-import { TrashIcon, ClipboardIcon, EyeIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, ClipboardIcon, EyeIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../Components/Alert/Alert'
 import { getCustomers, deleteCustomer } from '../api/controller/CustomersController';
+
+
+
+import Modal from '../Components/tailwindUI/Modal';
+import ModalDelete from '../Components/ModalDelete/ModalDelete';
+
+import See from "./See";
+import Update from "./Update";
+import Create from "./Create";
 
 function Customers() {
   const history = useNavigate();
@@ -19,6 +27,15 @@ function Customers() {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState('Error');
   const [deletedUser, setDeletedUser] = useState(null);
+
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+
+  //Modales
+  const [openModal, setOpenModal] = useState(false);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [openModalUpdate, setOpenModalUpdate] = useState(false);
+  const [openModalCreate, setOpenModalCreate] = useState(false);
 
   useEffect(() => {
     if (deletedUser == null || deletedUser == true){
@@ -42,16 +59,20 @@ function Customers() {
   ];
 
   const handleView = item => {
-    history(`/customers/view/${item.id}`,{
+    setSelectedCustomer(item)
+    setOpenModal(true)
+    /*history(`/customers/view/${item.id}`,{
             client: item,
         }
-    )
+    )*/
   }
   const handleUpdate = item => {
-    history(`/customers/update/${item.id}`,{
+    setSelectedCustomer(item)
+    setOpenModalUpdate(true)
+    /*history(`/customers/update/${item.id}`,{
             client: item,
         }
-    )
+    )*/
   }
   
   const handleDelete = async (item) => {
@@ -68,6 +89,11 @@ function Customers() {
         setAlertType('Error');
       }
     })
+  }
+  const handleModalDelete = (item) => {
+    setSelectedCustomer(item)
+    setOpenModalDelete(true)
+
   }
 
   const columnActions = [
@@ -90,7 +116,7 @@ function Customers() {
         name: 'Eliminar Cliente',
         type: 'primary',
         icon: <TrashIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
-        action: handleDelete,
+        action: handleModalDelete,
     }
   ];
 
@@ -98,6 +124,15 @@ function Customers() {
     setError(null)
     setAlertType('Error');
     setAlertMessage('Ingresa tus datos.')
+  }
+
+  const handleCreate = item => {
+    setOpenModalCreate(true)
+    
+    /*history(`/app/create/${item.id}`,{
+            client: item,
+        }
+    )*/
   }
 
   return (
@@ -113,8 +148,9 @@ function Customers() {
             </div>
           </div>
           <div>
-            <div className='mt-3 ml-5 flex flex-row justify-between items-center '>
+            <div className='mt-3 ml-5 mr-5 flex flex-row justify-between items-center '>
                 <p className='text-3xl font-bold'>Clientes</p>
+                <button onClick={handleCreate} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400">Crear cliente</button>
             </div>
             <div className="mt-5 w-full overflow-hidden">
               <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
@@ -125,6 +161,26 @@ function Customers() {
           </div>
         </div>
       </div>
+
+      <Modal show={ openModal } setShow={ setOpenModal } className='min-w-full sm:min-w-[1200px]'>
+          <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModal(false) }/></div>
+          <See customerId={selectedCustomer?.id}/>
+      </Modal>
+
+      <Modal show={ openModalUpdate } setShow={ setOpenModalUpdate } className='min-w-full sm:min-w-[1200px]'>
+          <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalUpdate(false) }/></div>
+          <Update customerId={selectedCustomer?.id}/>
+          
+      </Modal>
+      <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>
+          <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalCreate(false) }/></div>
+          <Create/>
+      </Modal>
+
+      <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>
+          <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalDelete(false) }/></div>
+          <ModalDelete onDelete={handleDelete}/>
+      </Modal>
     </div>
   )
 }

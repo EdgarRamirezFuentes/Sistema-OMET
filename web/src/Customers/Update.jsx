@@ -6,8 +6,9 @@ import Alert from '../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { getCustomer, updateCustomer } from '../api/controller/CustomersController'
+import PropTypes from 'prop-types';
 
-function UpdateCustomer() {
+function UpdateCustomer({customerId}) {
     const params = useParams();
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'))
@@ -47,7 +48,7 @@ function UpdateCustomer() {
     useEffect(() => {
         if (customer === null){
             console.log(params); 
-            getClientData(params.id);
+            getClientData(customerId);
         }
         if(rfc.length<12 || rfc.length > 13){
             setRfcError(true);
@@ -105,15 +106,7 @@ function UpdateCustomer() {
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-screen'>
-                <SideBar/>
                 <div className='w-full'>
-                    <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
-                        <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-                        <p className='w-full font-sans text-xl text-black'>/ Perfil</p>
-                        <div className='w-full mr-5'>
-                            <Timer/>
-                        </div>
-                    </div>
                     <div className='mt-3 ml-5 flex justify-center'>
                         <p className='text-3xl font-bold'>Actualizar cliente</p>
                     </div>
@@ -165,6 +158,9 @@ function UpdateCustomer() {
             </div>
         </div>
     )
+}
+UpdateCustomer.propTypes = {
+  customerId : PropTypes.number
 }
 
 export default UpdateCustomer

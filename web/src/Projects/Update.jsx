@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { getProject, updateProject } from '../api/controller/ProjectsController'
 import { getCustomers } from '../api/controller/ClientsController';
 import { useParams } from 'react-router-dom';
-function UpdateProject() {
+import PropTypes from 'prop-types';
+function UpdateProject({projectId}) {
     const params = useParams();
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'))
@@ -46,7 +47,7 @@ function UpdateProject() {
         description: description,
       }
 
-      await updateProject(params.id, data, session.token).then(async (response) => {
+      await updateProject(projectId, data, session.token).then(async (response) => {
 
         let res = await response.json();
         if (response.status === 200){
@@ -73,7 +74,7 @@ function UpdateProject() {
     }
 
     const getProjectData = async () => {
-        await getProject(session.token, params.id).then(async(response)=>{
+        await getProject(session.token, projectId).then(async(response)=>{
               let projectArray = await response.json()
               let project  = projectArray.project;
               let mainteiner = projectArray.maintainers;
@@ -88,15 +89,7 @@ function UpdateProject() {
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-screen'>
-                <SideBar/>
                 <div className='w-full'>
-                    <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
-                        <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-                        <p className='w-full font-sans text-xl text-black'>/ Perfil</p>
-                        <div className='w-full mr-5'>
-                            <Timer/>
-                        </div>
-                    </div>
                     <div className='mt-3 ml-5 flex justify-center'>
                         <p className='text-3xl font-bold'>Actualizar proyecto</p>
                     </div>
@@ -119,7 +112,7 @@ function UpdateProject() {
                               
                               <p className='font-bold'>Descripción:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input value={description} onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="description" name="description"/><br/><br/>
+                                <textarea value={description} onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="description" name="description"/><br/><br/>
                               </div>
 
                           </div>
@@ -135,6 +128,10 @@ function UpdateProject() {
             </div>
         </div>
     )
+}
+
+UpdateProject.propTypes = {
+  projectId : PropTypes.number
 }
 
 export default UpdateProject

@@ -23,6 +23,38 @@ export const getModelField = async (project_id, token) =>{
     }
 }
 
+export const getModels = async (token, app_id) => {
+    const objApi = apiClient('project/models?project_app_id='+app_id);
+    try {
+        var response = await objApi.get(undefined, token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+}
+
+export const getModel = async (token, model_id) => {
+    console.log("token", token)
+    console.log("model_id", model_id)
+    const objApi = apiClient('project/models/'+model_id+"/");
+    try {
+        var response = await objApi.get(undefined, token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+}
+
+export const create = async (formData, token) =>{
+    const objApi = apiClient('project/models/');
+    try {
+        var response = await objApi.post(formData, token);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e);
+    }
+}
+
 export const createModel = async (formData, token) =>{
     const objApi = apiClient('project/fields/');
     try {
@@ -47,6 +79,17 @@ export const deleteModelField = async (field_id, token) =>{
     const objApi = apiClient('project/fields');
     try {
         var response = await objApi.del(field_id, token);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e);
+    }
+}
+
+export const delete_ = async (model_id, token) =>{
+    console.log("model_id", model_id);
+    const objApi = apiClient('project/models');
+    try {
+        var response = await objApi.del(model_id, token);
         return response;
     } catch (e) {
         console.log("Error ===>", e);

@@ -1,22 +1,14 @@
 import '../../App.css'
-import Timer from '../../Components/Timer/Timer'
-import SideBar from '../../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../../Components/Alert/Alert'
-import { useNavigate } from 'react-router-dom';
-import { createProjectModel } from '../../api/controller/ProjetModelController'
-import { useParams, useLocation } from 'react-router-dom';
-
-function SeeProjectModel() {
-    const params = useParams();
-    const location = useLocation();
-    const history = useNavigate();
-    const session = JSON.parse(localStorage.getItem('session'));
+import PropTypes from 'prop-types';
+function SeeProjectModel({model}) {
 
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
     const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
 
     const onCloseHandler = () => {
         setError(null)
@@ -25,23 +17,15 @@ function SeeProjectModel() {
     }
 
     useEffect(() => {
-        console.log("location.state");
-        console.log(location.state); 
-        setName(location.state.item.name)
+        console.log("model",model)
+        setName(model?.name)
+        setDescription(model?.caption)
     }, []);
   
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-screen'>
-                <SideBar/>
                 <div className='w-full'>
-                    <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
-                        <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-                        <p className='w-full font-sans text-xl text-black'>/ Perfil</p>
-                        <div className='w-full mr-5'>
-                            <Timer/>
-                        </div>
-                    </div>
                     <div className='mt-3 ml-5 flex justify-center'>
                         <p className='text-3xl font-bold'>Datos del modelo</p>
                     </div>
@@ -60,6 +44,12 @@ function SeeProjectModel() {
                                 <input value={name} disabled onChange={(event) => {setName(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="project_name" name="project_name"/><br/><br/>
                               </div>
                             </div>
+                            <div className='w-full flex flex-col justify-between'>
+                              <p className='font-bold'>Descripción:</p>
+                              <div className='mb-10 w-full flex flex-row justify-center'>
+                                <textarea value={description} disabled onChange={(event) => {setName(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="project_name" name="project_name"/><br/><br/>
+                              </div>
+                            </div>
                           </div>
                         </div>
                     </div>
@@ -69,5 +59,9 @@ function SeeProjectModel() {
         </div>
     )
 }
+
+SeeProjectModel.propTypes = {
+    model : PropTypes.any
+  }
 
 export default SeeProjectModel

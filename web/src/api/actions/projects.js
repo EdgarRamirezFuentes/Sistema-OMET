@@ -83,6 +83,16 @@ export const getProjectModels = async (token, projectId) => {
     }
 }
 
+export const getModels = async (token, app_id) => {
+    const objApi = apiClient('project/models?app_id='+app_id);
+    try {
+        var response = await objApi.get(undefined, token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+}
+
 
 export const createProjectModel = async (formData, token) =>{
     const objApi = apiClient('project/models/');

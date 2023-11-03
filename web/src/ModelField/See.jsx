@@ -1,110 +1,42 @@
 import '../App.css'
-import Timer from '../Components/Timer/Timer'
-import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { getDataTypes } from '../api/controller/DataTypeController'
-import { createModel } from '../api/controller/ModelFieldsController'
-function SeeModel() {
-    const history = useNavigate();
-    const params = useParams();
-    const location = useLocation();
+import { getModel } from '../api/controller/ModelFieldsController'
+import PropTypes from 'prop-types';
+
+function SeeModel({model}) {
     const session = JSON.parse(localStorage.getItem('session'))
-    const [allDataTypes, setAllDataTypes] = useState([])
 
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
     const [name, setName] = useState('');
-    const [caption, setCaption] = useState('');
-    const [order, setOrder] = useState(0);
-    const [isRequired, setIsRequired] = useState(false);
-
-    const [selectedType, setSelectedType] = useState('');
 
     useEffect(() => {
-        console.log("location.state.item",location.state.item);
-          setName(location.state.item.name)
-          setCaption(location.state.item.caption)
-          setIsRequired(false)
-          setOrder(location.state.item.order)
-          setSelectedType(location.state.item.data_type)
-          dataTypes()
+        
+        getModelField()
       }, []);
 
-    const dataTypes = async ()=>{
-        await getDataTypes(session.token).then(async(clients)=>{
-          let clientsArray = await clients.json()
-          setAllDataTypes(clientsArray)
-          setIsLoadingData(false)
+
+    const getModelField = async ()=>{
+        await getModel(model?.id, session.token).then(async (model)=>{
+          let model_data = await model.json()
+          setName(model_data?.name)
         })
     }
-
-    const handleChange = (event) => {
-        setSelectedType(event.target.value);
-    };
-    
-    const handleChangeRequired = (event) => {
-        setIsRequired(event.target.value);
-    };
 
     const onCloseHandler = () => {
         setError(null)
         setAlertType('Error');
         setAlertMessage('')
     }
-
-    const buttonHandler = async () => {
-        if(name === '' || caption === '' || selectedType === '' || order === 0){
-            setAlertType('Warning');
-            setAlertMessage('Ingresa tus datos.')
-            setError(true);
-            return;
-        }
-
-        let data = [{
-            name: name,
-            caption: caption,
-            order: order,
-            is_required: isRequired,
-            data_type: selectedType,
-            project_model: params.id
-        }]
-
-        await createModel(data, session.token).then(async (response)=>{
-            let responseJson = await response.json()
-            console.log(responseJson);
-            if (response.status === 201){
-            setAlertType('Success');
-            setAlertMessage('Campo creado correctamente.')
-            setError(true);
-            setTimeout(() => {
-                history(`/projects/model/${location.state.model}`)
-            }, 1500);
-            }else{
-            setAlertType('Error');
-            setAlertMessage('Error al crear el campo.')
-            setError(true);
-            }
-        });
-    }
   
     return (
         <div className="w-full h-full bg-slate-100">
-            <div className='flex flex-row h-screen'>
-                <SideBar/>
+            <div className='flex flex-row h-full'>
                 <div className='w-full'>
-                    <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
-                        <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-                        <p className='w-full font-sans text-xl text-black'>/ Perfil</p>
-                        <div className='w-full mr-5'>
-                            <Timer/>
-                        </div>
-                    </div>
                     <div className='mt-3 ml-5 flex justify-center'>
-                        <p className='text-3xl font-bold'>Datos del campo</p>
+                        <p className='text-3xl font-bold'>Datos del modelo</p>
                     </div>
                     <div className='flex flex-col justify-between'>
                     <div className='mt-5 p-5 flex flex-col items-center m-auto w-1/2 rounded-2xl bg-white'>
@@ -122,28 +54,6 @@ function SeeModel() {
                               <div className='mb-10 w-full flex flex-row justify-center'>
                                 <input value={name} disabled onChange={(event) => {setName(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="project_name" name="project_name"/><br/><br/>
                               </div>
-                              
-                              <p className='font-bold'>Descripción:</p>
-                              <div className='mb-10 w-full flex flex-row justify-center'>
-                                <textarea value={caption} disabled onChange={(event) => {setCaption(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="caption" name="caption"/><br/><br/>
-                              </div>
-                              <p className='font-bold'>Orden:</p>
-                              <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input value={order} disabled min={0} onChange={(event) => {setOrder(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='0' type="number" id="order" name="order"/><br/><br/>
-                              </div>
-
-                              <p className='font-bold'>Tipo de dato:</p>
-                              <div className='mb-10 w-full flex flex-row justify-center'>
-                              <div className="mt-1 relative rounded-md shadow-sm">
-                                <select disabled className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'
-                                 value={selectedType} onChange={handleChange}>
-                                  <option value="">Selecciona un tipo de dato</option>
-                                  {allDataTypes.map((option, i) => (
-                                      <option key={i} value={option.id}>{option.name}</option>
-                                  ))}
-                                </select>
-                              </div>
-                            </div>
                           </div>
 
                         </div>
@@ -154,6 +64,10 @@ function SeeModel() {
             </div>
         </div>
     )
+}
+
+SeeModel.propTypes = {
+    model : PropTypes.any
 }
 
 export default SeeModel

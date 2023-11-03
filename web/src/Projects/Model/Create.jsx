@@ -6,11 +6,13 @@ import Alert from '../../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
 import { createProjectModel } from '../../api/controller/ProjetModelController'
 import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function CreateProjectModel() {
+function CreateProjectModel({appId}) {
     const params = useParams();
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'));
+    console.log("appId",appId)
 
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
@@ -33,7 +35,7 @@ function CreateProjectModel() {
 
       let data = {
         name: name,
-        project_app: params.id,
+        project_app: appId,
       }
 
       await createProjectModel(data, session.token).then(async (response) => {
@@ -44,7 +46,7 @@ function CreateProjectModel() {
           setAlertMessage('Modelo creado correctamente.')
           setError(true);
           setTimeout(() => {
-            history('/projects/model/'+params.id)
+            history('/projects/model/'+appId)
           },1000);
           return;
         }else{
@@ -59,15 +61,7 @@ function CreateProjectModel() {
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-screen'>
-                <SideBar/>
                 <div className='w-full'>
-                    <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
-                        <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-                        <p className='w-full font-sans text-xl text-black'>/ Perfil</p>
-                        <div className='w-full mr-5'>
-                            <Timer/>
-                        </div>
-                    </div>
                     <div className='mt-3 ml-5 flex justify-center'>
                         <p className='text-3xl font-bold'>Crear modelo</p>
                     </div>
@@ -97,6 +91,10 @@ function CreateProjectModel() {
             </div>
         </div>
     )
+}
+
+CreateProjectModel.propTypes = {
+  appId : PropTypes.number
 }
 
 export default CreateProjectModel

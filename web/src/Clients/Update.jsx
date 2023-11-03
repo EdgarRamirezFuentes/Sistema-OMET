@@ -9,11 +9,12 @@ import React, { useRef, useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { getClient, updateClient } from '../api/controller/ClientsController'
 import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function Update() {
+function Update({userId, onUpdate}) {
     const params = useParams();
     const session = JSON.parse(localStorage.getItem('session'))
     const fileInputRef = useRef(null);
@@ -66,18 +67,6 @@ function Update() {
         return window.btoa(binary);
     };
 
-    const handleImageClick = () => {
-        fileInputRef.current.click();
-    };
-
-    const handleMouseEnter = () => {
-        setShowText(true);
-    };
-
-    const handleMouseLeave = () => {
-        setShowText(false);
-    };
-
     const onCloseHandler = () => {
         setError(null)
         setAlertType('Error');
@@ -99,8 +88,7 @@ function Update() {
 
     useEffect(() => {
         if (user === null){
-            console.log(params); 
-            getClientData(params.id);
+            getClientData(userId);
         }
         if(rfc.length<12 || rfc.length > 13){
             setRfcError(true);
@@ -153,6 +141,7 @@ function Update() {
             setError(true);
             setAlertMessage('Datos actualizados con éxito.');
             setAlertType('Success');
+            onUpdate
             /*localStorage.setItem('session', JSON.stringify(res));
 
             const session = JSON.parse(localStorage.getItem('session'))
@@ -168,17 +157,9 @@ function Update() {
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-screen'>
-                <SideBar/>
                 <div className='w-full'>
-                    <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
-                        <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-                        <p className='w-full font-sans text-xl text-black'>/ Perfil</p>
-                        <div className='w-full mr-5'>
-                            <Timer/>
-                        </div>
-                    </div>
-                    <div className='mt-3 ml-5 flex flex-row items-center '>
-                        <p className='text-3xl font-bold' >Perfil</p>
+                    <div className='mt-3 ml-5 flex flex-row items-center justify-center'>
+                        <p className='text-3xl font-bold'>Actualizar Perfil</p>
                     </div>
                     <div className='flex flex-col justify-between'>
                         <div className='flex items-center justify-center h-full w-full rounded-full'>
@@ -234,6 +215,12 @@ function Update() {
             </div>
         </div>
     )
-    }
+}
+
+Update.propTypes = {
+    userId : PropTypes.number,
+    onUpdate: PropTypes.func
+}
+
 
 export default Update

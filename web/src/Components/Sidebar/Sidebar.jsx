@@ -1,7 +1,7 @@
 import axolote from '../../assets/axolote.png'
 import React, { useState, useEffect, useMemo } from 'react';
 import { Disclosure } from '@headlessui/react';
-import { HomeIcon, ArrowRightOnRectangleIcon, ClipboardDocumentListIcon, UserGroupIcon, ChevronDownIcon, IdentificationIcon, MinusSmallIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, ArrowRightOnRectangleIcon, ChevronDownIcon, MinusSmallIcon } from '@heroicons/react/24/outline';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -30,9 +30,8 @@ function SideBar({ user }) {
             name: 'Usuarios',
             icon: MinusSmallIcon,
             current: true,
-            paths: ['/clients/create', '/clients/get'],
+            paths: ['/clients/get'],
             children: [
-                { id: 1, name: 'Crear', current: true, route: '/clients/create', paths: ['/clients/create'], superuser: true},
                 { id: 2, name: 'Ver', current: false, route: '/clients/get', paths: ['/clients/get'], superuser: true},
             ],
             general : false,
@@ -45,7 +44,6 @@ function SideBar({ user }) {
             current: true,
             paths: [ '/projects/create', '/projects/get'],
             children: [
-                { id: 1, name: 'Crear', current: true, route: '/projects/create', paths: ['/projects/create'], superuser: true  },
                 { id: 2, name: 'Ver', current: false, route: '/projects/get', paths: ['/projects/get'], superuser: false, general: true } ,
             ],
             general : true
@@ -57,35 +55,10 @@ function SideBar({ user }) {
             current: true,
             paths: [ '/customers/create', '/customers/get'],
             children: [
-                { id: 1, name: 'Crear', current: true, route: '/customers/create', paths: ['/customers/create'], superuser: true  },
                 { id: 2, name: 'Ver', current: false, route: '/customers/get', paths: ['/customers/get'], superuser: false, general: true } ,
             ],
             general : true
-        },
-        /*{
-            id: 5,
-            name: 'Apps',
-            icon: IdentificationIcon,
-            current: true,
-            paths: [ '/app/create', '/app/view'],
-            children: [
-                { id: 1, name: 'Crear', current: true, route: '/app/create', paths: ['/app/create'], superuser: true  },
-                { id: 2, name: 'Ver', current: false, route: '/app/get', paths: ['/app/get'], superuser: false, general: true } ,
-            ],
-            general : true
-        },
-        {
-            id: 4,
-            name: 'Tipos de datos',
-            icon: ListBulletIcon,
-            current: true,
-            paths: [ '/data-type/create', '/data-type/get'],
-            children: [
-                { id: 1, name: 'Crear', current: true, route: '/data-type/create', paths: ['/data-type/create'], superuser: true  },
-                { id: 2, name: 'Ver', current: false, route: '/data-type/get', paths: ['/data-type/get'], superuser: false, general: true } ,
-            ],
-            general : true
-        },*/
+        }
     ]);
 
     const changeCurrentNavigation = () => {

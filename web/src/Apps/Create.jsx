@@ -6,7 +6,8 @@ import Alert from '../Components/Alert/Alert'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { createApp } from '../api/controller/AppController'
-function CreateApp() {
+import PropTypes from 'prop-types';
+function CreateApp({projectId}) {
     const history = useNavigate();
     const params = useParams();
     const location = useLocation();
@@ -35,7 +36,7 @@ function CreateApp() {
         let data = {
             name: name,
             description: caption,
-            project: parseInt(params.id)
+            project: parseInt(projectId)
         }
 
         await createApp(data, session.token).then(async (response)=>{
@@ -63,15 +64,7 @@ function CreateApp() {
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-screen'>
-                <SideBar/>
                 <div className='w-full'>
-                    <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
-                        <p className='pr-1 font-sans text-lg text-gray-500'>Admin</p>
-                        <p className='w-full font-sans text-xl text-black'>/ Perfil</p>
-                        <div className='w-full mr-5'>
-                            <Timer/>
-                        </div>
-                    </div>
                     <div className='mt-3 ml-5 flex justify-center'>
                         <p className='text-3xl font-bold'>Crear app</p>
                     </div>
@@ -109,6 +102,10 @@ function CreateApp() {
             </div>
         </div>
     )
+}
+
+CreateApp.propTypes = {
+    projectId : PropTypes.number
 }
 
 export default CreateApp

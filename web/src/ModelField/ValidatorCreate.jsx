@@ -53,14 +53,8 @@ function CreateValidator({validators, model_field_id, data, isLoadingData, actio
       value: validatorValue
     }
 
-    console.log("===data===")
-    console.log(data)
-
     await createValidator(data, session.token).then(async (response) => {
-      console.log("==response==")
-      console.log(response)
       let res = await response.json();
-        console.log(res)
         if (response.status === 201){
           setAlertType('Success');
           setAlertMessage('Validador creado correctamente.')

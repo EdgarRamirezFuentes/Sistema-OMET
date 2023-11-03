@@ -3,12 +3,18 @@ import Timer from '../Components/Timer/Timer'
 import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
-import { createProjectMaintenance, getProject } from '../api/controller/ProjectsController'
-import { getCustomers } from '../api/controller/ClientsController';
+import { getProject } from '../api/controller/ProjectsController'
 import { useLocation, useNavigate } from 'react-router-dom';
 import Table from '../Components/tailwindUI/Table'
-import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { deleteApp } from '../api/controller/AppController'
+
+import Modal from '../Components/tailwindUI/Modal';
+import ModalDelete from '../Components/ModalDelete/ModalDelete';
+
+import See from "./See";
+import Update from "./Update";
+import Create from "./Create";
 function SeeApps() {
     const location = useLocation();
     const history = useNavigate();
@@ -23,6 +29,14 @@ function SeeApps() {
     const [isLoadingData, setIsLoadingData] = useState(true)
     const [allApps, setAllApps] = useState([])
 
+    const [selectedApp, setSelectedApp] = useState(null);
+
+    //Modales
+    const [openModal, setOpenModal] = useState(false);
+    const [openModalDelete, setOpenModalDelete] = useState(false);
+    const [openModalUpdate, setOpenModalUpdate] = useState(false);
+    const [openModalCreate, setOpenModalCreate] = useState(false);
+
     const handleChange = (event) => {
       setSelectedUser(event.target.value);
     };
@@ -33,28 +47,31 @@ function SeeApps() {
     ];
 
     const handleView = item => {
+        setOpenModal(true)
+        setSelectedApp(item)
       /*history(`/clients/view/${item.id}`,{
               client: item,
           }
-      )*/
+      )
       history(`/app/view/${item.id}`,{
             state:{
                 project: location.state.project,
             }
-        }
-    )
+        })*/
     }
     const handleUpdate = item => {
-      history(`/app/update/${item.id}`,{ 
+        setOpenModalUpdate(true)
+        setSelectedApp(item)
+      /*history(`/app/update/${item.id}`,{ 
             state:{
                 project: location.state.project,
             }
           }
-      )
+      )*/
     }
 
     const handleProjectModel = item => {
-        history(`/projects/model/${item.id}`,{
+        history(`/model/get/${item.id}`,{
             state:{
     
               project: item,
@@ -64,25 +81,9 @@ function SeeApps() {
       }
     
     const handleDelete = async (item) => {
-        await deleteApp(item.id, session.token).then(async(response)=>{
-            if (response.status === 204){
-
-                setAlertType('Success');
-                setAlertMessage('App eliminada correctamente.')
-                setError(true);
-                setFlag(false);
-                getProjectData();
-                setAllApps([])
-                setTimeout(() => {
-                    setError(false);
-                    getProjectData();
-                }, 1500);
-            }else{
-                setAlertType('Error');
-                setAlertMessage('Error al eliminar la app.')
-                setError(true);
-            }
-        })
+        setOpenModalDelete(true)
+        setSelectedApp(item)
+        /**/
     }
 
     const columnActions = [
@@ -143,9 +144,32 @@ function SeeApps() {
         }
     }
     const handlerCreateApp = () => {
-        history('/app/create/'+location.state.project.id,{
+        setOpenModalCreate(true)
+        /*history('/app/create/'+location.state.project.id,{
             state:{
                 project: location.state.project,
+            }
+        })*/
+    }
+
+    const delete_ = async () => {
+        await deleteApp(selectedApp.id, session.token).then(async(response)=>{
+            if (response.status === 204){
+
+                setAlertType('Success');
+                setAlertMessage('App eliminada correctamente.')
+                setError(true);
+                setFlag(false);
+                getProjectData();
+                setAllApps([])
+                setTimeout(() => {
+                    setError(false);
+                    getProjectData();
+                }, 1500);
+            }else{
+                setAlertType('Error');
+                setAlertMessage('Error al eliminar la app.')
+                setError(true);
             }
         })
     }
@@ -177,6 +201,25 @@ function SeeApps() {
                 </div>
                 </div>
             </div>
+            <Modal show={ openModal } setShow={ setOpenModal } className='min-w-full sm:min-w-[1200px]'>
+                <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModal(false) }/></div>
+                <See appId={selectedApp?.id}/>
+            </Modal>
+
+            <Modal show={ openModalUpdate } setShow={ setOpenModalUpdate } className='min-w-full sm:min-w-[1200px]'>
+                <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalUpdate(false) }/></div>
+                <Update appId={selectedApp?.id}/>
+                
+            </Modal>
+            <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>
+                <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalCreate(false) }/></div>
+                <Create projectId={location?.state?.project?.id}/>
+            </Modal>
+
+            <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>
+                <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalDelete(false) }/></div>
+                <ModalDelete onDelete={delete_}/>
+            </Modal>
         </div>
     )
 }
