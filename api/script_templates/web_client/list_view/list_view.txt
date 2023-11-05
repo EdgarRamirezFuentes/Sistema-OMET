@@ -141,4 +141,4 @@ function {{ITEM_NAME}}List() {
     )
 }
 
-export default FarmaciasList
+export default {{ITEM_NAME}}List
