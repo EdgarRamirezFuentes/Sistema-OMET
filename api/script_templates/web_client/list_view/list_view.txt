@@ -113,8 +113,8 @@ function {{ITEM_NAME}}List() {
                 </div>
                 <div>
                     <div className='mt-3 ml-5 mr-5 flex flex-row justify-between items-center '>
-                        <p className='text-3xl font-bold'>Lista de {'"Nombre"'}</p>
-                        <button onClick={handlerCreate} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400">Crear {'"Nombre"'}</button>
+                        <p className='text-3xl font-bold'>Lista de {{ITEM_NAME}}</p>
+                        <button onClick={handlerCreate} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400">Crear {{ITEM_NAME}}</button>
                     </div>
                     <div className="mt-5 w-full overflow-hidden">
                         <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
