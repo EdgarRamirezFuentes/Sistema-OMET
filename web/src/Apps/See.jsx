@@ -1,16 +1,9 @@
 import '../App.css'
-import Timer from '../Components/Timer/Timer'
-import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { updateApp, getApps } from '../api/controller/AppController'
+import { getApps } from '../api/controller/AppController'
 import PropTypes from 'prop-types';
 function SeeApp({appId}) {
-    const history = useNavigate();
-    const params = useParams();
-    const location = useLocation();
     const session = JSON.parse(localStorage.getItem('session'))
 
     const [error, setError] = useState(null);

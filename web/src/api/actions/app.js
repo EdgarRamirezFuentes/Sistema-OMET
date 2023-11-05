@@ -1,21 +1,20 @@
 import apiClient from '../client';
 
-
-export const getApps = async (app_id, token) =>{
-    console.log("token", token);
-    const objApi = apiClient('project/apps/'+app_id+'/');
+export const createApp = async (formData, token) =>{
+    const objApi = apiClient('project/apps/');
     try {
-        var response = await objApi.get(undefined, token);
+        var response = await objApi.post(formData, token);
         return response;
     } catch (e) {
         console.log("Error ===>", e);
     }
 }
 
-export const createApp = async (formData, token) =>{
-    const objApi = apiClient('project/apps/');
+export const getApps = async (app_id, token) =>{
+    console.log("token", token);
+    const objApi = apiClient('project/apps/'+app_id+'/');
     try {
-        var response = await objApi.post(formData, token);
+        var response = await objApi.get(undefined, token);
         return response;
     } catch (e) {
         console.log("Error ===>", e);
