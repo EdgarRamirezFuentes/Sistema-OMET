@@ -10,9 +10,6 @@ from project.serializers import (
     ProjectAppSerializer,
     MinimalProjectAppSerializer,
     FullProjectAppSerializer,
-    MaintenanceSerializer,
-    MinimalMaintenanceSerializer,
-    ProjectMaintainersSerializer,
     AppModelSerializer,
     MinimalAppModelSerializer,
     FullAppModelSerializer,
@@ -25,7 +22,6 @@ from project.serializers import (
 from core.models import (
     Project,
     ProjectApp,
-    Maintenance,
     AppModel,
     ModelField,
     ValidatorValue
@@ -126,12 +122,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
             # Getting the models of the project
             response_data['project_apps'] = project_apps_serializer.data
 
-            # Getting the maintainers of the project only if the user is admin
-            if request.user.is_superuser:
-                maintainers = Maintenance.objects.filter(project=instance)
-                maintainers_serializer = ProjectMaintainersSerializer(maintainers, many=True)
-                response_data['maintainers'] = maintainers_serializer.data
-
             return response.Response(response_data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
@@ -225,38 +215,6 @@ class ProjectAppViewSet(viewsets.ModelViewSet):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             print(e)
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class MaintenanceViewSet(mixins.CreateModelMixin,
-                         mixins.ListModelMixin,
-                         mixins.DestroyModelMixin,
-                         viewsets.GenericViewSet):
-    """Viewset for maintenance"""
-    authentication_classes = [TokenAuthentication,]
-    permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
-    queryset = Maintenance.objects.all()
-    serializer_class = MaintenanceSerializer
-
-    def list(self, request, *args, **kwargs):
-        """List all the maintenance filtered by project and maintainer"""
-        try:
-            project_name = request.query_params.get('project_name', None)
-            maintainer_id = request.query_params.get('maintainer_id', None)
-
-            queryset = self.queryset
-
-            if project_name:
-                queryset = queryset.filter(project__name=project_name)
-
-            if maintainer_id:
-                queryset = queryset.filter(user=int(maintainer_id))
-
-            serializer = MinimalMaintenanceSerializer(queryset, many=True)
-            return response.Response(serializer.data, status=status.HTTP_200_OK)
-        except (ObjectDoesNotExist, Http404):
-            return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
 

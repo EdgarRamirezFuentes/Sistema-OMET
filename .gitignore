@@ -561,3 +561,4 @@ FodyWeavers.xsd
 # Custom ignores
 */vol/
 .DS_Store
+.vscode

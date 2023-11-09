@@ -6,7 +6,6 @@ app_name = 'project'
 
 router = routers.SimpleRouter()
 
-router.register('maintenance', views.MaintenanceViewSet, basename='maintenance')
 router.register('apps', views.ProjectAppViewSet, basename='project-app')
 router.register('models', views.AppModelViewSet, basename='app-model')
 router.register('fields', views.ModelFieldViewSet, basename='model-field')

@@ -1,9 +1,5 @@
 from django.utils.translation import gettext as _
 
-from user.serializers import (
-    MinimalUserSerializer,
-)
-
 from dataType.serializers import (
     DataTypeSerializer,
     ValidatorSerializer
@@ -21,7 +17,6 @@ from core.models import (
     ProjectApp,
     AppModel,
     ModelField,
-    Maintenance,
     ValidatorValue,
 )
 
@@ -101,32 +96,6 @@ class FullProjectAppSerializer(serializers.ModelSerializer):
         model = ProjectApp
         fields = ('id', 'name', 'description',
                   'project')
-
-
-class MaintenanceSerializer(serializers.ModelSerializer):
-    """Default serializer for maintenance model."""
-    class Meta:
-        model = Maintenance
-        fields = ('id', 'project', 'user',)
-
-
-class MinimalMaintenanceSerializer(serializers.ModelSerializer):
-    """Serializer for maintenance model with minimal fields."""
-    project = MinimalProjectSerializer()
-    user = MinimalUserSerializer()
-
-    class Meta:
-        model = Maintenance
-        fields = ('id', 'project', 'user')
-
-
-class ProjectMaintainersSerializer(serializers.ModelSerializer):
-    """Serializer for project maintainers."""
-    user = MinimalUserSerializer()
-
-    class Meta:
-        model = Maintenance
-        fields = ('id', 'user')
 
 
 class AppModelSerializer(serializers.ModelSerializer):

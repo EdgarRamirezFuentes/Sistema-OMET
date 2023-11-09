@@ -6,7 +6,6 @@ class Project(models.Model):
     name = models.CharField(max_length=255, null=False)
     description = models.CharField(max_length=255, null=True)
     customer = models.ForeignKey('Customer', on_delete=models.CASCADE, null=False)
-    maintainers = models.ManyToManyField('User', through='Maintenance')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
