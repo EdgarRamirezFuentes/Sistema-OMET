@@ -36,7 +36,6 @@ from rest_framework import permissions
 from knox.auth import TokenAuthentication
 from rest_framework import (
     viewsets,
-    mixins,
     response,
     status,
     views,

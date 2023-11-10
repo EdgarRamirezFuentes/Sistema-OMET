@@ -153,7 +153,7 @@ class ModelFieldSerializer(serializers.ModelSerializer):
         model = ModelField
         fields = ('id', 'name', 'data_type',
                   'order', 'caption',
-                   'app_model', 'model_field_relation')
+                   'app_model')
 
     def validate_name(self, name):
         """Validate model field name.

@@ -23,7 +23,6 @@ class SidebarBuilder():
         for project_app in ProjectApp.objects.filter(project=self.project):
             sidebar_app_items += self.__build_app_sidebar_item(project_app, item_id)
             item_id += 1
-            print(sidebar_app_items)
 
         self.sidebar = self.sidebar.replace('{{APP_ITEMS}}', sidebar_app_items)
 

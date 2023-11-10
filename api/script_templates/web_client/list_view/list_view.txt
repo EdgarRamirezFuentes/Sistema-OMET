@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Table from '../Components/tailwindUI/Table'
 import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Modal from '../Components/tailwindUI/Modal';
-function {{ITEM_NAME}}List() {
+function {{MODEL_NAME}}List() {
     const history = useNavigate();
 
     const [error, setError] = useState(null);
@@ -32,9 +32,9 @@ function {{ITEM_NAME}}List() {
     useEffect(() => {
 
         if (allData.length == 0) {
-            
+
         }
-        
+
     },[allData])
 
     const handleView = item => {
@@ -45,7 +45,7 @@ function {{ITEM_NAME}}List() {
         setOpenModalUpdate(true)
         setSelectedItem(item)
     }
-    
+
     const handleDelete = async (item) => {
         setOpenModalDelete(true)
         setSelectedApp(item)
@@ -99,8 +99,8 @@ function {{ITEM_NAME}}List() {
             setAllData([{"id":1,"name":"Daniel"}])
         }
     }
-    
-  
+
+
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-screen'>
@@ -113,8 +113,8 @@ function {{ITEM_NAME}}List() {
                 </div>
                 <div>
                     <div className='mt-3 ml-5 mr-5 flex flex-row justify-between items-center '>
-                        <p className='text-3xl font-bold'>Lista de {{ITEM_NAME}}</p>
-                        <button onClick={handlerCreate} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400">Crear {{ITEM_NAME}}</button>
+                        <p className='text-3xl font-bold'>Lista de {{MODEL_NAME}}</p>
+                        <button onClick={handlerCreate} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400">Crear {{MODEL_NAME}}</button>
                     </div>
                     <div className="mt-5 w-full overflow-hidden">
                         <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
@@ -141,4 +141,4 @@ function {{ITEM_NAME}}List() {
     )
 }
 
-export default {{ITEM_NAME}}List
+export default {{MODEL_NAME}}List
