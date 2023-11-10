@@ -94,7 +94,7 @@ function Models() {
 
 
   const handleProjectModel = item => {
-    history(`/projects/model/${item.id}`,{
+    history(`/projects/field/${item.id}`,{
         state:{
 
           project: item,

@@ -55,7 +55,7 @@ function UpdateModel({model}) {
             setAlertMessage('Campo actualizado correctamente.')
             setError(true);
             setTimeout(() => {
-                history(`/projects/model/${location.state.model}`)
+                history(`/projects/field/${location.state.model}`)
             }, 1500);
             }else{
             setAlertType('Error');

@@ -27,7 +27,7 @@ function SeeProjectModel({model}) {
             <div className='flex flex-row h-screen'>
                 <div className='w-full'>
                     <div className='mt-3 ml-5 flex justify-center'>
-                        <p className='text-3xl font-bold'>Datos del modelo</p>
+                        <p className='text-3xl font-bold'>Datos del campo</p>
                     </div>
                     <div className='flex flex-col justify-between'>
                     <div className='mt-5 p-5 flex flex-col items-center m-auto w-1/2 rounded-2xl bg-white'>
