@@ -60,14 +60,14 @@ function ChangePassword() {
 
         await changePassword(userData, session.token).then((response) => {
             console.log("Response");
-            console.log(response);
+            console.log(response.code);
             if(response.non_field_errors){
                 setError(true);
                 setAlertMessage(response.non_field_errors[0]);
                 setAlertType('Error');
                 return;
             }
-            else if (response.message){
+            else if (response.status === 200){
                 setError(false);
                 setAlertMessage('Contraseña actualizada.');
                 setAlertType('Success');

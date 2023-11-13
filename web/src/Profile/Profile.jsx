@@ -156,7 +156,7 @@ function Profile() {
   
   return (
     <div className="w-full h-full bg-slate-100">
-      <div className='flex flex-row h-screen'>
+      <div className='flex flex-row h-full'>
       <SideBar/>
         <div className='w-full'>
           <div className='w-full p-5 flex flex-row justify-between items-center bg-white'>
