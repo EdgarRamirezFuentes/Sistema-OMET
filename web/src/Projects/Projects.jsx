@@ -4,7 +4,7 @@ import SideBar from '../Components/Sidebar/Sidebar'
 import Table from '../Components/tailwindUI/Table'
 import { getAllProjects, deleteProject } from '../api/controller/ProjectsController'
 import { useEffect, useState } from 'react'
-import { TrashIcon, ClipboardIcon, EyeIcon, WrenchScrewdriverIcon, CircleStackIcon, ArrowDownOnSquareIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon, ArrowDownOnSquareIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../Components/Alert/Alert'
 import { exportProject } from '../api/controller/ExportController'
@@ -56,7 +56,7 @@ function Projects() {
   const tableColumns = [
     { heading: 'Id', value: 'id',align: 'center' },
     { heading: 'Nombre', value: 'name' , main: true},
-    { heading: 'Customer', value: 'customer.name'}
+    { heading: 'Cliente', value: 'customer.name'}
   ];
 
   const handleView = item => {
@@ -98,10 +98,11 @@ function Projects() {
     })*/
   }
 
-  const deleteProjectFunc = async (item) => {
-    await deleteProject(session.token, item.id).then((response)=>{
+  const deleteProjectFunc = async () => {
+    await deleteProject(session.token, selectedProject.id).then((response)=>{
 
       if(response.status === 204){
+        setOpenModalDelete(false)
         setAlertType('Success');
         setAlertMessage('Proyecto eliminado correctamente.')
         setError(true);
@@ -182,27 +183,20 @@ function Projects() {
     },
     {
         id: 3,
-        name: 'Actualizar Mantenedores',
-        type: 'primary',
-        icon: <WrenchScrewdriverIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
-        action: handleUpdateMaintainer,
-    },
-    {
-        id: 4,
         name: 'Consultar Apps',
         type: 'primary',
         icon: <CircleStackIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleApps,
     },
     {
-        id: 5,
+        id: 4,
         name: 'Exportar Proyecto',
         type: 'primary',
         icon: <ArrowDownOnSquareIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleDownloadProject,
     },
     {
-        id: 6,
+        id: 5,
         name: 'Eliminar Proyecto',
         type: 'primary',
         icon: <TrashIcon className='w-5 h-5 text-gray-600 lg:text-white'/>,
@@ -256,7 +250,7 @@ function Projects() {
       </Modal>
       <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>
           <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalCreate(false) }/></div>
-          <Create/>
+          <Create onCreated={()=>{setOpenModalCreate(false);projects()}}/>
       </Modal>
 
       <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>

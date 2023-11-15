@@ -21,7 +21,7 @@ function CreateProjectModel({modelId, onCreated}) {
 
     const [selectedModel, setSelectedModel] = useState(null);
     const [selectedApp, setSelectedApp] = useState(null);
-    const [selectedField, setSelectedField] = useState(null);
+    const [selectedField, setSelectedField] = useState(0);
     
     const [projectApps, setProjectApps] = useState([]);
     const [projectModels, setProjectModels] = useState([]);
@@ -36,7 +36,7 @@ function CreateProjectModel({modelId, onCreated}) {
 
     useEffect(() => {
 
-      if(projectApps == null){
+      if(projectApps.length == 0){
         projectStructure()
       }
       
@@ -50,13 +50,12 @@ function CreateProjectModel({modelId, onCreated}) {
         })
       }else{
         dataTypes.map((item) => {
-          if(item.id == selectedDataType && item.name == 'OnetoOneForeignKey' && item.name == 'OnetoManyForeignKey' && item.name == 'ManytoManyForeignKey'){
-            if (selectedApp == null){
-              //setSelectedApp(projectApps[0].id)
+          if(item.id == selectedDataType){
+            if (item.name == 'OnetoOneForeignKey' || item.name == 'OnetoManyForeignKey' || item.name == 'ManytoManyForeignKey'){
+              setShowApps(true)
+            }else{
+              setShowApps(false)
             }
-            setShowApps(true)
-          }else{
-            setShowApps(false)
           }
         })
       }
@@ -85,7 +84,7 @@ function CreateProjectModel({modelId, onCreated}) {
       if (selectedField){
         projectFields.map((item) => {
           if(item.id == selectedField){
-            setModelFieldRelation(item.id)
+            setModelFieldRelation(selectedField)
           }
         })
       }
@@ -99,23 +98,25 @@ function CreateProjectModel({modelId, onCreated}) {
     }
 
     const buttonHandler = async () => {
-      if(name === ''){
+      console.log("==crear==")
+      if(name === '' || order === 0 ){
           setAlertType('Warning');
           setAlertMessage('Ingresa los datos.')
           setError(true);
           return;
       }
 
-      let data = [{
+      let data = {
         name: name,
         caption: description,
-        order: order,
-        data_type: selectedDataType,
-        app_model: modelId,
-      }]
+        order: parseInt(order),
+        data_type: parseInt(selectedDataType),
+        app_model: parseInt(modelId),
+      }
+
 
       if(model_field_relation != 0){
-        data[0].model_field_relation = model_field_relation
+        data.model_field_relation = model_field_relation
       }
 
       await createProjectFields(data, session.token).then(async (response) => {
@@ -138,6 +139,7 @@ function CreateProjectModel({modelId, onCreated}) {
     const projectStructure = async () => {
       await getProjectStructure(session.token, modelId).then(async (response) => {
         let res = await response.json();
+        console.log("projectStructure",res)
         if (response.status === 200){
           setProjectApps(res)
           

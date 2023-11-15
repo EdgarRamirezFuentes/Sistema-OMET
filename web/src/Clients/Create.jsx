@@ -1,12 +1,11 @@
 import '../App.css'
-import Timer from '../Components/Timer/Timer'
-import SideBar from '../Components/Sidebar/Sidebar'
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Alert from '../Components/Alert/Alert'
 import { createClient } from '../api/controller/ClientsController';
 import PasswordInput from '../Components/tailwindUI/PasswordButton';
-function Clients() {
+function Clients({onCreated}) {
   const history = useNavigate();
   const session = JSON.parse(localStorage.getItem('session'));
   const [password, setPassword] = useState('');
@@ -96,9 +95,7 @@ function Clients() {
         setAlertMessage('Usuario registrado con éxito.')
         setError(true);
         setAlertType('Success');
-        setTimeout(() => {
-          history('/clients/get')
-      }, 1000);
+        setTimeout((e) => onCreated && onCreated(true),1000);
         return;
       }
       if (res.status === 400){
@@ -118,7 +115,7 @@ function Clients() {
 
   return (
     <div className="w-full h-full bg-slate-100">
-      <div className='flex flex-row h-screen'>
+      <div className='flex flex-row h-full'>
         <div className='w-full justify-center'>
           <div className='flex flex-col items-center'> 
             <div className='mt-3 ml-5 flex justify-center'>
@@ -187,5 +184,10 @@ function Clients() {
     </div>
   )
 }
+
+Clients.propTypes = {
+  onCreated: PropTypes.func
+}
+
 
 export default Clients
