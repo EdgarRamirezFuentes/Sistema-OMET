@@ -17,6 +17,7 @@ from core.models import (
     AppModel,
     ModelField,
     ValidatorValue,
+    ForeignKeyRelation
 )
 
 from rest_framework import serializers
@@ -245,3 +246,11 @@ class ModelFieldValidatorValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = ValidatorValue
         fields = ('id', 'validator', 'value')
+
+
+class ForeignKeyRelationSerializer(serializers.ModelSerializer):
+    """Default serializer for foreign key relation model."""
+
+    class Meta:
+        model = ForeignKeyRelation
+        fields = ('id', 'model_field_origin', 'model_field_related')

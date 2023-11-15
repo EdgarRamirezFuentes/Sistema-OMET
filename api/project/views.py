@@ -16,7 +16,8 @@ from project.serializers import (
     ModelFieldSerializer,
     MinimalModelFieldSerializer,
     ValidatorValueSerializer,
-    ModelFieldValidatorValueSerializer
+    ModelFieldValidatorValueSerializer,
+    ForeignKeyRelationSerializer,
 )
 
 from core.models import (
@@ -277,25 +278,22 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
             data = request.data
             saved_model_field = None
             model_field_relation_id = data.pop('model_field_relation', None)
-
             serializer = ModelFieldSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             saved_model_field = serializer.save()
 
-            data_type = DataType.objects.get(id=data['data_type'])
-
-            if 'ForeignKey' in data_type.name:
-                model_field_relation = ModelField.objects.get(id=model_field_relation_id)
-                ForeignKeyRelation.objects.create(
-                    model_field_origin=saved_model_field,
-                    model_field_related=model_field_relation
-                )
+            if 'ForeignKey' in saved_model_field.data_type.name:
+                foreign_key_serializer = ForeignKeyRelationSerializer(data={
+                    'model_field_origin': model_field_relation_id,
+                    'model_field_related': saved_model_field.id
+                })
+                foreign_key_serializer.is_valid(raise_exception=True)
+                foreign_key_serializer.save()
 
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
         except serializers.ValidationError as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST, data=e.detail)
         except Exception as e:
-            print(e)
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
