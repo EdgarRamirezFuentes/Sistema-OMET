@@ -22,8 +22,7 @@ function CreateProjectModel({modelId, onCreated}) {
     const [selectedModel, setSelectedModel] = useState(null);
     const [selectedApp, setSelectedApp] = useState(null);
     const [selectedField, setSelectedField] = useState(null);
-
-    const [project, setProject] = useState(null);
+    
     const [projectApps, setProjectApps] = useState([]);
     const [projectModels, setProjectModels] = useState([]);
     const [projectFields, setProjectFields] = useState([]);
@@ -37,7 +36,7 @@ function CreateProjectModel({modelId, onCreated}) {
 
     useEffect(() => {
 
-      if(project == null){
+      if(projectApps == null){
         projectStructure()
       }
       
@@ -51,7 +50,7 @@ function CreateProjectModel({modelId, onCreated}) {
         })
       }else{
         dataTypes.map((item) => {
-          if(item.id == selectedDataType && item.name == 'OnetoOneForeignKey' || item.name == 'OnetoManyForeignKey'|| item.name == 'ManytoManyForeignKey'){
+          if(item.id == selectedDataType && item.name == 'OnetoOneForeignKey' && item.name == 'OnetoManyForeignKey' && item.name == 'ManytoManyForeignKey'){
             if (selectedApp == null){
               //setSelectedApp(projectApps[0].id)
             }
