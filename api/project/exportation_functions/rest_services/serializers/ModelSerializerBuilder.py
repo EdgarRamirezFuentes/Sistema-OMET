@@ -1,11 +1,9 @@
 from core.models import (
     ModelField,
+    ForeignKeyRelation
 )
 
-from project.utils import (
-    format_project_name,
-    get_template_file_content
-)
+from project.utils import get_template_file_content
 
 from ..HELPER_DICTIONARIES import (
     SCRIPT_TEMPLATE_URLS,
@@ -42,6 +40,8 @@ class ModelSerializerBuilder():
         if foreign_key_model_fields:
             self.__build_foreign_key_serializers(foreign_key_model_fields)
 
+
+
         self.__serializer_script = self.__serializer_script.replace('{{MODEL_SERIALIZER}}', model_serializer)
         self.__serializer_script = self.__serializer_script.replace('{{FOREIGN_KEY_SERIALIZERS}}', self.__foreign_key_serializers)
         self.__serializer_script = self.__serializer_script.replace('{{FOREIGN_KEY_IMPORTS}}', '\n'.join(self.__foreign_key_imports))
@@ -58,25 +58,29 @@ class ModelSerializerBuilder():
         for model_field in foreign_key_model_fields:
             model_field_name = model_field.name
             model_field_data_type = model_field.data_type.name.lower()
-            model_field_relation = model_field.model_field_relation
-            model_field_relation_data_type = model_field_relation.data_type.name.lower()
-            model_field_relation_app_model_name = model_field_relation.app_model.name
-            model_field_relation_project_app_name = model_field_relation.app_model.project_app.name.lower()
-            model_field_relation_name = model_field_relation.name
+            try:
+                model_field_relation = ForeignKeyRelation.objects.get(model_field_origin=model_field)
+            except ForeignKeyRelation.DoesNotExist:
+                raise ValueError(f'El campo {model_field.name} del modelo {self.__app_model.name} no tiene una relación.')
 
             if not model_field_relation:
                 raise ValueError(f'El campo {model_field.name} del modelo {self.__app_model.name} no debe ser nulo.')
 
-            if model_field_relation_data_type in ['onetomanyforeignkey', 'manytomanyforeignkey']:
-                raise ValueError(f'El campo {model_field_relation_name} del modelo {model_field_relation_app_model_name} de la app' +
-                                 f'{model_field_relation_project_app_name} no debe ser llave foránea.')
+            model_field_related = model_field_relation.model_field_related
+            model_field_related_data_type = model_field_related.data_type.name.lower()
+            model_field_related_app_model_name = model_field_related.app_model.name
+            model_field_related_project_app_name = model_field_related.app_model.project_app.name.lower()
+            model_field_related_name = model_field_related.name
 
-            self.__build_model_field_serializer(model_field_relation_app_model_name, model_field_relation_name)
-            self.__foreign_key_imports.add(f'from {model_field_relation_project_app_name}.models import {model_field_relation_app_model_name}')
+            if model_field_related_data_type in ['onetomanyforeignkey', 'manytomanyforeignkey']:
+                raise ValueError(f'El campo {model_field_related_name} del modelo {model_field_related_app_model_name} de la app' +
+                                 f'{model_field_related_project_app_name} no debe ser llave foránea.')
+            self.__build_model_field_serializer(model_field_related_app_model_name, model_field_related_name)
+            self.__foreign_key_imports.add(f'from {model_field_related_project_app_name}.models import {model_field_related_app_model_name}')
 
             foreign_key_model_field = foreign_key_field_template.replace('{{FIELD_NAME}}', model_field_name)
-            foreign_key_model_field = foreign_key_model_field.replace('{{MODEL_NAME}}', model_field_relation_app_model_name)
-            foreign_key_model_field = foreign_key_model_field.replace('{{MODEL_FIELD_RELATION_NAME}}', model_field_relation_name.title())
+            foreign_key_model_field = foreign_key_model_field.replace('{{MODEL_NAME}}', model_field_related_app_model_name)
+            foreign_key_model_field = foreign_key_model_field.replace('{{MODEL_FIELD_RELATION_NAME}}', model_field_related_name.title())
             foreign_key_model_field = foreign_key_model_field.replace('{{MANY_VALUE}}', 'True' if  model_field_data_type == 'manytomanyforeignkey' else 'False')
             self.__foreign_key_fields.add(foreign_key_model_field)
 

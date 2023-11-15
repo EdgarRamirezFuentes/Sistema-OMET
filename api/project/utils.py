@@ -1,30 +1,15 @@
 import re
 
-
-def validate_name(name:str)->bool:
-    """Validate a name.
-
-    Args:
-        name (str): name.
-
-    Returns:
-        bool: True if name is valid, False otherwise.
-    """
-    name_regex = r'^[a-z]+([a-z_\-\s]*[a-z]+)*$'
-    return re.match(name_regex, name, flags=re.IGNORECASE)
-
-def format_name(name:str)->str:
-    """Format a name.
+def validate_project_name(name:str)->bool:
+    """Validate the project name contains only letters.
 
     Args:
-        name (str): name.
+        name (str): Project name.
 
     Returns:
-        str: Formatted name.
+        bool: True if the name is valid, False otherwise.
     """
-    new_name = name.replace('_', ' ').replace('-', ' ')
-    new_name = [word.title() for word in name.split(' ') if word]
-    return ''.join(new_name)
+    return re.match(r'^[a-zA-Z\s]+$', name)
 
 def format_project_name(name:str)->str:
     """Format a project name.

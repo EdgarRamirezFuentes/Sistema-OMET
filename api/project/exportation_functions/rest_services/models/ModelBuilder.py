@@ -1,6 +1,7 @@
 from core.models import (
     ModelField,
-    ValidatorValue
+    ValidatorValue,
+    ForeignKeyRelation
 )
 
 
@@ -12,10 +13,7 @@ from ..HELPER_DICTIONARIES import (
     VALIDATOR_IMPORTS
 )
 
-from project.utils import (
-    format_project_name,
-    get_template_file_content
-)
+from project.utils import get_template_file_content
 
 
 class ModelBuilder():
@@ -77,13 +75,18 @@ class ModelBuilder():
             model_field_body (str): The model field body
         """
         # Getting the foreign key model data
-        foreign_key_model = model_field.model_field_relation.app_model
-        foreign_key_model_app = foreign_key_model.project_app.name
-        foreign_key_model_name = foreign_key_model.name
-        foreign_key_model_app_name = format_project_name(foreign_key_model_app).lower()
+        try:
+            foreign_key_relation = ForeignKeyRelation.objects.get(model_field_origin=model_field)
+        except ForeignKeyRelation.DoesNotExist:
+            raise ValueError(f'El campo {model_field.name} debe tener una relación con otro modelo.')
 
-        self.__foreign_key_imports.add(f'from {foreign_key_model_app_name}.models import {foreign_key_model_name}\n')
-        model_field_body = model_field_body.replace('{{FOREIGN_KEY_MODEL}}', foreign_key_model_name)
+        related_model_field = foreign_key_relation.model_field_related
+        related_model = related_model_field.app_model
+        related_model_name = related_model.name
+        related_model_app_name = related_model.project_app.name.lower()
+
+        self.__foreign_key_imports.add(f'from {related_model_app_name}.models import {related_model_name}\n')
+        model_field_body = model_field_body.replace('{{FOREIGN_KEY_MODEL}}', related_model_name)
 
         self.__model_fields += model_field_body
 

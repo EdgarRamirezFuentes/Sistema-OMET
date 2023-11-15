@@ -9,7 +9,6 @@ class ModelField(models.Model):
     order = models.IntegerField(default=0, null=False, validators=[MinValueValidator(0),])
     data_type = models.ForeignKey('DataType', on_delete=models.SET_NULL, null=True)
     app_model = models.ForeignKey('AppModel', on_delete=models.CASCADE, null=False)
-    model_field_relation = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 

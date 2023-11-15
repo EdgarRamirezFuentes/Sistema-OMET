@@ -109,6 +109,7 @@ def add_project_app_directories(main_directory, project):
         if not project_apps:
             raise ValueError(f'El proyecto {project.name} debe tener al menos una app.')
 
+
         for project_app in project_apps:
             create_project_app_directory(main_directory, project_app)
 
@@ -132,6 +133,7 @@ def create_project_app_directory(main_directory, project_app):
             app_template_content = app_template_content.replace('{{APP_NAME_CLASS}}', project_app_name)
             app_template_content = app_template_content.replace('{{APP_NAME}}', project_app_directory)
             main_directory.writestr(f'api/{project_app_directory}/apps.py', app_template_content)
+
 
             # Adding the project app models
             create_app_models(main_directory, project_app)

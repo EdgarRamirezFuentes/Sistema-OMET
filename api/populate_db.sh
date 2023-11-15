@@ -17,3 +17,4 @@ python manage.py loaddata ./fixtures/projectApp.json
 python manage.py loaddata ./fixtures/appModel.json
 python manage.py loaddata ./fixtures/modelField.json
 python manage.py loaddata ./fixtures/validatorValue.json
+python manage.py loaddata ./fixtures/foreignKeyRelation.json

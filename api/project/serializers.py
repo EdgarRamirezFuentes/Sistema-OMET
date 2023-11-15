@@ -8,8 +8,7 @@ from dataType.serializers import (
 from customer.serializers import MinimalCustomerSerializer
 
 from .utils import (
-    validate_name,
-    format_name,
+    validate_project_name,
 )
 
 from core.models import (
@@ -30,6 +29,27 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = ('id', 'name', 'description',
                   'customer')
+
+    def validate_name(self, name):
+        """Validate the project name contains only letters.
+
+        Args:
+            name (str): Project name.
+
+        Raises:
+            serializers.ValidationError: If project name is not valid.
+
+        Returns:
+            str: Formatted project name.
+        """
+        name = name.strip()
+
+        if not validate_project_name(name):
+            raise serializers.ValidationError(
+                _('El nombre de un proyecto debe contener solo letras del alfabeto inglés y espacios.')
+            )
+
+        return name
 
 
 class MinimalProjectSerializer(serializers.ModelSerializer):
@@ -71,12 +91,14 @@ class ProjectAppSerializer(serializers.ModelSerializer):
         Returns:
             str: Formatted project app name.
         """
-        if not name.strip().isalpha():
+        name = name.strip()
+
+        if not name.isalpha():
             raise serializers.ValidationError(
-                _('El nombre de una aplicación debe contener solo letras.')
+                _('El nombre de una aplicación debe contener solo letras del alfabeto inglés.')
             )
 
-        return format_name(name)
+        return name
 
 
 class MinimalProjectAppSerializer(serializers.ModelSerializer):
@@ -117,15 +139,14 @@ class AppModelSerializer(serializers.ModelSerializer):
         Returns:
             str: Formatted model name.
         """
-        is_valid_name = validate_name(name)
+        name = name.strip()
 
-        if not is_valid_name:
+        if not name.isalpha():
             raise serializers.ValidationError(
-                _('El nombre del modelo debe comenzar y terminar con una letra,' +
-                  ' y solo puede contener letras, guiones medios y espacios.')
+                _('El nombre de un modelo debe contener solo letras del alfabeto inglés.')
             )
 
-        return format_name(name)
+        return name
 
 
 class MinimalAppModelSerializer(serializers.ModelSerializer):
@@ -167,15 +188,14 @@ class ModelFieldSerializer(serializers.ModelSerializer):
         Returns:
             str: Formatted model field name.
         """
-        is_valid_name = validate_name(name)
+        name = name.strip()
 
-        if not is_valid_name:
+        if not name.isalpha():
             raise serializers.ValidationError(
-                _('El nombre del campo de un modelo debe comenzar y terminar con una letra,' +
-                  ' y solo puede contener letras, guiones medios y espacios.')
+                _('El nombre de un campo de modelo debe contener solo letras del alfabeto inglés.')
             )
 
-        return format_name(name)
+        return name
 
 
 class MinimalModelFieldSerializer(serializers.ModelSerializer):

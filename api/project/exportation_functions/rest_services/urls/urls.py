@@ -1,4 +1,4 @@
-from project.utils import format_project_name, get_template_file_content
+from project.utils import get_template_file_content
 from core.models import AppModel
 from ..HELPER_DICTIONARIES import SCRIPT_TEMPLATE_URLS
 

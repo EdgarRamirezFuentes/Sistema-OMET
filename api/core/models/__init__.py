@@ -8,3 +8,4 @@ from .DataType import DataType
 from .ModelField import ModelField
 from .Validator import Validator
 from .ValidatorValue import ValidatorValue
+from .ForeignKeyRelation import ForeignKeyRelation
