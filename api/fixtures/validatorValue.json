@@ -195,7 +195,7 @@
         "fields": {
             "validator": 6,
             "model_field": 11,
-            "value": "\"^[A-Z]{4}\\d{6}[HM][A-Z]{2}[A-Z0-9]{3}$\"",
+            "value": "\"^[A-Z]{4}\\d{6}[HM][A-Z]{2}[A-Z0-9]{5}$\"",
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
