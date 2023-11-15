@@ -279,20 +279,21 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
             model_field_relation_id = data.pop('model_field_relation', None)
 
             serializer = ModelFieldSerializer(data=data)
-            if serializer.is_valid():
-                saved_model_field = serializer.save()
+            serializer.is_valid(raise_exception=True)
+            saved_model_field = serializer.save()
 
             if 'ForeignKey' in data_type.name:
+                print('Creating foreign key relation')
                 model_field_relation = ModelField.objects.get(id=model_field_relation_id)
                 ForeignKeyRelation.objects.create(
                     model_field_origin=saved_model_field,
                     model_field_related=model_field_relation
                 )
 
-                return response.Response(serializer.data, status=status.HTTP_201_CREATED)
-            return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return response.Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+            print(e)
+            return response.Response(status=status.HTTP_400_BAD_REQUEST, data=e.detail)
 
     def list(self, request, *args, **kwargs):
         """List the all the model fields"""
@@ -344,8 +345,8 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            print(e)
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+            return response.Response(status=status.HTTP_400_BAD_REQUEST, data=e.detail)
 
     def partial_update(self, request, *args, **kwargs):
         """Partially update the model field"""
@@ -365,11 +366,9 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
-            print(e)
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            print(e)
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+            return response.Response(status=status.HTTP_400_BAD_REQUEST, data=e.detail)
 
 
 class ValidatorValueViewSet(viewsets.ModelViewSet):
