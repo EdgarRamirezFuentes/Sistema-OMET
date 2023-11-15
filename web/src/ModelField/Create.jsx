@@ -48,7 +48,7 @@ function CreateModel({projectAppId}) {
             setAlertMessage('Campo creado correctamente.')
             setError(true);
             setTimeout(() => {
-                history(`/projects/model/${location.state.model}`)
+                history(`/projects/field/${location.state.model}`)
             }, 1500);
             }else{
             setAlertType('Error');

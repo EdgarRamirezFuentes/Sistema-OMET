@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Table from '../Components/tailwindUI/Table'
 import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import Modal from '../Components/tailwindUI/Modal';
+import { create{{MODEL_NAME}} } from '../api/controller/{{MODEL_NAME}}Controller'
 function {{MODEL_NAME}}List() {
     const history = useNavigate();
 
@@ -26,7 +27,7 @@ function {{MODEL_NAME}}List() {
 
     const tableColumns = [
       { heading: 'Id', value: 'id',align: 'center' },
-      { heading: 'Nombre', value: 'name' , main: true},
+      { heading: {{FIRST_VALUE_CAPITALIZE}}, value: {{FIRST_VALUE}}, main: true},
     ];
 
     useEffect(() => {

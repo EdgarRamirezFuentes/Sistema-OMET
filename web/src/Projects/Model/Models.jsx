@@ -36,7 +36,6 @@ function Models() {
     const [openModalCreate, setOpenModalCreate] = useState(false);
 
   useEffect(() => {
-    console.log("selectedModel",selectedModel)
     if (deletedProject == null || deletedProject){
       getModels()
       setDeletedProject(false);
@@ -46,7 +45,6 @@ function Models() {
   const getModels = async ()=>{
     await getModelFields(params.id, session.token).then(async (models)=>{
       let modelList = await models.json()
-      console.log("modelList",modelList);
       if (modelList.length != []){
         setAllModels(modelList)
         setIsLoadingData(false)
@@ -103,13 +101,15 @@ function Models() {
   }
   
   const handleDelete = async (item) => {
-    await deleteModelField(item.id, session.token).then((response)=>{
+    console.log("item",item)
+    await deleteModelField(selectedModel.id, session.token).then((response)=>{
 
       if(response.status === 204){
         setAlertType('Success');
         setAlertMessage('Modelo eliminado correctamente.')
         setError(true);
         setDeletedProject(true);
+        setOpenModalDelete(false)
      }
     })
   }
@@ -201,7 +201,7 @@ function Models() {
       </Modal>
       <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>
           <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalCreate(false) }/></div>
-          <Create appId={params.id}/>
+          <Create modelId={params.id} onCreated={(flag)=>{setOpenModalCreate(false)}}/>
       </Modal>
 
       <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>

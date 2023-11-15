@@ -68,10 +68,10 @@ function App() {
               <Route path="/projects/view/:id" element={<SeeProject />} />
               <Route path="/projects/update/maintainer/:id" element={<UpdateMaintainersProject />} />
 
-              <Route path="/projects/model/:id" element={<Models />} />
-              <Route path="/projects/model/create/:id" element={<CreateProjectModel />} />
-              <Route path="/projects/model/view/:id" element={<SeeProjectModel />} />
-              <Route path="/projects/model/update/:id" element={<UpdateProjectModel />} />
+              <Route path="/projects/field/:id" element={<Models />} />
+              <Route path="/projects/field/create/:id" element={<CreateProjectModel />} />
+              <Route path="/projects/field/view/:id" element={<SeeProjectModel />} />
+              <Route path="/projects/field/update/:id" element={<UpdateProjectModel />} />
 
               <Route path="/customers/create" element={<CreateCustomer />} />
               <Route path="/customers/get" element={<Customers />} />
