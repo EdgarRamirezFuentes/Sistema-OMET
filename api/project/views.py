@@ -34,6 +34,7 @@ from .utils import format_project_name
 from .exportation_functions.rest_services.base import create_rest_services_directory
 from .exportation_functions.web_client.base import create_web_client_directory
 
+from rest_framework import serializers
 from rest_framework import permissions
 from knox.auth import TokenAuthentication
 from rest_framework import (
@@ -275,15 +276,15 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
         try:
             data = request.data
             saved_model_field = None
-            data_type = DataType.objects.get(id=data['data_type'])
             model_field_relation_id = data.pop('model_field_relation', None)
 
             serializer = ModelFieldSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             saved_model_field = serializer.save()
 
+            data_type = DataType.objects.get(id=data['data_type'])
+
             if 'ForeignKey' in data_type.name:
-                print('Creating foreign key relation')
                 model_field_relation = ModelField.objects.get(id=model_field_relation_id)
                 ForeignKeyRelation.objects.create(
                     model_field_origin=saved_model_field,
@@ -291,9 +292,11 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
                 )
 
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+        except serializers.ValidationError as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST, data=e.detail)
         except Exception as e:
             print(e)
-            return response.Response(status=status.HTTP_400_BAD_REQUEST, data=e.detail)
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
         """List the all the model fields"""
@@ -344,9 +347,10 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-
+        except serializers.ValidationError as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST, data=e.detail)
+        except Exception as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
     def partial_update(self, request, *args, **kwargs):
         """Partially update the model field"""
@@ -367,8 +371,10 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
+        except serializers.ValidationError as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST, data=e.detail)
+        except Exception as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class ValidatorValueViewSet(viewsets.ModelViewSet):
