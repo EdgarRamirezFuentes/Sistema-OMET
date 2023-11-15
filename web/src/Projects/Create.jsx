@@ -6,8 +6,9 @@ import Alert from '../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
 import {createProject} from '../api/controller/ProjectsController'
 import { getCustomers } from '../api/controller/CustomersController';
+import PropTypes from 'prop-types';
 
-function CreateProject() {
+function CreateProject({onCreated}) {
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'))
     const user = session.user;
@@ -55,9 +56,7 @@ function CreateProject() {
           setAlertType('Success');
           setAlertMessage('Proyecto creado correctamente.')
           setError(true);
-          setTimeout(() => {
-            history('/projects/get')
-          },1000);
+          setTimeout((e) => onCreated && onCreated(true),1000);
           return;
         }
       })
@@ -124,6 +123,10 @@ function CreateProject() {
             </div>
         </div>
     )
+}
+
+CreateProject.propTypes = {
+  onCreated: PropTypes.func
 }
 
 export default CreateProject

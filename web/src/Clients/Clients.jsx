@@ -17,8 +17,6 @@ import Create from "./Create";
 function Clients() {
   const history = useNavigate();
   const session = JSON.parse(localStorage.getItem('session'));
-  console.log("Session");
-  console.log(session);
   const [allClients, setAllClients] = useState([])
   const [isLoadingData, setIsLoadingData] = useState(true)
 
@@ -209,7 +207,7 @@ function Clients() {
 
       <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>
           <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalCreate(false) }/></div>
-          <Create onDelete={handleDelete}/>
+          <Create onDelete={handleDelete} onCreated={()=>{setOpenModalCreate(false);clients()}}/>
       </Modal>
 
       <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>

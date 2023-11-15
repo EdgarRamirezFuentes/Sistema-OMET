@@ -40,7 +40,7 @@ function Models() {
       getModels()
       setDeletedProject(false);
     }
-  }, [selectedModel]);
+  }, [selectedModel, deletedProject]);
 
   const getModels = async ()=>{
     await getModelFields(params.id, session.token).then(async (models)=>{
@@ -101,7 +101,6 @@ function Models() {
   }
   
   const handleDelete = async (item) => {
-    console.log("item",item)
     await deleteModelField(selectedModel.id, session.token).then((response)=>{
 
       if(response.status === 204){
@@ -201,7 +200,7 @@ function Models() {
       </Modal>
       <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>
           <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalCreate(false) }/></div>
-          <Create modelId={params.id} onCreated={(flag)=>{setOpenModalCreate(false)}}/>
+          <Create modelId={params.id} onCreated={(flag)=>{setOpenModalCreate(false); getModels()}}/>
       </Modal>
 
       <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>
