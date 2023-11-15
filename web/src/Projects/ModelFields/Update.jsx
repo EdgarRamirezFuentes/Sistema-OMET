@@ -48,7 +48,7 @@ function UpdateProjectModel({field}) {
         let res = await response.json();
         if (response.status === 200){
           setAlertType('Success');
-          setAlertMessage('Modelo actualizado correctamente.')
+          setAlertMessage('Campo actualizado correctamente.')
           setError(true);
           setTimeout(() => {
             history('/projects/field/'+location.state.model)
@@ -63,7 +63,7 @@ function UpdateProjectModel({field}) {
             <div className='flex flex-row h-screen'>
                 <div className='w-full'>
                     <div className='mt-3 ml-5 flex justify-center'>
-                        <p className='text-3xl font-bold'>Actualizar modelo</p>
+                        <p className='text-3xl font-bold'>Actualizar Campo</p>
                     </div>
                     <div className='flex flex-col justify-between'>
                       <div className='mt-5 p-5 flex flex-col items-center m-auto w-1/2 rounded-2xl bg-white'>

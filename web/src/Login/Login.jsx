@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import escom from '../assets/escom.png'
 import axolote from '../assets/axolote.png'
 import ipn from '../assets/ipn.png'
+import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/controller/LoginController'
 
 import '../App.css'
@@ -10,12 +11,19 @@ import Alert from '../Components/Alert/Alert'
 
 
 function Login() {
+  const history = useNavigate();
+  const session = JSON.parse(localStorage.getItem('session'))
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState('Error');
 
+  useEffect(() => {
+    if (session){
+      history('/home')
+    }
+  }, [])
   const buttonHandler = async () => {
 
     if(username === '' || password === ''){

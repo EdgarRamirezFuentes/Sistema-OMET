@@ -7,8 +7,6 @@ import { create } from '../api/controller/ModelFieldsController'
 import PropTypes from 'prop-types';
 
 function CreateModel({projectAppId}) {
-
-    console.log("projectAppId",projectAppId);
     const history = useNavigate();
     const params = useParams();
     const location = useLocation();

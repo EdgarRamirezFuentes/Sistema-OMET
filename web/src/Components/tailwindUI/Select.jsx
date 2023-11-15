@@ -9,7 +9,7 @@ function Select({ value, setValue, listOptions, label, isDisabled, needed, error
         <>
             <div className='w-full'>
                 {label && (
-                    <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+                    <label htmlFor={id} className='font-bold'>
                         {label}
                         {needed && <span className='text-red-400'> *</span>}
                     </label>

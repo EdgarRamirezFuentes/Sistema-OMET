@@ -43,14 +43,13 @@ function ValidatorsModel() {
     useEffect(() => {
         if (state && state.item) {
             const { item } = state;
-            console.log("location.state", item);
             setName(item.name);
             setCaption(item.caption);
             dataTypes();
-            getValidators();
-            getModelFieldData();
         }
-    }, [state]);
+        getValidators();
+        getModelFieldData();
+    }, [model]);
 
     const dataTypes = async () => {
         const clients = await getDataTypes(session.token);
@@ -60,10 +59,10 @@ function ValidatorsModel() {
     };
 
     const getModelFieldData = async () => {
-        const models = await getModelField(params.id, session.token);
-        const modelList = await models.json();
-        console.log("modelList", modelList);
-        if (modelList.length !== 0) {
+        if (model == null) {
+            const models = await getModelField(params.id, session.token);
+            const modelList = await models.json();
+        
             setValidatorsUsed(modelList.validators);
             setModel(modelList);
             setIsLoadingData(false);
@@ -92,10 +91,13 @@ function ValidatorsModel() {
     };
 
     const getValidators = async () => {
-        const response = await getDataType(params.id, session.token);
-        const res = await response.json();
-        console.log("res", res);
-        setValidators(res.validators);
+        if(validators.length ==0){
+            const response = await getDataType(params.id, session.token);
+            const res = await response.json();
+            console.log("res", res);
+            setValidators(res.validators);
+        }
+        
     };
 
     const deleteUsedValidators = () => {
@@ -222,7 +224,7 @@ function ValidatorsModel() {
             <Modal show={ openModalUpdate } setShow={ setOpenModalUpdate } className='min-w-full sm:min-w-[500px]'>
 
                 <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalUpdate(false) }/></div>
-                <UpdateValidator/>
+                <UpdateValidator validators={validators} model_field_id={params.id}/>
             </Modal>
             <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>
 

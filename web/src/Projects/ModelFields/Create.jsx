@@ -2,9 +2,7 @@ import '../../App.css'
 import React, { useState, useEffect } from 'react';
 import Alert from '../../Components/Alert/Alert'
 import Select from '../../Components/tailwindUI/Select';
-import { useNavigate } from 'react-router-dom';
 import { createProjectFields } from '../../api/controller/FieldsController'
-import { useParams } from 'react-router-dom';
 import { getDataTypes } from '../../api/controller/DataTypeController'
 import { getProjectStructure } from '../../api/controller/ProjectsController'
 import PropTypes from 'prop-types';
@@ -46,25 +44,27 @@ function CreateProjectModel({modelId, onCreated}) {
       if(dataTypes.length == 0){
         getDataTypes(session.token).then(async (response) => {
           let res = await response.json();
-          console.log(res)
           if (response.status === 200){
+            setSelectedDataType(res[0].id)
             setDataTypes(res)
           }
         })
       }else{
         dataTypes.map((item) => {
-          if(item.id == selectedDataType){
-            if(item.name == 'OnetoOneForeignKey' || item.name == 'OnetoManyForeignKey'|| item.name == 'ManytoManyForeignKey'){
-              setShowApps(true)
-            }else{
-              setShowApps(false)
+          if(item.id == selectedDataType && item.name == 'OnetoOneForeignKey' || item.name == 'OnetoManyForeignKey'|| item.name == 'ManytoManyForeignKey'){
+            if (selectedApp == null){
+              //setSelectedApp(projectApps[0].id)
             }
+            setShowApps(true)
+          }else{
+            setShowApps(false)
           }
         })
       }
 
       if(selectedApp){
         setShowModels(true)
+        //setSelectedModel(projectApps[selectedApp].app_models[0].id)
         projectApps.map((item) => {
           if(item.id == selectedApp){
             setProjectModels(item.app_models)
@@ -74,6 +74,7 @@ function CreateProjectModel({modelId, onCreated}) {
 
       if(selectedModel){
         setShowFields(true)
+        //setSelectedModel(projectModels[0].id)
         projectModels.map((item) => {
           if(item.id == selectedModel){
             console.log(item)
@@ -120,7 +121,6 @@ function CreateProjectModel({modelId, onCreated}) {
 
       await createProjectFields(data, session.token).then(async (response) => {
         let res = await response.json();
-        console.log(res)
         if (response.status === 201){
           setAlertType('Success');
           setAlertMessage('Campo creado correctamente.')
@@ -139,9 +139,9 @@ function CreateProjectModel({modelId, onCreated}) {
     const projectStructure = async () => {
       await getProjectStructure(session.token, modelId).then(async (response) => {
         let res = await response.json();
-        console.log(res)
         if (response.status === 200){
           setProjectApps(res)
+          
         }
       })
     }
@@ -175,9 +175,8 @@ function CreateProjectModel({modelId, onCreated}) {
                               <div className='mb-10 w-full flex flex-row justify-center'>
                                 <input onChange={(event) => {setOrder(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Orden' type="number" id="project_name" name="project_name"/><br/><br/>
                               </div>
-                              <p className='font-bold'>Tipo de dato:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <Select value={selectedDataType} setValue={setSelectedDataType} listOptions={dataTypes}/>
+                                <Select value={selectedDataType} setValue={setSelectedDataType} listOptions={dataTypes} label={"Tipo de dato"} needed={true}/>
                               </div>
                               {showApps ? <> <p className='font-bold'>App:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
