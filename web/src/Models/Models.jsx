@@ -97,7 +97,7 @@ function Models() {
     history(`/projects/field/${item.id}`,{
         state:{
 
-          project: item,
+          project: location.state.project,
         }
       }
     )

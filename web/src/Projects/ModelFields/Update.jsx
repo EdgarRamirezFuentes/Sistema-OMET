@@ -1,15 +1,12 @@
 import '../../App.css'
-import Timer from '../../Components/Timer/Timer'
-import SideBar from '../../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
 import { updateProjectModel, getProjectModel } from '../../api/controller/ProjetModelController'
-import { useParams, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-function UpdateProjectModel({field}) {
-    const params = useParams();
+function UpdateProjectModel({field, model, onUpdated}) {
     const location = useLocation();
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'));
@@ -17,7 +14,6 @@ function UpdateProjectModel({field}) {
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
-    const [modelData, setModelData] = useState(null);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
 
@@ -44,15 +40,13 @@ function UpdateProjectModel({field}) {
         caption: description
       }
 
-      await updateProjectModel(model.id,data, session.token).then(async (response) => {
+      await updateProjectModel(model.id, data, session.token).then(async (response) => {
         let res = await response.json();
         if (response.status === 200){
           setAlertType('Success');
           setAlertMessage('Campo actualizado correctamente.')
           setError(true);
-          setTimeout(() => {
-            history('/projects/field/'+location.state.model)
-          },1000);
+          setTimeout((e) => onUpdated && onUpdated(true),1000);
           return;
         }
       })
@@ -101,7 +95,8 @@ function UpdateProjectModel({field}) {
 
 UpdateProjectModel.propTypes = {
   field: PropTypes.any,
-  modelId : PropTypes.any
+  model : PropTypes.any,
+  onUpdated: PropTypes.func
 }
 
 export default UpdateProjectModel

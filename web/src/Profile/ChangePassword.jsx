@@ -34,10 +34,6 @@ function ChangePassword() {
 
     const buttonHandler = async () => {
 
-        console.log("Old password: " + oldPassword);
-        console.log("New password: " + newPassword);
-        console.log("Confirm password: " + confirmPassword);
-
         if(oldPassword === '' || newPassword === '' || confirmPassword === ''){
             setAlertType('Warning');
             setAlertMessage('Ingresa tus datos.')
@@ -59,8 +55,6 @@ function ChangePassword() {
           }
 
         await changePassword(userData, session.token).then((response) => {
-            console.log("Response");
-            console.log(response.code);
             if(response.non_field_errors){
                 setError(true);
                 setAlertMessage(response.non_field_errors[0]);
@@ -96,33 +90,29 @@ function ChangePassword() {
                         <p className='text-3xl font-bold' >Mi perfil</p>
                     </div>
                     <div className='flex flex-col justify-between'>
-                    <div className='mt-5 p-5 flex flex-col items-center m-auto w-1/2 rounded-2xl bg-white'>
+                        <div className='mt-5 p-5 flex flex-col items-center justify-center m-auto w-1/2 rounded-2xl bg-white'>
 
-                        <div className="w-full overflow-hidden">
-                            <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
-                        </div>
-
-                        <div className='mt-5 w-full items-center flex flex-row'>
-
-                        <div className='w-full flex flex-col items-center'>
-
-                            <div className='w-full flex flex-col justify-between'>
-                            <p className='font-bold'>Antigua contraseña:</p>
-                            <PasswordInput val={(value)=>{setOldPassword(value)}}/>
-                            
-                            <p className='font-bold'>Nueva contraseña:</p>
-                            <PasswordInput val={(value)=>{setNewPassword(value);}}/>
-
-                            <p className='font-bold'>Confirmar contraseña:</p>
-                            <PasswordInput val={(value)=>{setConfirmPassword(value);}}/>
+                            <div className="w-full overflow-hidden">
+                                <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
                             </div>
 
+                            <div className='mt-5 w-full items-center flex flex-row'>
+
+                                <div className='w-full flex flex-col justify-between'>
+                                    <p className='font-bold'>Antigua contraseña:</p>
+                                    <PasswordInput val={(value)=>{setOldPassword(value)}}/>
+                                    
+                                    <p className='font-bold'>Nueva contraseña:</p>
+                                    <PasswordInput val={(value)=>{setNewPassword(value);}}/>
+
+                                    <p className='font-bold'>Confirmar contraseña:</p>
+                                    <PasswordInput val={(value)=>{setConfirmPassword(value);}}/>
+                                </div>
+                            </div>
+                            <div className='w-1/4 mt-5'>
+                                <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Actualizar"/><br/><br/>
+                            </div>
                         </div>
-                        </div>
-                        <div className='w-1/4'>
-                        <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Actualizar"/><br/><br/>
-                        </div>
-                    </div>
                     </div>
                 </div>
             </div>

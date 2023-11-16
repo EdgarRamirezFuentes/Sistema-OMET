@@ -73,8 +73,7 @@ function SeeApps() {
     const handleProjectModel = item => {
         history(`/model/get/${item.id}`,{
             state:{
-    
-              project: item,
+              project: location.state.project,
             }
           }
         )

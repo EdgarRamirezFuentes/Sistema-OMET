@@ -77,13 +77,6 @@ function Projects() {
     )*/
   }
   
-  const handleUpdateMaintainer = item => {
-    history(`/projects/update/maintainer/${item.id}`,{
-            client: item,
-        }
-    )
-  }
-  
   const handleDelete = async (item) => {
     setOpenModalDelete(true)
     setSelectedProject(item)
@@ -118,7 +111,6 @@ function Projects() {
     )*/
     history(`/apps/`,{
         state:{
-
           project: item,
         }
       }

@@ -6,10 +6,11 @@ import { createProjectFields } from '../../api/controller/FieldsController'
 import { getDataTypes } from '../../api/controller/DataTypeController'
 import { getProjectStructure } from '../../api/controller/ProjectsController'
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
 function CreateProjectModel({modelId, onCreated}) {
     const session = JSON.parse(localStorage.getItem('session'));
-
+    const location = useLocation();
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
@@ -32,6 +33,7 @@ function CreateProjectModel({modelId, onCreated}) {
     const [showApps, setShowApps] = useState(false);
     const [showModels, setShowModels] = useState(false);
     const [showFields, setShowFields] = useState(false);
+    
 
 
     useEffect(() => {
@@ -98,8 +100,7 @@ function CreateProjectModel({modelId, onCreated}) {
     }
 
     const buttonHandler = async () => {
-      console.log("==crear==")
-      if(name === '' || order === 0 ){
+      if(name === '' || description ==='' || order === 0 ){
           setAlertType('Warning');
           setAlertMessage('Ingresa los datos.')
           setError(true);
@@ -137,7 +138,7 @@ function CreateProjectModel({modelId, onCreated}) {
     }
 
     const projectStructure = async () => {
-      await getProjectStructure(session.token, modelId).then(async (response) => {
+      await getProjectStructure(session.token, location.state.project.id).then(async (response) => {
         let res = await response.json();
         console.log("projectStructure",res)
         if (response.status === 200){
