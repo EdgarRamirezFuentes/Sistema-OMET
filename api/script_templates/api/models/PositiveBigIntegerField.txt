@@ -1,0 +1,1 @@
+{{FIELD_NAME}} = models.PositiveBigIntegerField({{ATTRIBUTES}}, validators=[{{VALIDATORS}}, ])

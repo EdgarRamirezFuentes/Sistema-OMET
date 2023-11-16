@@ -11,4 +11,7 @@ SCRIPT_TEMPLATE_URLS = {
     'web_client_controller': os.path.join(settings.BASE_DIR, 'script_templates/web_client/controllers/controller.txt'),
     'web_client_actions': os.path.join(settings.BASE_DIR, 'script_templates/web_client/actions/actions.txt'),
     'web_client_list_view': os.path.join(settings.BASE_DIR, 'script_templates/web_client/list_view/list_view.txt'),
+    'web_client_router': os.path.join(settings.BASE_DIR, 'script_templates/web_client/router/router.txt'),
+    'web_client_list_view_route': os.path.join(settings.BASE_DIR, 'script_templates/web_client/router/list_views/listViewRoute.txt'),
+    'web_client_list_view_import': os.path.join(settings.BASE_DIR, 'script_templates/web_client/router/list_views/listViewImport.txt'),
 }

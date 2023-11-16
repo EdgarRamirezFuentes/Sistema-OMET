@@ -6,8 +6,14 @@ export const create{{APP_MODEL}} = async (formData, token) =>{
     })
 }
 
-export const get{{APP_MODEL}} = async (id, token) =>{
-    return await actions.get{{APP_MODEL}}(id, token).then((response) => {
+export const get{{APP_MODEL}} = async (token) =>{
+    return await actions.get{{APP_MODEL}}(token).then((response) => {
+        return response;
+    })
+}
+
+export const retrieve{{APP_MODEL}} = async (id, token) =>{
+    return await actions.retrieve{{APP_MODEL}}(id, token).then((response) => {
         return response;
     })
 }

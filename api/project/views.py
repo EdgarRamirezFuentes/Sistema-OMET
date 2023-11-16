@@ -282,6 +282,7 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             saved_model_field = serializer.save()
 
+            # Adding the relation between the model field and the foreign key model field
             if 'ForeignKey' in saved_model_field.data_type.name:
                 foreign_key_serializer = ForeignKeyRelationSerializer(data={
                     'model_field_origin': model_field_relation_id,
@@ -289,6 +290,17 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
                 })
                 foreign_key_serializer.is_valid(raise_exception=True)
                 foreign_key_serializer.save()
+
+            # Adding a required validator for the CharField and TextField data types
+            if saved_model_field.data_type.name in ['CharField', 'TextField']:
+                value_validator_serializer = ValidatorValueSerializer(data={
+                    'model_field': saved_model_field.id,
+                    'validator': 5,
+                    'value': 100
+                })
+
+                value_validator_serializer.is_valid(raise_exception=True)
+                value_validator_serializer.save()
 
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
         except serializers.ValidationError as e:

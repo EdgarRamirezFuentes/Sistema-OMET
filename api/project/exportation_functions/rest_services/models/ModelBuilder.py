@@ -105,9 +105,13 @@ class ModelBuilder():
             model_field_body = self.__add_validator(validator, model_field_body)
 
         # Removing the validators and attributes placeholders
+        print(model_field_body)
         model_field_body = model_field_body.replace('{{VALIDATORS}}, ', '')
+        print(model_field_body)
         model_field_body = model_field_body.replace('{{ATTRIBUTES}}, ', '')
+        print(model_field_body)
         model_field_body = model_field_body.replace('validators=[]', '')
+        print(model_field_body)
 
         self.__model_fields += model_field_body
 

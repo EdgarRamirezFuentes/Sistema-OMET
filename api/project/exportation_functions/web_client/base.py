@@ -11,6 +11,7 @@ from .sidebar.sidebar import create_sidebar_component
 from .controllers.controller import create_app_controllers
 from .actions.action import create_app_actions
 from .views.views import create_list_views
+from .router.router import create_project_router
 
 
 def create_web_client_directory(main_directory, project):
@@ -22,13 +23,13 @@ def create_web_client_directory(main_directory, project):
     """
     try:
         create_web_client_base_directories(main_directory)
-        create_project_app_directories(main_directory, project)
         create_sidebar_component(main_directory, project)
         create_login_component(main_directory, project)
         create_index_page(main_directory, project)
         create_project_controllers(main_directory, project)
         create_project_actions(main_directory, project)
         create_project_list_views(main_directory, project)
+        create_project_router(main_directory, project)
     except ValueError as e:
         raise e
 
@@ -47,27 +48,6 @@ def create_web_client_base_directories(main_directory):
 
             print(file_path, arcname)
             main_directory.write(file_path, f'web/{arcname}')
-
-def create_project_app_directories(main_directory, project):
-    project_apps = ProjectApp.objects.filter(project=project)
-
-    for project_app in project_apps:
-        create_project_app_directory(main_directory, project_app)
-
-def create_project_app_directory(main_directory, project_app):
-    """Create the web client directory in the zip file.
-
-    Args:
-        main_directory (zipfile.ZipFile): The main directory of the project
-        project (Project): The project object
-    """
-    try:
-        main_directory.writestr(f'web/src/{project_app.name}/{project_app.name}Create.jsx', f'// Create {project_app.name} component')
-        main_directory.writestr(f'web/src/{project_app.name}/{project_app.name}Detail.jsx', f'// Detail {project_app.name} component')
-        main_directory.writestr(f'web/src/{project_app.name}/{project_app.name}List.jsx', f'// List {project_app.name} component')
-        main_directory.writestr(f'web/src/{project_app.name}/{project_app.name}Update.jsx', f'// Update {project_app.name} component')
-    except ValueError as e:
-        raise e
 
 def create_login_component(main_directory, project):
     """Create the login component in the zip file.

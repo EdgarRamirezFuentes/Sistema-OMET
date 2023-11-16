@@ -1,16 +1,17 @@
-import '../App.css'
-import Timer from '../Components/Timer/Timer'
-import SideBar from '../Components/Sidebar/Sidebar'
+import '../../App.css'
+import Timer from '../../Components/Timer/Timer'
+import SideBar from '../../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
-import Alert from '../Components/Alert/Alert'
+import Alert from '../../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
-import Table from '../Components/tailwindUI/Table'
+import Table from '../../Components/tailwindUI/Table'
 import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import Modal from '../Components/tailwindUI/Modal';
-import { create{{MODEL_NAME}} } from '../api/controller/{{MODEL_NAME}}Controller'
+import Modal from '../../Components/tailwindUI/Modal';
+import { get{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
 function {{MODEL_NAME}}List() {
     const history = useNavigate();
 
+    const session = JSON.parse(localStorage.getItem('session'));
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
@@ -24,6 +25,7 @@ function {{MODEL_NAME}}List() {
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [openModalUpdate, setOpenModalUpdate] = useState(false);
     const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [flag ,setFlag] = useState(false);
 
     const tableColumns = [
       { heading: 'Id', value: 'id',align: 'center' },
@@ -31,9 +33,27 @@ function {{MODEL_NAME}}List() {
     ];
 
     useEffect(() => {
+        if (allData.length == 0 && !flag) {
 
-        if (allData.length == 0) {
-
+            get{{MODEL_NAME}}(session.token).then(async (response) => {
+                console.log(response)
+                if (response.status === 200) {
+                    let res = await response.json()
+                    setAllData(res)
+                    console.log(res)
+                    setIsLoadingData(false)
+                    setFlag(true)
+                } else {
+                    setError(response.data.message)
+                    setAlertMessage(response.data.message)
+                    setIsLoadingData(false)
+                }
+            }).catch((error) => {
+                console.log(error)
+                setError(error)
+                setAlertMessage(error)
+                setIsLoadingData(false)
+            })
         }
 
     },[allData])

@@ -1,0 +1,1 @@
+<Route path="{{COMPONENT_PATH}}/get" element={<{{COMPONENT_NAME}}ListView />} />
