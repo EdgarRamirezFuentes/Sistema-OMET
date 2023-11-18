@@ -42,7 +42,7 @@ function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, lab
     return (
         <div className='w-full'>
             {label && (
-                <label className="block text-sm font-medium text-gray-700">
+                <label className='font-bold'>
                     {label}
                     {needed && <span className='text-red-400'> *</span>}
                 </label>

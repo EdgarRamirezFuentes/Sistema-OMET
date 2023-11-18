@@ -8,7 +8,6 @@ import {createProject} from '../api/controller/ProjectsController'
 import { getCustomers } from '../api/controller/CustomersController';
 import PropTypes from 'prop-types';
 
-import Input from '../Components/tailwindUI/Input'
 
 function CreateProject({onCreated}) {
     const history = useNavigate();
