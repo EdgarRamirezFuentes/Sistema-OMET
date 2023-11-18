@@ -49,19 +49,20 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """Viewset for active projects"""
     authentication_classes = [TokenAuthentication,]
     permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
-    queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-
+    def get_queryset(self):
+        return Project.objects.all()
+    
     def list(self, request, *args, **kwargs):
         """List the all the projects filtered by name and customer"""
         try:
             name = request.query_params.get('name', None)
             customer_id = request.query_params.get('customer_id', None)
 
-            queryset = self.queryset
+            queryset = self.get_queryset()
 
             if name:
-                queryset = queryset.filter(name=name)
+                queryset = queryset.filter(name__icontains=name)
 
             if customer_id:
                 customer_id = int(customer_id)

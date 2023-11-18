@@ -10,6 +10,7 @@ import Alert from '../Components/Alert/Alert'
 import { exportProject } from '../api/controller/ExportController'
 import Modal from '../Components/tailwindUI/Modal';
 import ModalDelete from '../Components/ModalDelete/ModalDelete';
+import {filterProjects} from '../api/controller/ProjectsController'
 
 import See from "./See";
 import Update from "./Update";
@@ -36,8 +37,10 @@ function Projects() {
   useEffect(() => {
     if (deletedProject == null || deletedProject){
       projects()
+      filterProject();
       setDeletedProject(false);
     }
+    
   }, [deletedProject]);
 
   const projects = async ()=>{
@@ -50,6 +53,13 @@ function Projects() {
         setAllClients([])
         setIsLoadingData(true)
       }
+    })
+  }
+
+  const filterProject = async (value)=>{
+    await filterProjects(session.token, "test").then(async (response)=>{
+      let res = await response.json()
+      console.log(res)
     })
   }
 

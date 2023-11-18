@@ -144,3 +144,14 @@ export const getProjectStructure = async (token, projectId) => {
         console.log("Error ===>", e)
     }
 }
+
+
+export const filterProjects = async (token, filter) => {
+    const objApi = apiClient('project?name='+filter);
+    try {
+        var response = await objApi.get(undefined, token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+}

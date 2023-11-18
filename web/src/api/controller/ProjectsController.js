@@ -49,3 +49,10 @@ export const getProjectStructure = async (token, projectId) => {
 }
 
 
+export const filterProjects = async (token, filterData) => {
+    return await projectsAction.filterProjects(token, filterData).then((response) => {
+        return response;
+    })
+}
+
+
