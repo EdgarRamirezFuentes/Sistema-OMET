@@ -14,7 +14,7 @@ function Create{{MODEL_NAME}}({onCreated}) {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
 
-    const [{{MODEL_FIELD_NAME}}, set{{MODEL_FIELD_NAME_TILE}}] = useState('');
+    {{FIELDS_HOOKS}}
     
 
     const onCloseHandler = () => {
