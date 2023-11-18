@@ -285,8 +285,8 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
             # Adding the relation between the model field and the foreign key model field
             if 'ForeignKey' in saved_model_field.data_type.name:
                 foreign_key_serializer = ForeignKeyRelationSerializer(data={
-                    'model_field_origin': model_field_relation_id,
-                    'model_field_related': saved_model_field.id
+                    'model_field_origin': saved_model_field.id,
+                    'model_field_related': model_field_relation_id
                 })
                 foreign_key_serializer.is_valid(raise_exception=True)
                 foreign_key_serializer.save()

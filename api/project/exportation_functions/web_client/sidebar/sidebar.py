@@ -11,6 +11,6 @@ def create_sidebar_component(main_directory, project):
         sidebar_builder = SidebarBuilder(project)
         sidebar_script = sidebar_builder.build()
 
-        main_directory.writestr('web/src/components/sidebar/Sidebar.jsx', sidebar_script)
+        main_directory.writestr('web/src/Components/sidebar/Sidebar.jsx', sidebar_script)
     except Exception as e:
         raise e

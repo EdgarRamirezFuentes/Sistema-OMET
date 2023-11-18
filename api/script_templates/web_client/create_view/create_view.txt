@@ -4,6 +4,7 @@ import Alert from '../../Components/Alert/Alert'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { create{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
 import PropTypes from 'prop-types';
+import Input from '../Components/tailwindUI/Input'
 
 function Create{{MODEL_NAME}}({onCreated}) {
     const history = useNavigate();
@@ -12,6 +13,8 @@ function Create{{MODEL_NAME}}({onCreated}) {
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
+
+    const [{{MODEL_FIELD_NAME}}, set{{MODEL_FIELD_NAME_TILE}}] = useState('');
     
 
     const onCloseHandler = () => {
@@ -21,13 +24,14 @@ function Create{{MODEL_NAME}}({onCreated}) {
     }
 
     const buttonHandler = async () => {
-        if(name === ''){
+        if(name === '' ){
             setAlertType('Warning');
             setAlertMessage('Ingresa los datos.')
             setError(true);
             return;
         }
         let request = {
+            {{MODEL_FIELD_NAME}}: {{MODEL_FIELD_NAME}},
         }
 
         await create{{MODEL_NAME}}(request, session.token).then(async (response)=>{
@@ -63,6 +67,7 @@ function Create{{MODEL_NAME}}({onCreated}) {
                                 <div className='w-full flex flex-col items-center'>
 
                                     <div className='w-full flex flex-col justify-between'>
+                                        {{INPUT_FIELDS}}
                                     </div>
 
                                 </div>

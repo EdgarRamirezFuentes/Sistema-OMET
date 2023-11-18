@@ -59,7 +59,7 @@ const apiClient = (endpoint) => {
             url = `${endpoint}`;
         }
         else{
-            url = `${endpoint}/${id}/`;
+            url = `${endpoint}${id}/`;
         }
         return  customFetch(url, "PATCH", body, token);
     };
@@ -67,7 +67,7 @@ const apiClient = (endpoint) => {
     const del = async (id = false, token = undefined) => {
         if (!id)
             throw new Error("to make a delete you must provide the id and the body");
-        const url = `${endpoint}/${id}/`;
+        const url = `${endpoint}${id}/`;
         return await customFetch(url, "DELETE", undefined, token);
     };
 
