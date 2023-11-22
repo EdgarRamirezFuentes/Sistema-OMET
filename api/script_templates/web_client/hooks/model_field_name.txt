@@ -1,1 +1,0 @@
-const [{{MODEL_FIELD_NAME}}, set{{MODEL_FIELD_NAME_TITLE}}] = useState('');

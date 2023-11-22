@@ -2,20 +2,43 @@ import '../../App.css'
 import React, { useState, useEffect } from 'react';
 import Alert from '../../Components/Alert/Alert'
 import { useNavigate, useLocation } from 'react-router-dom';
-import { create{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
+import { retrieve{{MODEL_NAME}}, update{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
 import PropTypes from 'prop-types';
-import Input from '../Components/tailwindUI/Input'
+import Input from '../../Components/tailwindUI/Input'
+import Select from '../../Components/tailwindUI/Select'
 
-function update{{MODEL_NAME}}({onCreated}) {
+function Update{{MODEL_NAME}}({onUpdated, {{MODEL_NAME_LOWER}}_id}) {
     const history = useNavigate();
     const location = useLocation();
     const session = JSON.parse(localStorage.getItem('session'));
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
+    const [data, setData] = useState(null);
 
-    {{FIELDS_HOOKS}}
-    
+{{MODEL_HOOKS}}
+
+    useEffect(() => {
+        if (data == null) {
+            retrieve{{MODEL_NAME}}({{MODEL_NAME_LOWER}}_id, session.token).then(async (response) => {
+                console.log(response)
+                if (response.status === 200) {
+                    let res = await response.json()
+                    setData(res)
+                    console.log(res)
+                } else {
+                    setError(response.data.message)
+                    setAlertMessage(response.data.message)
+                }
+            }).catch((error) => {
+                console.log(error)
+                setError(error)
+                setAlertMessage(error)
+            })
+        }
+    },[data])
+
+
 
     const onCloseHandler = () => {
         setError(null)
@@ -31,12 +54,23 @@ function update{{MODEL_NAME}}({onCreated}) {
             return;
         }
         let request = {
-            {{MODEL_FIELD_NAME}}: {{MODEL_FIELD_NAME}},
+{{REQUEST_FIELDS}}
         }
 
-        {{OPERATION_REQUEST}}
+        await update{{MODEL_NAME}}({{MODEL_NAME_LOWER}}_id, request, session.token).then(async (response)=>{
+            if (response.status === 200){
+                setAlertType('Success');
+                setAlertMessage('Actualizado correctamente.')
+                setError(true);
+                setTimeout((e) => onUpdated && onUpdated(true),1000);
+            }else{
+                setAlertType('Error');
+                setAlertMessage('Error al actualizar.')
+                setError(true);
+            }
+        });
     }
-  
+
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-full'>
@@ -56,12 +90,14 @@ function update{{MODEL_NAME}}({onCreated}) {
                                 <div className='w-full flex flex-col items-center'>
 
                                     <div className='w-full flex flex-col justify-between'>
-                                        {{INPUT_FIELDS}}
+{{INPUT_FIELDS}}
                                     </div>
 
                                 </div>
                             </div>
-                            {{BUTTON}}
+                            <div className='w-1/4'>
+                                <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Crear"/><br/><br/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -70,8 +106,9 @@ function update{{MODEL_NAME}}({onCreated}) {
     )
 }
 
-Create{{MODEL_NAME}}.propTypes = {
-    onCreated : PropTypes.func
+Update{{MODEL_NAME}}.propTypes = {
+    onUpdated : PropTypes.func,
+    {{MODEL_NAME_LOWER}}_id: PropTypes.number
 }
 
-export default Create{{MODEL_NAME}}
+export default Update{{MODEL_NAME}}

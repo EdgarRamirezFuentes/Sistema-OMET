@@ -6,16 +6,17 @@ import { create{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_
 import PropTypes from 'prop-types';
 import Input from '../Components/tailwindUI/Input'
 
-function create{{MODEL_NAME}}({onCreated}) {
+function Get{{MODEL_NAME}}() {
     const history = useNavigate();
     const location = useLocation();
     const session = JSON.parse(localStorage.getItem('session'));
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
+    const [selectedItem, setSelectedItem] = useState(null);
 
     {{FIELDS_HOOKS}}
-    
+
 
     const onCloseHandler = () => {
         setError(null)
@@ -23,20 +24,29 @@ function create{{MODEL_NAME}}({onCreated}) {
         setAlertMessage('')
     }
 
-    const buttonHandler = async () => {
-        if(name === '' ){
-            setAlertType('Warning');
-            setAlertMessage('Ingresa los datos.')
-            setError(true);
-            return;
-        }
-        let request = {
-            {{MODEL_FIELD_NAME}}: {{MODEL_FIELD_NAME}},
+    useEffect(() => {
+        if (selectedItem == null) {
+
+            retrieve{{MODEL_NAME}}(id, session.token).then(async (response) => {
+                console.log(response)
+                if (response.status === 200) {
+                    let res = await response.json()
+                    setSelectedItem(res)
+                    console.log(res)
+                    setFlag(true)
+                } else {
+                    setError(response.data.message)
+                    setAlertMessage(response.data.message)
+                }
+            }).catch((error) => {
+                console.log(error)
+                setError(error)
+                setAlertMessage(error)
+            })
         }
 
-        {{OPERATION_REQUEST}}
-    }
-  
+    },[selectedItem])
+
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-full'>
@@ -56,12 +66,10 @@ function create{{MODEL_NAME}}({onCreated}) {
                                 <div className='w-full flex flex-col items-center'>
 
                                     <div className='w-full flex flex-col justify-between'>
-                                        {{INPUT_FIELDS}}
+{{FIELD_DATA}}
                                     </div>
-
                                 </div>
                             </div>
-                            {{BUTTON}}
                         </div>
                     </div>
                 </div>
@@ -70,8 +78,4 @@ function create{{MODEL_NAME}}({onCreated}) {
     )
 }
 
-Create{{MODEL_NAME}}.propTypes = {
-    onCreated : PropTypes.func
-}
-
-export default Create{{MODEL_NAME}}
+export default Get{{MODEL_NAME}}

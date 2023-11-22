@@ -11,8 +11,10 @@ def create_app_actions(main_directory, project_app):
         action_builder = ActionBuilder(app_model)
         action_script = action_builder.build()
 
-        action_path = f'web/src/api/actions/{project_app_name}/{app_model.name}.js'
+        web_client_action_path = f'web/src/api/actions/{project_app_name}/{app_model.name}.js'
+        mobile_client_action_path = f'mobile/src/api/actions/{project_app_name}/{app_model.name}.js'
 
-        main_directory.writestr(action_path, action_script)
+        main_directory.writestr(web_client_action_path, action_script)
+        main_directory.writestr(mobile_client_action_path, action_script)
 
 

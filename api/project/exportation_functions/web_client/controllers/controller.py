@@ -11,6 +11,8 @@ def create_app_controllers(main_directory, project_app):
         controller_builder = ControllerBuilder(app_model)
         controller_script = controller_builder.build()
 
-        controller_path = f'web/src/api/controller/{project_app_name}/{app_model.name}.js'
+        web_client_controller_path = f'web/src/api/controller/{project_app_name}/{app_model.name}.js'
+        mobile_client_controller_path = f'mobile/src/api/controller/{project_app_name}/{app_model.name}.js'
 
-        main_directory.writestr(controller_path, controller_script)
+        main_directory.writestr(web_client_controller_path, controller_script)
+        main_directory.writestr(mobile_client_controller_path, controller_script)

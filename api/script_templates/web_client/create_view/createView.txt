@@ -4,19 +4,19 @@ import Alert from '../../Components/Alert/Alert'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { create{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
 import PropTypes from 'prop-types';
-import Input from '../Components/tailwindUI/Input'
+import Input from '../../Components/tailwindUI/Input'
+import Select from '../../Components/tailwindUI/Select'
 
-function Get{{MODEL_NAME}}() {
+function Create{{MODEL_NAME}}({onCreated}) {
     const history = useNavigate();
     const location = useLocation();
     const session = JSON.parse(localStorage.getItem('session'));
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
-    const [selectedItem, setSelectedItem] = useState(null);
 
-    {{FIELDS_HOOKS}}
-    
+{{MODEL_HOOKS}}
+
 
     const onCloseHandler = () => {
         setError(null)
@@ -24,29 +24,25 @@ function Get{{MODEL_NAME}}() {
         setAlertMessage('')
     }
 
-    useEffect(() => {
-        if (selectedItem == null) {
-
-            retrieve{{MODEL_NAME}}(id, session.token).then(async (response) => {
-                console.log(response)
-                if (response.status === 200) {
-                    let res = await response.json()
-                    setSelectedItem(res)
-                    console.log(res)
-                    setFlag(true)
-                } else {
-                    setError(response.data.message)
-                    setAlertMessage(response.data.message)
-                }
-            }).catch((error) => {
-                console.log(error)
-                setError(error)
-                setAlertMessage(error)
-            })
+    const buttonHandler = async () => {
+        let request = {
+{{REQUEST_FIELDS}}
         }
 
-    },[selectedItem])
-  
+        await create{{MODEL_NAME}}(request, session.token).then(async (response)=>{
+            if (response.status === 201){
+                setAlertType('Success');
+                setAlertMessage('Creado correctamente.')
+                setError(true);
+                setTimeout((e) => onCreated && onCreated(true),1000);
+            }else{
+                setAlertType('Error');
+                setAlertMessage('Error al crear.')
+                setError(true);
+            }
+        });
+    }
+
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-full'>
@@ -66,9 +62,13 @@ function Get{{MODEL_NAME}}() {
                                 <div className='w-full flex flex-col items-center'>
 
                                     <div className='w-full flex flex-col justify-between'>
-                                        {{INPUT_FIELDS}}
+{{INPUT_FIELDS}}
                                     </div>
+
                                 </div>
+                            </div>
+                            <div className='w-1/4'>
+                                <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Crear"/><br/><br/>
                             </div>
                         </div>
                     </div>
@@ -78,4 +78,8 @@ function Get{{MODEL_NAME}}() {
     )
 }
 
-export default Get{{MODEL_NAME}}
+Create{{MODEL_NAME}}.propTypes = {
+    onCreated : PropTypes.func
+}
+
+export default Create{{MODEL_NAME}}

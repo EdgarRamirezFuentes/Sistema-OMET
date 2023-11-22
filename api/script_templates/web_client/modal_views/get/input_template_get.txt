@@ -1,1 +1,0 @@
-<Input placeholder={'selectedItem.{{MODEL_FIELD_NAME}}'} label={'selectedItem.{{MODEL_FIELD_NAME}}'} disabledInput={true} readOnly={true}/>
