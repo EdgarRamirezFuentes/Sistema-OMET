@@ -1,1 +1,1 @@
-{{FIELD_NAME}} = models.ManyToManyField({{FOREIGN_KEY_MODEL}})
+{{FIELD_NAME}} = models.ManyToManyField({{FOREIGN_KEY_MODEL}}, related_name={{RELATED_NAME}})

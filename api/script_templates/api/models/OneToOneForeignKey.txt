@@ -1,1 +1,1 @@
-{{FIELD_NAME}} = models.OneToOneField({{FOREIGN_KEY_MODEL}}, on_delete=models.CASCADE)
+{{FIELD_NAME}} = models.OneToOneField({{FOREIGN_KEY_MODEL}}, on_delete=models.CASCADE, related_name={{RELATED_NAME}})

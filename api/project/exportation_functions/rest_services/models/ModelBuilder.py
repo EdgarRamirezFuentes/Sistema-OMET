@@ -85,8 +85,9 @@ class ModelBuilder():
         related_model_name = related_model.name
         related_model_app_name = related_model.project_app.name.lower()
 
-        self.__foreign_key_imports.add(f'from {related_model_app_name}.models import {related_model_name}\n')
-        model_field_body = model_field_body.replace('{{FOREIGN_KEY_MODEL}}', related_model_name)
+        #self.__foreign_key_imports.add(f'from {related_model_app_name}.models import {related_model_name}\n')
+        model_field_body = model_field_body.replace('{{FOREIGN_KEY_MODEL}}', f"'{related_model_app_name}.{related_model_name}'" if related_model_field != model_field else 'self')
+        model_field_body = model_field_body.replace('{{RELATED_NAME}}', f"'{model_field.app_model.name.lower()}_{model_field.name.lower()}_{related_model_name.lower()}'")
 
         self.__model_fields += model_field_body
 
