@@ -2,9 +2,10 @@ import '../App.css'
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { getModel } from '../api/controller/ModelFieldsController'
+import { updateProjectModel } from '../api/controller/ProjectModelController'
 import PropTypes from 'prop-types';
 
-function UpdateModel({model}) {
+function UpdateModel({model, onUpdated}) {
     const session = JSON.parse(localStorage.getItem('session'))
 
     const [error, setError] = useState(null);
@@ -31,22 +32,18 @@ function UpdateModel({model}) {
     }
 
     const buttonHandler = async () => {
-        setAlertType('Success');
-        setAlertMessage('Campo actualizado correctamente.')
-        setError(true);
-        /*if(name === ''){
+        if(name === ''){
             setAlertType('Warning');
             setAlertMessage('Ingresa tus datos.')
             setError(true);
             return;
         }
 
-        let data = [{
-            name: name,
-            project_app: params.id
-        }]
+        let data = {
+            name: name
+        }
 
-        await updateModel(location.state.item.id, data, session.token).then(async (response)=>{
+        await updateProjectModel(model?.id, data, session.token).then(async (response)=>{
             let responseJson = await response.json()
             console.log("====response====");
             console.log(responseJson);
@@ -54,15 +51,13 @@ function UpdateModel({model}) {
             setAlertType('Success');
             setAlertMessage('Campo actualizado correctamente.')
             setError(true);
-            setTimeout(() => {
-                history(`/projects/field/${location.state.model}`)
-            }, 1500);
+            setTimeout((e) => onUpdated && onUpdated(true),1000);
             }else{
             setAlertType('Error');
             setAlertMessage('Error al crear el campo.')
             setError(true);
             }
-        });*/
+        });
     }
   
     return (
@@ -104,7 +99,8 @@ function UpdateModel({model}) {
 }
 
 UpdateModel.propTypes = {
-    model : PropTypes.any
+    model : PropTypes.any,
+    onUpdated : PropTypes.func
 }
 
 

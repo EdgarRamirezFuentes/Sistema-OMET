@@ -51,3 +51,13 @@ export const deleteCustomer = async (token, customerId) => {
     }
 
 }
+
+export const filterCustomers = async (token, filter) => {
+    const objApi = apiClient('customer?email='+filter);
+    try {
+        var response = await objApi.get(undefined, token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+}

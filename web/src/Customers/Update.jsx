@@ -1,6 +1,4 @@
 import '../App.css'
-import Timer from '../Components/Timer/Timer'
-import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import { getCustomer, updateCustomer } from '../api/controller/CustomersController'
 import PropTypes from 'prop-types';
 
-function UpdateCustomer({customerId}) {
+function UpdateCustomer({customerId, onUpdated}) {
     const params = useParams();
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'))
@@ -88,9 +86,7 @@ function UpdateCustomer({customerId}) {
         if (response.status === 200){
           setAlertType('Success');
           setAlertMessage('Customer actualizado correctamente.')
-          setTimeout(() => {
-            history('/customers/get');
-          }, 1000);
+          setTimeout((e) => {onUpdated && onUpdated(true)},1000)
           setError(true);
           return;
         }else{
@@ -160,7 +156,8 @@ function UpdateCustomer({customerId}) {
     )
 }
 UpdateCustomer.propTypes = {
-  customerId : PropTypes.number
+  customerId : PropTypes.number,
+  onUpdated : PropTypes.func
 }
 
 export default UpdateCustomer

@@ -11,6 +11,7 @@ import { exportProject } from '../api/controller/ExportController'
 import Modal from '../Components/tailwindUI/Modal';
 import ModalDelete from '../Components/ModalDelete/ModalDelete';
 import {filterProjects} from '../api/controller/ProjectsController'
+import SearchBar from '../Components/tailwindUI/SearchBar'
 
 import See from "./See";
 import Update from "./Update";
@@ -19,13 +20,16 @@ function Projects() {
   const history = useNavigate();
   const session = JSON.parse(localStorage.getItem('session'));
   const [allClients, setAllClients] = useState([])
+  const [filteredProjects, setFilteredProjects] = useState([])
   const [isLoadingData, setIsLoadingData] = useState(true)
+  const [filterText, setFilterText] = useState('');
 
   const [error, setError] = useState(null);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState('Error');
   const [deletedProject, setDeletedProject] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [flag, setFlag] = useState(false);
 
 
   //Modales
@@ -35,20 +39,20 @@ function Projects() {
   const [openModalCreate, setOpenModalCreate] = useState(false);
 
   useEffect(() => {
-    if (deletedProject == null || deletedProject){
+    if (deletedProject == null || deletedProject || !flag){
       projects()
-      filterProject();
       setDeletedProject(false);
     }
     
-  }, [deletedProject]);
+  }, [deletedProject, flag, filteredProjects]);
 
   const projects = async ()=>{
     await getAllProjects(session.token).then(async (projects)=>{
       let projectsList = await projects.json()
-      if (projectsList.length > 0){
+      if (projectsList.length > 0 || !flag){
         setAllClients(projectsList)
         setIsLoadingData(false)
+        setFlag(true)
       }else{
         setAllClients([])
         setIsLoadingData(true)
@@ -57,8 +61,10 @@ function Projects() {
   }
 
   const filterProject = async (value)=>{
-    await filterProjects(session.token, "test").then(async (response)=>{
+    setFilterText(value)
+    await filterProjects(session.token, value).then(async (response)=>{
       let res = await response.json()
+      setFilteredProjects(res)
       console.log(res)
     })
   }
@@ -72,33 +78,15 @@ function Projects() {
   const handleView = item => {
     setOpenModal(true)
     setSelectedProject(item)
-
-    /*history(`/projects/view/${item.id}`,{
-            client: item,
-        }
-    )*/
   }
   const handleUpdate = item => {
     setOpenModalUpdate(true)
     setSelectedProject(item)
-    /*history(`/projects/update/${item.id}`,{
-            client: item,
-        }
-    )*/
   }
   
   const handleDelete = async (item) => {
     setOpenModalDelete(true)
     setSelectedProject(item)
-    /*await deleteProject(session.token, item.id).then((response)=>{
-
-      if(response.status === 204){
-        setAlertType('Success');
-        setAlertMessage('Proyecto eliminado correctamente.')
-        setError(true);
-        setDeletedProject(true);
-     }
-    })*/
   }
 
   const deleteProjectFunc = async () => {
@@ -115,10 +103,6 @@ function Projects() {
   }
 
   const handleApps = item => {
-    /*history(`/app/create/${item.id}`,{
-            client: item,
-        }
-    )*/
     history(`/apps/`,{
         state:{
           project: item,
@@ -161,11 +145,6 @@ function Projects() {
 
   const handleCreate = item => {
     setOpenModalCreate(true)
-    
-    /*history(`/app/create/${item.id}`,{
-            client: item,
-        }
-    )*/
   }
 
   const columnActions = [
@@ -232,8 +211,11 @@ function Projects() {
             <div className="mt-5 w-full overflow-hidden">
               <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
             </div>
+            <div className='ml-3 mr-5'>
+              <SearchBar value={filterText} setValue={filterProject} placeholder_desktop={"Buscar"}/>
+            </div>
             <div className='mt-5'>
-              <Table title='Proyectos' data={ allClients } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
+              <Table title='Proyectos' data={filteredProjects.length >0 ? filteredProjects:allClients } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
             </div>
           </div>
         </div>
@@ -247,12 +229,12 @@ function Projects() {
 
       <Modal show={ openModalUpdate } setShow={ setOpenModalUpdate } className='min-w-full sm:min-w-[1200px]'>
           <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalUpdate(false) }/></div>
-          <Update projectId={selectedProject?.id}/>
+          <Update projectId={selectedProject?.id} onUpdated={()=>{setOpenModalUpdate(false);setFlag(false)}}/>
           
       </Modal>
       <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>
           <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalCreate(false) }/></div>
-          <Create onCreated={()=>{setOpenModalCreate(false);projects()}}/>
+          <Create onCreated={()=>{setOpenModalCreate(false);setFlag(false)}}/>
       </Modal>
 
       <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>

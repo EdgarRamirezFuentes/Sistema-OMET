@@ -1,12 +1,12 @@
 import '../App.css'
-import Timer from '../Components/Timer/Timer'
-import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
 import {createProject} from '../api/controller/ProjectsController'
 import { getCustomers } from '../api/controller/CustomersController';
 import PropTypes from 'prop-types';
+import CheckboxGroup from '../Components/tailwindUI/CheckboxGroup';
+import Select from '../Components/tailwindUI/Select';
 
 
 function CreateProject({onCreated}) {
@@ -21,6 +21,9 @@ function CreateProject({onCreated}) {
     const [description, setDescription] = useState('');
     const [selectedUser, setSelectedUser] = useState('');
     const [allClients, setAllClients] = useState([])
+    const [selectedItems, setSelectedItems] = useState([])
+    const [items, setItems] = useState([{id:1,title:"Titulo1",description:"Description"},{id:2,title:"Titulo2",description:"Description"},{id:3,title:"Titulo3",description:"Description"}])
+    const [selectedIds, setSelectedIds] = useState([])
     const handleChange = (event) => {
       setSelectedUser(event.target.value);
       console.log("===selectedUser===");
@@ -30,6 +33,11 @@ function CreateProject({onCreated}) {
     useEffect(() => {
       getActiveCustomers();
     }, []);
+
+    useEffect(() => {
+      console.log("===setSelectedIds===");
+      console.log(selectedIds);
+    },[selectedItems, selectedIds])
 
     const onCloseHandler = () => {
         setError(null)
@@ -86,7 +94,7 @@ function CreateProject({onCreated}) {
 
                         <div className='mt-5 w-full items-center flex flex-row'>
 
-                        <div className='w-full flex flex-col items-center'>
+                          <div className='w-full flex flex-col items-center'>
 
                             <div className='w-full flex flex-col justify-between'>
                               <p className='font-bold'>Nombre:</p>
@@ -101,22 +109,31 @@ function CreateProject({onCreated}) {
 
                               <p className='font-bold'>Customer:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                              <div className="mt-1 relative rounded-md shadow-sm">
-                                <select className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'
-                                 value={selectedUser} onChange={handleChange}>
-                                  <option value="">Selecciona un usuario</option>
-                                  {allClients.map((option, i) => (
-                                      <option key={i} value={option.id}>{option.name}</option>
-                                  ))}
-                                </select>
+                                <div className="mt-1 relative rounded-md shadow-sm">
+                                  <select className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'
+                                  value={selectedUser} onChange={handleChange}>
+                                    <option value="">Selecciona un usuario</option>
+                                    {allClients.map((option, i) => (
+                                        <option key={i} value={option.id}>{option.name}</option>
+                                    ))}
+                                  </select>
+                                </div>
                               </div>
+                              <CheckboxGroup
+                                items={items}
+                                selectedItems={selectedItems}
+                                setSelectedItems={setSelectedItems}
+                                setSelectedIds={setSelectedIds}
+                                label="Mi Grupo de Checkbox"
+                                needed={true} // o false, dependiendo de tus necesidades
+                                // error="Mensaje de error" // Descomenta si necesitas mostrar un error
+                              />
                             </div>
-                          </div>
 
-                        </div>
+                          </div>
                         </div>
                         <div className='w-1/4'>
-                        <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Crear"/><br/><br/>
+                          <input onClick={buttonHandler} className=' text-white w-full py-2 px-4 rounded-full bg-zinc-400 mx-auto hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Crear"/><br/><br/>
                         </div>
                     </div>
                     </div>

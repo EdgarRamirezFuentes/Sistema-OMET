@@ -1,11 +1,10 @@
 import '../App.css'
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
-import { useNavigate } from 'react-router-dom';
-import {createValidator} from '../api/controller/ValidatorsController'
+import { createValidator } from '../api/controller/ValidatorsController'
 import PropTypes from 'prop-types';
 
-function CreateValidator({validators, model_field_id, data, isLoadingData, actions }) {
+function CreateValidator({validators, model_field_id, onCreated}) {
 
     const session = JSON.parse(localStorage.getItem('session'));
 
@@ -59,9 +58,7 @@ function CreateValidator({validators, model_field_id, data, isLoadingData, actio
           setAlertType('Success');
           setAlertMessage('Validador creado correctamente.')
           setError(true);
-          setTimeout(() => {
-            history('model/validators/'+model_field_id)
-          },1000);
+          setTimeout((e) => onCreated && onCreated(true),1000);
           return;
         }else{
           const keys = Object.keys(res);
@@ -124,6 +121,7 @@ function CreateValidator({validators, model_field_id, data, isLoadingData, actio
 CreateValidator.propTypes = {
   validators: PropTypes.arrayOf(PropTypes.object),
   model_field_id: PropTypes.any,
+  onCreated: PropTypes.func,
 }
 
 export default CreateValidator

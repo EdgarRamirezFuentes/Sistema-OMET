@@ -1,18 +1,10 @@
 import '../App.css'
-import Timer from '../Components/Timer/Timer'
-import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
-import { useNavigate } from 'react-router-dom';
 import { getProject, updateProject } from '../api/controller/ProjectsController'
-import { getCustomers } from '../api/controller/ClientsController';
-import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
-function UpdateProject({projectId}) {
-    const params = useParams();
-    const history = useNavigate();
+function UpdateProject({projectId, onUpdated}) {
     const session = JSON.parse(localStorage.getItem('session'))
-    const user = session.user;
 
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
@@ -20,11 +12,8 @@ function UpdateProject({projectId}) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [selectedUser, setSelectedUser] = useState('');
-    const [allClients, setAllClients] = useState([])
-    const [isLoadingData, setIsLoadingData] = useState(true);
 
     useEffect(() => {
-      getActiveCustomers();
       getProjectData();
     }, []);
 
@@ -54,32 +43,20 @@ function UpdateProject({projectId}) {
           setAlertType('Success');
           setAlertMessage('Proyecto actualizado correctamente.')
           setError(true);
-          setTimeout(() => {
-            history('/projects/get')
-          },1000);
+          setTimeout((e) => onUpdated && onUpdated(true),1000);
         }else{
           setAlertType('Error');
           setAlertMessage('Error al actualizar el proyecto.')
           setError(true);
         }
-
       });
     }
 
-    const getActiveCustomers = async () => {
-      await getCustomers(session.token).then(async(clients)=>{
-         let clientsArray = await clients.json()
-         setAllClients(clientsArray)
-       })
-    }
 
     const getProjectData = async () => {
         await getProject(session.token, projectId).then(async(response)=>{
               let projectArray = await response.json()
               let project  = projectArray.project;
-              let mainteiner = projectArray.maintainers;
-              setAllClients(mainteiner);
-              setIsLoadingData(false)
               setName(project.name);
               setDescription(project.description);
               setSelectedUser(project.customer.id);
@@ -131,7 +108,8 @@ function UpdateProject({projectId}) {
 }
 
 UpdateProject.propTypes = {
-  projectId : PropTypes.number
+  projectId : PropTypes.number,
+  onUpdated: PropTypes.func,
 }
 
 export default UpdateProject

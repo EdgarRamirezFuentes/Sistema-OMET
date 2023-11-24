@@ -14,6 +14,8 @@ import CreateValidator from './ValidatorCreate';
 import ModalDelete from '../Components/ModalDelete/ModalDelete';
 import UpdateValidator from './ValidatorUpdate';
 
+import { deleteValidator } from '../api/controller/ValidatorsController'
+
 function ValidatorsModel() {
     const { state } = useLocation();
     const params = useParams();
@@ -24,63 +26,57 @@ function ValidatorsModel() {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
     const [name, setName] = useState('');
-    const [caption, setCaption] = useState('');
     const [validators, setValidators] = useState([]);
-    const [selectedType, setSelectedType] = useState('');
-    const [validatorSelected, setValidatorSelected] = useState(null);
+    const [selectedType, setSelectedType] = useState(null);
     const [model, setModel] = useState(null);
-    const [validatorValue, setValidatorValue] = useState('');
-    const [validatorBoolean, setValidatorBoolean] = useState(false);
     const [validatorsUsed, setValidatorsUsed] = useState([]);
     const [isLoadingData, setIsLoadingData] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [itemToUpdate, setItemToUpdate] = useState(null);
+    const [availableValidators, setAvailableValidators] = useState([]);
+    const [flag, setFlag] = useState(false);
 
     const [openModal, setOpenModal] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [openModalUpdate, setOpenModalUpdate] = useState(false);
 
     useEffect(() => {
-        if (state && state.item) {
-            const { item } = state;
-            setName(item.name);
-            setCaption(item.caption);
-            dataTypes();
-        }
-        getValidators();
+
         getModelFieldData();
-    }, [model]);
+        dataTypes();
+        setValidatorData();
+        getValidators();
+        deleteUsedValidators();
+        /*dataTypes();
+        */
+    }, [name, selectedType, model, allDataTypes, flag]);
 
     const dataTypes = async () => {
-        const clients = await getDataTypes(session.token);
-        const clientsArray = await clients.json();
-        setAllDataTypes(clientsArray);
-        setValidatorData();
+        if (allDataTypes.length == 0) {
+            const clients = await getDataTypes(session.token);
+            const clientsArray = await clients.json();
+            setAllDataTypes(clientsArray);
+        }
+        
     };
 
     const getModelFieldData = async () => {
-        if (model == null) {
-            const models = await getModelField(params.id, session.token);
-            const modelList = await models.json();
-        
+        if (model == null || !flag) {
+            const model = await getModelField(params.id, session.token);
+            const modelList = await model.json();
+            console.log("===validators used===", modelList)
             setValidatorsUsed(modelList.validators);
             setModel(modelList);
             setIsLoadingData(false);
+            setFlag(true)
         }
     };
 
     const setValidatorData = () => {
-        const dataType = allDataTypes.find(element => element.id === state.item.data_type);
-        if (dataType) setSelectedType(dataType.name);
-    };
-
-    const handleValidatorChange = (event) => {
-        const foundValidator = validators.find(element => element.id === event.target.value);
-        if (foundValidator) {
-            setValidatorSelected(foundValidator);
-            const { name } = foundValidator;
-            setValidatorBoolean(["null", "unique", "db_index"].includes(name));
-            setValidatorValue("");
+        const dataType = allDataTypes.find(element => element.id == model?.data_type);
+        if (dataType) {
+            setSelectedType(dataType.name);
+            setName(model.name);
         }
     };
 
@@ -91,10 +87,9 @@ function ValidatorsModel() {
     };
 
     const getValidators = async () => {
-        if(validators.length ==0){
-            const response = await getDataType(params.id, session.token);
+        if(validators.length ==0|| !flag){
+            const response = await getDataType(model.data_type, session.token);
             const res = await response.json();
-            console.log("res", res);
             setValidators(res.validators);
         }
         
@@ -104,7 +99,8 @@ function ValidatorsModel() {
         const updatedValidators = validators.filter(validator => 
             !model.validators.some(element2 => element2.validator.id === validator.id)
         );
-        setValidators(updatedValidators);
+        setAvailableValidators(updatedValidators);
+        //setValidators(updatedValidators);
     };
 
     const handleUpdate = item => {
@@ -119,8 +115,23 @@ function ValidatorsModel() {
     };
 
     const deleteItem = async () => {
-        console.log("====delete item ====")
-        console.log("itemToDelete", itemToDelete)
+        await deleteValidator(itemToDelete.id, session.token).then(async (response) => {
+            if (response.status === 204){
+                setAlertType('Success');
+                setAlertMessage('Validador eliminado correctamente.');
+                setError(true);
+                //setTimeout((e) => onCloseHandler(),1000);
+                deleteUsedValidators();
+                setFlag(false)
+                return;
+            }else{
+                const res = await response.json();
+                const keys = Object.keys(res);
+                setAlertMessage(res[keys[0]][0]);
+                setAlertType('Error');
+                setError(true);
+            }
+        });
         setOpenModalDelete(false);
         setItemToDelete(null)
     }
@@ -201,7 +212,7 @@ function ValidatorsModel() {
                                         </div>
                                         <div className='w-full flex flex-row justify-between'>
                                             <p className='font-bold'>Validadores:</p>
-                                            <input onClick={buttonHandler} className=' text-white w-1/6 rounded-full bg-zinc-400  hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Agregar validador"/>
+                                            {availableValidators.length>0 ? <input onClick={buttonHandler} className=' text-white w-1/6 rounded-full bg-zinc-400  hover:bg-cyan-400 hover:cursor-pointer' type="submit" value="Agregar validador"/>:null}
                                         </div>
 
                                         <div className='mt-5'>
@@ -218,13 +229,13 @@ function ValidatorsModel() {
             <Modal show={ openModal } setShow={ setOpenModal } className='min-w-full sm:min-w-[500px]'>
 
                 <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModal(false) }/></div>
-                <CreateValidator validators={validators} model_field_id={params.id}/>
+                <CreateValidator validators={availableValidators} model_field_id={params.id} onCreated={()=>{setOpenModal(false); setFlag(false);getModelFieldData()}}/>
             </Modal>
 
             <Modal show={ openModalUpdate } setShow={ setOpenModalUpdate } className='min-w-full sm:min-w-[500px]'>
 
                 <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalUpdate(false) }/></div>
-                <UpdateValidator validators={validators} model_field_id={params.id}/>
+                <UpdateValidator validators={validators} model_field_id={params.id} validator={itemToUpdate} onUpdated={()=>{setOpenModalUpdate(false);setFlag(false);getModelFieldData()}}/>
             </Modal>
             <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>
 

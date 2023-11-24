@@ -153,7 +153,7 @@ class ProjectAppViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(project=int(project_id))
 
             if name:
-                queryset = queryset.filter(name=name)
+                queryset = queryset.filter(name__icontains=name)
 
             serializer = MinimalProjectAppSerializer(queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
@@ -241,7 +241,7 @@ class AppModelViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(project_app=int(project_app_id))
 
             if model_name:
-                queryset = queryset.filter(name=model_name)
+                queryset = queryset.filter(name__icontains=model_name)
 
             serializer = MinimalAppModelSerializer(queryset, many=True)
 
@@ -313,9 +313,13 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
         """List the all the model fields"""
         try:
             app_model_id = request.query_params.get('app_model_id', None)
+            name = request.query_params.get('name', None)
 
             if app_model_id:
                 self.queryset = self.queryset.filter(app_model=int(app_model_id))
+
+            if name:
+                self.queryset = self.queryset.filter(name__icontains=name)
 
             serializer = ModelFieldSerializer(self.queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)

@@ -64,7 +64,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(is_staff=is_staff)
 
             if email is not None:
-                queryset = queryset.filter(email=email)
+                queryset = queryset.filter(email__icontains=email)
 
             if is_superuser is not None:
                 is_superuser = False if is_superuser.lower().strip() != 'true' else True

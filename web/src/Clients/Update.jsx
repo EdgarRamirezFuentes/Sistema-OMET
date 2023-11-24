@@ -1,24 +1,17 @@
-import escom from '../assets/escom.png'
 import axolote from '../assets/axolote.png'
-import ipn from '../assets/ipn.png'
 
 import '../App.css'
-import Timer from '../Components/Timer/Timer'
-import SideBar from '../Components/Sidebar/Sidebar'
 import React, { useRef, useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { getClient, updateClient } from '../api/controller/ClientsController'
-import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function Update({userId, onUpdate}) {
-    const params = useParams();
+    
     const session = JSON.parse(localStorage.getItem('session'))
-    const fileInputRef = useRef(null);
-    const [showText, setShowText] = useState(false);
     const [profileImage, setProfileImageBase64] = useState(null);
     const [user, setUser] = useState(null)
 
@@ -73,7 +66,7 @@ function Update({userId, onUpdate}) {
         setAlertMessage('')
     }
 
-    const getClientData = async (userId)=>{
+    const getClientData = async ()=>{
         await getClient(session.token, userId).then(async(client)=>{
             client = await client.json();
             setUser(client);
@@ -141,7 +134,7 @@ function Update({userId, onUpdate}) {
             setError(true);
             setAlertMessage('Datos actualizados con éxito.');
             setAlertType('Success');
-            onUpdate
+            setTimeout(() => {onUpdate && onUpdate(true)}, 1000);
             /*localStorage.setItem('session', JSON.stringify(res));
 
             const session = JSON.parse(localStorage.getItem('session'))

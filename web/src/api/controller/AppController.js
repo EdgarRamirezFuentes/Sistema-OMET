@@ -23,3 +23,9 @@ export const deleteApp = async (app_id, token) =>{
         return response;
     })
 }
+
+export const filterApps = async (token, filterText, project_id) =>{
+    return await appActions.filterApps(token, filterText, project_id).then((response) => {
+        return response;
+    })
+}

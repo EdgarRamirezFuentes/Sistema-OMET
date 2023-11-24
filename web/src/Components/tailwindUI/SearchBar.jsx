@@ -14,6 +14,7 @@ function SearchBar({ value, setValue, placeholder_mobile, placeholder_desktop, .
         }
         if(Object.keys(err).length === 0){
             setValue(e.target.elements.search.value);
+            setError(null);
         } else {
             setError(err);
         }
@@ -38,7 +39,7 @@ function SearchBar({ value, setValue, placeholder_mobile, placeholder_desktop, .
                             type="search"
                             {...rest}
                         />
-                        <button type="submit" className="text-white absolute right-0 bottom-0 bg-v2-blue-text-login focus:ring-4 focus:outline-none focus:ring-transparent font-medium rounded-r-md text-sm px-4 py-[13px]">Buscar</button>
+                        <button type="submit" className="text-white absolute right-0 bottom-0 bg-v2-blue-text-login bg-zinc-400 hover:bg-cyan-400 focus:outline-none focus:ring-transparent font-medium rounded-r-md text-sm px-4 py-[13px]">Buscar</button>
                     </form>
                     {error !== null && <span className='w-full text-red-500 text-sm'>{ error.name }</span>}
                 </div>

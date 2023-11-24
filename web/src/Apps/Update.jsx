@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { updateApp, getApps } from '../api/controller/AppController'
 import PropTypes from 'prop-types';
-function UpdateApp({appId}) {
+function UpdateApp({appId, onUpdated}) {
     const history = useNavigate();
     const params = useParams();
     const location = useLocation();
@@ -45,14 +45,7 @@ function UpdateApp({appId}) {
             setAlertType('Success');
             setAlertMessage('App actualizada correctamente.')
             setError(true);
-            setTimeout(() => {
-                history(`/apps/`,{
-                    state:{
-                      project: location.state.project,
-                    }
-                  }
-                )
-            }, 1500);
+            setTimeout((e) => {onUpdated && onUpdated(true)},1000);
             }else{
             setAlertType('Error');
             setAlertMessage('Error al actualizar la app.')
@@ -118,7 +111,8 @@ function UpdateApp({appId}) {
 }
 
 UpdateApp.propTypes = {
-    appId : PropTypes.number
+    appId : PropTypes.number,
+    onUpdated: PropTypes.func,
 }
 
 export default UpdateApp

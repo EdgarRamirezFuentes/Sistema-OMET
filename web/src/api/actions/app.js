@@ -11,7 +11,7 @@ export const createApp = async (formData, token) =>{
 }
 
 export const getApps = async (app_id, token) =>{
-    console.log("token", token);
+    
     const objApi = apiClient('project/apps/'+app_id+'/');
     try {
         var response = await objApi.get(undefined, token);
@@ -35,6 +35,16 @@ export const deleteApp = async (app_id, token) =>{
     const objApi = apiClient('project/apps');
     try {
         var response = await objApi.del(app_id, token);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e);
+    }
+}
+
+export const filterApps = async (token, filterText, project_id) =>{
+    const objApi = apiClient('project/apps?name='+filterText+'&project_id='+project_id);
+    try {
+        var response = await objApi.get(undefined, token);
         return response;
     } catch (e) {
         console.log("Error ===>", e);
