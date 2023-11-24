@@ -105,7 +105,7 @@ class ViewBuilder:
                 relation = ForeignKeyRelation.objects.get(model_field_origin=model_field)
                 related_model_field = relation.model_field_related
                 related_model_field_name = related_model_field.name
-                field_setter = f'\t\t\t\t\tset{model_field.name.title()}{related_model_field_name.title()}(res.{model_field.name}.{related_model_field_name});\n'
+                field_setter = f'\t\t\t\t\tset{model_field.name.title()}{related_model_field_name.title()}(res.{model_field.name}.id);\n'
             else:
                 field_setter = f'\t\t\t\t\tset{model_field.name.title()}(res.{model_field.name});\n'
             field_setters += field_setter
