@@ -87,10 +87,20 @@ export const updateClient = async (formData, token, userId) => {
 }
 
 export const changePassword = async (formData, token) => {
-    console.log("token", token);
+    
     const objApi = apiClient('user/change-password/');
     try {
         var response = await objApi.patch(undefined, formData, token)
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e)
+    }
+}
+
+export const filterClients = async (token, filterData) => {
+    const objApi = apiClient('user?email='+filterData);
+    try {
+        var response = await objApi.get(undefined, token)
         return response;
     } catch (e) {
         console.log("Error ===>", e)

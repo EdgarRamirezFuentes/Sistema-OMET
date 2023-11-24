@@ -12,30 +12,22 @@ export const createValidator = async (formData, token) =>{
 
 
 }
-export const createModel = async (formData, token) =>{
-    const objApi = apiClient('project/fields/');
+
+export const updateValidator = async (validator_id, formData, token) =>{
+    const objApi = apiClient('project/validator-value');
     try {
-        var response = await objApi.post(formData, token);
+        var response = await objApi.patch(validator_id, formData, token);
         return response;
     } catch (e) {
         console.log("Error ===>", e);
     }
+
 }
 
-export const updateModel = async (model_id, formData, token) =>{
-    const objApi = apiClient('project/fields');
+export const deleteValidator = async (validator_id, token) =>{
+    const objApi = apiClient('project/validator-value');
     try {
-        var response = await objApi.patch(model_id, formData, token);
-        return response;
-    } catch (e) {
-        console.log("Error ===>", e);
-    }
-}
-
-export const deleteModelField = async (field_id, token) =>{
-    const objApi = apiClient('project/fields');
-    try {
-        var response = await objApi.del(field_id, token);
+        var response = await objApi.del(validator_id, token);
         return response;
     } catch (e) {
         console.log("Error ===>", e);

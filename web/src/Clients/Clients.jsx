@@ -2,20 +2,19 @@ import '../App.css'
 import Timer from '../Components/Timer/Timer'
 import SideBar from '../Components/Sidebar/Sidebar'
 import Table from '../Components/tailwindUI/Table'
-import { getAllClients, resetPassword, deleteUser } from '../api/controller/ClientsController'
+import { getAllClients, resetPassword, deleteUser, filterClients } from '../api/controller/ClientsController'
 import { useEffect, useState } from 'react'
 import { TrashIcon, ClipboardIcon, EyeIcon, PaperAirplaneIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useNavigate } from 'react-router-dom';
 import Alert from '../Components/Alert/Alert'
 import Modal from '../Components/tailwindUI/Modal';
 import ModalDelete from '../Components/ModalDelete/ModalDelete';
 import ModalReset from '../Components/ModalReset/ModalReset';
+import SearchBar from '../Components/tailwindUI/SearchBar'
 import See from "./See";
 import Update from "./Update";
 import Create from "./Create";
 
 function Clients() {
-  const history = useNavigate();
   const session = JSON.parse(localStorage.getItem('session'));
   const [allClients, setAllClients] = useState([])
   const [isLoadingData, setIsLoadingData] = useState(true)
@@ -27,6 +26,9 @@ function Clients() {
   const [seeClient, setSeeClient] = useState(null);
   const [clientToUpdate, setClientToUpdate] = useState(null);
   const [clientToResetPassword, setClientToResetPassword] = useState(null);
+  const [flag, setFlag] = useState(false);
+  const [filterText, setFilterText] = useState('');
+  const [filteredClients, setFilteredClients] = useState([])
 
   const [openModal, setOpenModal] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
@@ -37,11 +39,11 @@ function Clients() {
   const [itemToDelete, setItemToDelete] = useState(null);
 
   useEffect(() => {
-    if (deletedUser == null || deletedUser == true){
+    if (deletedUser == null || deletedUser == true || !flag){
       clients()
       setDeletedUser(false);
     }
-  }, [deletedUser]);
+  }, [deletedUser, flag, allClients, filteredClients]);
 
   const clients = async ()=>{
     await getAllClients(session.token).then(async(clients)=>{
@@ -96,12 +98,8 @@ function Clients() {
     setOpenModalCreate(true);
   }
   
-  const handleDelete = async (item) => {
-    console.log("Item");
-    console.log(itemToDelete);
+  const handleDelete = async () => {
     await deleteUser(session.token, itemToDelete.id).then(async (response)=>{
-      console.log("Response");
-      console.log(response);
       if(response.status == 204){
         setError(true);
         setAlertMessage("Usuario eliminado correctamente");
@@ -120,7 +118,7 @@ function Clients() {
     //setDeletedUser(true);
   }
   
-  const handleResetPassword = async (item) => {
+  const handleResetPassword = async () => {
     await resetPassword(session.token, clientToResetPassword.id).then(async(response)=>{
       let res = await response.json()
       if(res.non_field_errors){
@@ -171,6 +169,15 @@ function Clients() {
     }
   ];
 
+  const filterClient = async (value)=>{
+    setFilterText(value)
+    await filterClients(session.token, value).then(async (response)=>{
+      let res = await response.json()
+      setFilteredClients(res)
+      console.log(res)
+    })
+  }
+
   const onCloseHandler = () => {
     setError(null)
     setAlertType('Error');
@@ -197,8 +204,11 @@ function Clients() {
             <div className="mt-5 w-full overflow-hidden">
               <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
             </div>
+            <div className='ml-3 mr-5'>
+              <SearchBar value={filterText} setValue={filterClient} placeholder_desktop={"Buscar"}/>
+            </div>
             <div className='mt-5'>
-              <Table title='Clientes' data={ allClients } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
+              <Table title='Clientes' data={filteredClients.length >0 ? filteredClients:allClients } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
             </div>
           </div>
         </div>
@@ -207,7 +217,7 @@ function Clients() {
 
       <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>
           <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalCreate(false) }/></div>
-          <Create onDelete={handleDelete} onCreated={()=>{setOpenModalCreate(false);clients()}}/>
+          <Create onDelete={handleDelete} onCreated={()=>{setOpenModalCreate(false);setFlag(false)}}/>
       </Modal>
 
       <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>
@@ -222,7 +232,7 @@ function Clients() {
 
       <Modal show={ openModalUpdate } setShow={ setOpenModalUpdate } className='min-w-full sm:min-w-[1200px]'>
           <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalUpdate(false) }/></div>
-          <Update userId={clientToUpdate?.id} onUpdate={()=>{setTimeout(setOpenModalUpdate(false),30)}}/>
+          <Update userId={clientToUpdate?.id} onUpdate={()=>{setOpenModalUpdate(false);setFlag(false)}}/>
       </Modal>
 
       <Modal show={ openModalResetPassword } setShow={ setOpenModalResetPassword } className='min-w-full sm:min-w-[500px]'>

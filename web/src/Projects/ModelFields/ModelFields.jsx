@@ -7,10 +7,10 @@ import { TrashIcon, ClipboardIcon, EyeIcon, XMarkIcon, Bars4Icon } from '@heroic
 import { useNavigate } from 'react-router-dom';
 import Alert from '../../Components/Alert/Alert'
 import { useParams } from 'react-router-dom'
-import { getModelFields, deleteModelField } from '../../api/controller/ModelFieldsController'
+import { getModelFields, deleteModelField, filterModelFields } from '../../api/controller/ModelFieldsController'
 import Modal from '../../Components/tailwindUI/Modal';
 import ModalDelete from '../../Components/ModalDelete/ModalDelete';
-
+import SearchBar from '../../Components/tailwindUI/SearchBar'
 import See from "./See";
 import Update from "./Update";
 import Create from "./Create";
@@ -27,6 +27,10 @@ function Models() {
     const [alertType, setAlertType] = useState('Error');
     const [deletedProject, setDeletedProject] = useState(null);
     const [selectedModel, setSelectedModel] = useState(null);
+    const [flag, setFlag] = useState(false);
+
+    const [filteredData, setFilteredData] = useState([]);
+    const [filterText, setFilterText] = useState('');
 
 
     //Modales
@@ -36,21 +40,27 @@ function Models() {
     const [openModalCreate, setOpenModalCreate] = useState(false);
 
   useEffect(() => {
-    if (deletedProject == null || deletedProject){
+    if (deletedProject == null || deletedProject || !flag){
       getModels()
       setDeletedProject(false);
     }
-  }, [selectedModel, deletedProject]);
+  }, [selectedModel, deletedProject, flag, allModels]);
 
   const getModels = async ()=>{
     await getModelFields(params.id, session.token).then(async (models)=>{
       let modelList = await models.json()
-      if (modelList.length != []){
+      if (modelList.length != 0 || !flag){
         setAllModels(modelList)
         setIsLoadingData(false)
       }else{
         setAllModels([])
       }
+      if(modelList.length == 0){
+        setAlertType('Error');
+        setAlertMessage('Campos no encontrados.')
+        setError(true);
+      }
+      setFlag(true)
     })
   }
 
@@ -113,11 +123,13 @@ function Models() {
     })
   }
 
-  const handleProjectModel = item => {
-    history(`/projects/create/model/${item.id}`,{
-            client: item,
-        }
-    )
+  const filterData = async (value)=>{
+    setFilterText(value)
+    console.log("params.id",params.id);
+    await filterModelFields(session.token, value, params.id).then(async (response)=>{
+      let res = await response.json()
+      setFilteredData(res)
+    })
   }
 
   const deleteModal = item => {
@@ -142,7 +154,7 @@ function Models() {
     },
     {
         id: 3,
-        name: 'Validators',
+        name: 'Validadores',
         type: 'primary',
         icon: <Bars4Icon className='w-5 h-5 text-gray-600 lg:text-white'/>,
         action: handleValidators,
@@ -177,13 +189,16 @@ function Models() {
           <div>
             <div className='mt-3 ml-5 flex flex-row justify-between items-center '>
                 <p className='text-3xl font-bold'>Campos</p>
-                <button onClick={handleCreate} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear campo</button>
+                {allModels.length != 0 ?<button onClick={handleCreate} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear campo</button>:null}
             </div>
             <div className="mt-5 w-full overflow-hidden">
               <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
             </div>
+            <div className='ml-3 mr-5'>
+              <SearchBar value={filterText} setValue={filterData} placeholder_desktop={"Buscar"}/>
+            </div>
             <div className='mt-5'>
-              <Table title='Clientes' data={ allModels } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
+              <Table title='Campos' data={filteredData.length >0 ? filteredData:allModels } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
             </div>
           </div>
         </div>
@@ -195,7 +210,7 @@ function Models() {
 
       <Modal show={ openModalUpdate } setShow={ setOpenModalUpdate } className='min-w-full sm:min-w-[1200px]'>
           <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalUpdate(false) }/></div>
-          <Update modelId={params.id} field={selectedModel}/>
+          <Update modelId={params.id} field={selectedModel} onUpdated={()=>{setOpenModalUpdate(false);setFlag(false);}}/>
           
       </Modal>
       <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>

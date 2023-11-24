@@ -11,7 +11,7 @@ export const create{{APP_MODEL}} = async (formData, token) =>{
 }
 
 export const get{{APP_MODEL}} = async (token) =>{
-    console.log("token", token);
+    
     const objApi = apiClient('{{MODEL_URL}}');
     try {
         var response = await objApi.get(undefined, token);
@@ -22,7 +22,7 @@ export const get{{APP_MODEL}} = async (token) =>{
 }
 
 export const retrieve{{APP_MODEL}} = async (id, token) =>{
-    console.log("token", token);
+    
     const objApi = apiClient('{{MODEL_URL}}' + id + '/');
     try {
         var response = await objApi.get(undefined, token);

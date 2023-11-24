@@ -1,15 +1,13 @@
 import '../App.css'
-import Timer from '../Components/Timer/Timer'
-import SideBar from '../Components/Sidebar/Sidebar'
+import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { useNavigate } from 'react-router-dom';
 import { createCustomer } from '../api/controller/CustomersController';
 
-function CreateCustomer() {
+function CreateCustomer({onCreated}) {
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'))
-    const user = session.user;
 
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
@@ -19,8 +17,6 @@ function CreateCustomer() {
     const [rfc, setRfc] = useState('');
     const [email, setEmail] = useState('');
 
-    const [selectedUser, setSelectedUser] = useState('');
-    const [allClients, setAllClients] = useState([])
     const [rfcError, setRfcError] = useState(false);
 
     useEffect(() => {
@@ -31,12 +27,6 @@ function CreateCustomer() {
         setRfcError(false);
       }
     },[rfc])
-
-    const handleChange = (event) => {
-      setSelectedUser(event.target.value);
-      console.log("===selectedUser===");
-      console.log(event.target.value);
-    };
 
     const onCloseHandler = () => {
         setError(null)
@@ -68,9 +58,7 @@ function CreateCustomer() {
         if (response.status === 201){
           setAlertType('Success');
           setAlertMessage('Customer creado correctamente.')
-          setTimeout(() => {
-            history('/customers/get');
-          }, 2000);
+          setTimeout((e) => {onCreated && onCreated(true)},1000);
           setError(true);
           return;
         }else{
@@ -138,6 +126,9 @@ function CreateCustomer() {
             </div>
         </div>
     )
+}
+CreateCustomer.propTypes = {
+  onCreated : PropTypes.func
 }
 
 export default CreateCustomer

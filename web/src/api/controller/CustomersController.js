@@ -29,3 +29,9 @@ export const deleteCustomer = async (token, customerId) => {
         return response;
     })
 }
+
+export const filterCustomers = async (token, filter) => {
+    return await customersActions.filterCustomers(token, filter).then((response) => {
+        return response;
+    })
+}

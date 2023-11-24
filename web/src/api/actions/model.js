@@ -2,7 +2,7 @@ import apiClient from '../client';
 
 
 export const getModelFields = async (project_id, token) =>{
-    console.log("token", token);
+    
     const objApi = apiClient('project/fields?app_model_id='+project_id);
     try {
         var response = await objApi.get(undefined, token);
@@ -13,7 +13,7 @@ export const getModelFields = async (project_id, token) =>{
 }
 
 export const getModelField = async (project_id, token) =>{
-    console.log("token", token);
+    
     const objApi = apiClient('project/fields/'+project_id);
     try {
         var response = await objApi.get(undefined, token);
@@ -90,6 +90,26 @@ export const delete_ = async (model_id, token) =>{
     const objApi = apiClient('project/models');
     try {
         var response = await objApi.del(model_id, token);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e);
+    }
+}
+
+export const filterModelFields = async (token, filterText, app_model_id) =>{
+    const objApi = apiClient('project/fields?name='+filterText+ '&app_model_id='+app_model_id);
+    try {
+        var response = await objApi.get(undefined, token);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e);
+    }
+}
+
+export const filterModels = async (token, filterText, project_app_id) =>{
+    const objApi = apiClient('project/models?model_name='+filterText+'&project_app_id='+project_app_id);
+    try {
+        var response = await objApi.get(undefined, token);
         return response;
     } catch (e) {
         console.log("Error ===>", e);

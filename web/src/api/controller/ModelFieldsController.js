@@ -55,3 +55,16 @@ export const delete_ = async (model_id, token) =>{
         return response;
     })
 }
+
+export const filterModelFields = async (token, filterText, app_model_id) =>{
+    return await modelActions.filterModelFields(token, filterText, app_model_id).then((response) => {
+        return response;
+    })
+
+}
+
+export const filterModels = async (token, filterText, project_app_id) =>{
+    return await modelActions.filterModels(token, filterText, project_app_id).then((response) => {
+        return response;
+    })
+}

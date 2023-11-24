@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { createApp } from '../api/controller/AppController'
 import PropTypes from 'prop-types';
-function CreateApp({projectId}) {
+function CreateApp({projectId, onCreated}) {
     const history = useNavigate();
     const location = useLocation();
     const session = JSON.parse(localStorage.getItem('session'))
@@ -37,23 +37,19 @@ function CreateApp({projectId}) {
         }
 
         await createApp(data, session.token).then(async (response)=>{
-            let responseJson = await response.json()
+            let data = await response.json();
+            console.log("data",data)
             if (response.status === 201){
             setAlertType('Success');
             setAlertMessage('App creada correctamente.')
             setError(true);
-            setTimeout(() => {
-                history(`/apps/`,{
-                    state:{
-                      project: location.state.project,
-                    }
-                  }
-                )
-            }, 1500);
+            setTimeout((e) => {onCreated && onCreated(true)},1000);
             }else{
-            setAlertType('Error');
-            setAlertMessage('Error al crear la app.')
-            setError(true);
+                const keys = Object.keys(data);
+                setAlertMessage(data[keys[0]][0])
+                setAlertType('Error');
+                //setAlertMessage('Error al crear la app.')
+                setError(true);
             }
         });
     }
@@ -102,7 +98,8 @@ function CreateApp({projectId}) {
 }
 
 CreateApp.propTypes = {
-    projectId : PropTypes.number
+    projectId : PropTypes.number,
+    onCreated : PropTypes.func
 }
 
 export default CreateApp

@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import Alert from '../Components/Alert/Alert'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { create } from '../api/controller/ModelFieldsController'
+import { createProjectModel } from '../api/controller/ProjectModelController'
 import PropTypes from 'prop-types';
 
-function CreateModel({projectAppId}) {
+function CreateModel({projectAppId, onCreated}) {
+    console.log("projectAppId",projectAppId)
     const history = useNavigate();
     const params = useParams();
     const location = useLocation();
@@ -35,14 +36,12 @@ function CreateModel({projectAppId}) {
             project_app: projectAppId
         }
 
-        await create(data, session.token).then(async (response)=>{
+        await createProjectModel(data, session.token).then(async (response)=>{
             if (response.status === 201){
             setAlertType('Success');
             setAlertMessage('Campo creado correctamente.')
             setError(true);
-            setTimeout(() => {
-                history(`/projects/field/${location.state.model}`)
-            }, 1500);
+            setTimeout((e) => onCreated && onCreated(true),1000);
             }else{
             setAlertType('Error');
             setAlertMessage('Error al crear el campo.')
@@ -89,7 +88,8 @@ function CreateModel({projectAppId}) {
     )
 }
 CreateModel.propTypes = {
-    projectAppId : PropTypes.any
+    projectAppId : PropTypes.any,
+    onCreated: PropTypes.func,
 }
 
 export default CreateModel

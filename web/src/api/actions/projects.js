@@ -21,7 +21,7 @@ export const getAllProjects = async (token) => {
 }
 
 export const getProject = async (token, projectId) => {
-    console.log("token", token);
+    
     console.log("projectId", projectId);
     const objApi = apiClient('project/'+projectId+'/');
     try {

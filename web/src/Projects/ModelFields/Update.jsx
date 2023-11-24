@@ -1,21 +1,22 @@
 import '../../App.css'
 import React, { useState, useEffect } from 'react';
 import Alert from '../../Components/Alert/Alert'
-import { useNavigate } from 'react-router-dom';
-import { updateProjectModel, getProjectModel } from '../../api/controller/ProjetModelController'
-import { useLocation } from 'react-router-dom';
+import Input from '../../Components/tailwindUI/Input'
+import { updateProjectField } from '../../api/controller/FieldsController'
 import PropTypes from 'prop-types';
 
 function UpdateProjectModel({field, model, onUpdated}) {
-    const location = useLocation();
-    const history = useNavigate();
+    console.log("field ====>",field)
+    console.log("model ====>",model)
     const session = JSON.parse(localStorage.getItem('session'));
+    console.log("session ====>",session)
 
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [order, setOrder] = useState(0);
 
     const onCloseHandler = () => {
         setError(null)
@@ -26,6 +27,7 @@ function UpdateProjectModel({field, model, onUpdated}) {
     useEffect(() => {
       setName(field?.name)
       setDescription(field?.caption)
+      setOrder(field?.order)
     }, []);
     const buttonHandler = async () => {
       if(name === ''){
@@ -37,11 +39,11 @@ function UpdateProjectModel({field, model, onUpdated}) {
 
       let data = {
         name: name,
-        caption: description
+        caption: description,
+        order: order
       }
 
-      await updateProjectModel(model.id, data, session.token).then(async (response) => {
-        let res = await response.json();
+      await updateProjectField(field.id, data, session.token).then(async (response) => {
         if (response.status === 200){
           setAlertType('Success');
           setAlertMessage('Campo actualizado correctamente.')
@@ -79,6 +81,9 @@ function UpdateProjectModel({field, model, onUpdated}) {
                                 <div className='mb-10 w-full flex flex-row justify-center'>
                                   <textarea value={description} onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="project_name" name="project_name"/><br/><br/>
                                 </div>
+                              </div>
+                              <div className='w-full flex flex-col justify-between'>
+                                <Input label={"Orden"} value={order} onChange={(event)=>{setOrder(event.target.value)}} type={"number"}/>
                               </div>
                             </div>
                           </div>

@@ -7,7 +7,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, label, needed, error }) {
+function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, label, needed, error, setSelectedIds }) {
 
     const [selected, setSelected] = useState(selectedItems);
     const gridCols = horizontal ? `flex-row` : 'flex-col';
@@ -25,6 +25,8 @@ function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, lab
         }
         if (setSelectedItems) setSelectedItems(items);
         else setSelected(items);
+        const newSelectedIds = items.filter(i => items.includes(i)).map(i => i.id);
+        if (setSelectedIds) setSelectedIds(newSelectedIds);
     }
 
     useEffect(() => {

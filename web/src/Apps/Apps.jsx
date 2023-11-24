@@ -7,8 +7,8 @@ import { getProject } from '../api/controller/ProjectsController'
 import { useLocation, useNavigate } from 'react-router-dom';
 import Table from '../Components/tailwindUI/Table'
 import { TrashIcon, ClipboardIcon, EyeIcon, CircleStackIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { deleteApp } from '../api/controller/AppController'
-
+import { deleteApp, filterApps } from '../api/controller/AppController'
+import SearchBar from '../Components/tailwindUI/SearchBar'
 import Modal from '../Components/tailwindUI/Modal';
 import ModalDelete from '../Components/ModalDelete/ModalDelete';
 
@@ -19,16 +19,15 @@ function SeeApps() {
     const location = useLocation();
     const history = useNavigate();
     const session = JSON.parse(localStorage.getItem('session'))
-    const user = session.user;
 
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
-    const [selectedUser, setSelectedUser] = useState('');
     const [flag, setFlag] = useState(false);
     const [isLoadingData, setIsLoadingData] = useState(true)
     const [allApps, setAllApps] = useState([])
-
+    const [filteredData, setFilteredData] = useState([]);
+    const [filterText, setFilterText] = useState('');
     const [selectedApp, setSelectedApp] = useState(null);
 
     //Modales
@@ -36,10 +35,6 @@ function SeeApps() {
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [openModalUpdate, setOpenModalUpdate] = useState(false);
     const [openModalCreate, setOpenModalCreate] = useState(false);
-
-    const handleChange = (event) => {
-      setSelectedUser(event.target.value);
-    };
 
     const tableColumns = [
       { heading: 'Id', value: 'id',align: 'center' },
@@ -49,25 +44,10 @@ function SeeApps() {
     const handleView = item => {
         setOpenModal(true)
         setSelectedApp(item)
-      /*history(`/clients/view/${item.id}`,{
-              client: item,
-          }
-      )
-      history(`/app/view/${item.id}`,{
-            state:{
-                project: location.state.project,
-            }
-        })*/
     }
     const handleUpdate = item => {
         setOpenModalUpdate(true)
         setSelectedApp(item)
-      /*history(`/app/update/${item.id}`,{ 
-            state:{
-                project: location.state.project,
-            }
-          }
-      )*/
     }
 
     const handleProjectModel = item => {
@@ -117,8 +97,9 @@ function SeeApps() {
       ];
 
     useEffect(() => {
+        console.log("refresh")
       getProjectData();
-    }, [allApps]);
+    }, [allApps, flag]);
 
     const onCloseHandler = () => {
         setError(null)
@@ -127,19 +108,27 @@ function SeeApps() {
     }
 
     const getProjectData = async () => {
-        if (allApps.length == 0 && !flag){
+        if (allApps.length == 0 || !flag){
             await getProject(session.token, location.state.project.id).then(async(response)=>{
-                        let projectArray = await response.json()
-                        if (projectArray.project_apps.length == 0){
-                            setIsLoadingData(true)
-                            setFlag(true);
-                            return;
-                        }
-                        setAllApps(projectArray.project_apps)
-                        setIsLoadingData(false)
-                        setFlag(true);
-                    }
-            )
+                console.log("response",response)
+                if (response.status === 404){
+                    setIsLoadingData(true)
+                    setFlag(true);
+                    setError(true);
+                    setAlertType('Error');
+                    setAlertMessage('No se encontraron las apps del proyecto.')
+                    return;
+                }
+                let projectArray = await response.json()
+                if (projectArray.project_apps.length == 0){
+                    setIsLoadingData(true)
+                    setFlag(true);
+                    return;
+                }
+                setAllApps(projectArray.project_apps)
+                setIsLoadingData(false)
+                setFlag(true);
+            })
         }
     }
     const handlerCreateApp = () => {
@@ -150,6 +139,13 @@ function SeeApps() {
             }
         })*/
     }
+    const filterData = async (value)=>{
+        setFilterText(value)
+        await filterApps(session.token, value, location.state.project.id).then(async (response)=>{
+          let res = await response.json()
+          setFilteredData(res)
+        })
+      }
 
     const delete_ = async () => {
         await deleteApp(selectedApp.id, session.token).then(async(response)=>{
@@ -162,9 +158,9 @@ function SeeApps() {
                 getProjectData();
                 setAllApps([])
                 setTimeout(() => {
-                    setError(false);
                     getProjectData();
                 }, 1500);
+                setOpenModalDelete(false);
             }else{
                 setAlertType('Error');
                 setAlertMessage('Error al eliminar la app.')
@@ -192,10 +188,13 @@ function SeeApps() {
                         <button onClick={handlerCreateApp} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400">Crear app</button>
                     </div>
                     <div className="mt-5 w-full overflow-hidden">
-                    <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
+                        <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
+                    </div>
+                    <div className='ml-3 mr-5'>
+                        <SearchBar value={filterText} setValue={filterData} placeholder_desktop={"Buscar"}/>
                     </div>
                     <div className='mt-5'>
-                    <Table title='Apps' data={ allApps } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
+                        <Table title='Apps' data={ filteredData.length >0 ? filteredData: allApps } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
                     </div>
                 </div>
                 </div>
@@ -207,12 +206,12 @@ function SeeApps() {
 
             <Modal show={ openModalUpdate } setShow={ setOpenModalUpdate } className='min-w-full sm:min-w-[1200px]'>
                 <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalUpdate(false) }/></div>
-                <Update appId={selectedApp?.id}/>
+                <Update appId={selectedApp?.id} onUpdated={()=>{setOpenModalUpdate(); setFlag(false)}}/>
                 
             </Modal>
             <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>
                 <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalCreate(false) }/></div>
-                <Create projectId={location?.state?.project?.id}/>
+                <Create projectId={location?.state?.project?.id} onCreated={()=>{setOpenModalCreate(false);setFlag(false)}}/>
             </Modal>
 
             <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>

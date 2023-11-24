@@ -25,16 +25,12 @@ class CustomerViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         """List all customers filtered by RFC and email."""
         try:
-            rfc = request.query_params.get('rfc', None)
             email = request.query_params.get('email', None)
 
             queryset = self.queryset
 
-            if rfc:
-                queryset = queryset.filter(rfc=rfc)
-
             if email:
-                queryset = queryset.filter(email=email)
+                queryset = queryset.filter(email__icontains=email)
 
             serializer = self.get_serializer(queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)

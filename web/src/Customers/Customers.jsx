@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react'
 import { TrashIcon, ClipboardIcon, EyeIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import Alert from '../Components/Alert/Alert'
-import { getCustomers, deleteCustomer } from '../api/controller/CustomersController';
-
+import { getCustomers, deleteCustomer, filterCustomers } from '../api/controller/CustomersController';
+import SearchBar from '../Components/tailwindUI/SearchBar'
 
 
 import Modal from '../Components/tailwindUI/Modal';
@@ -27,6 +27,9 @@ function Customers() {
   const [alertMessage, setAlertMessage] = useState('');
   const [alertType, setAlertType] = useState('Error');
   const [deletedUser, setDeletedUser] = useState(null);
+  const [flag, setFlag] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
+  const [filterText, setFilterText] = useState('');
 
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
@@ -38,17 +41,18 @@ function Customers() {
   const [openModalCreate, setOpenModalCreate] = useState(false);
 
   useEffect(() => {
-    if (deletedUser == null || deletedUser == true){
+    if (deletedUser == null || deletedUser == true || !flag){
       clients()
       setDeletedUser(false);
     }
-  }, [deletedUser]);
+  }, [deletedUser, flag, allClients]);
 
   const clients = async ()=>{
     await getCustomers(session.token).then(async(clients)=>{
       let clientsArray = await clients.json()
       setAllClients(clientsArray)
       setIsLoadingData(false)
+      setFlag(true)
     })
   }
 
@@ -75,13 +79,14 @@ function Customers() {
     )*/
   }
   
-  const handleDelete = async (item) => {
-    await deleteCustomer(session.token, item.id).then(async (response)=>{
+  const handleDelete = async () => {
+    await deleteCustomer(session.token, selectedCustomer.id).then(async (response)=>{
       if(response.status == 204){
         setError(true);
         setAlertMessage("Customer eliminado correctamente");
         setAlertType('Success');
         setDeletedUser(true);
+        setOpenModalDelete(false);
       }
       else{
         setError(true);
@@ -94,6 +99,14 @@ function Customers() {
     setSelectedCustomer(item)
     setOpenModalDelete(true)
 
+  }
+
+  const filterData = async (value)=>{
+    setFilterText(value)
+    await filterCustomers(session.token, value).then(async (response)=>{
+      let res = await response.json()
+      setFilteredData(res)
+    })
   }
 
   const columnActions = [
@@ -155,8 +168,11 @@ function Customers() {
             <div className="mt-5 w-full overflow-hidden">
               <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
             </div>
+            <div className='ml-3 mr-5'>
+              <SearchBar value={filterText} setValue={filterData} placeholder_desktop={"Buscar"}/>
+            </div>
             <div className='mt-5'>
-              <Table title='Clientes' data={ allClients } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
+              <Table title='Clientes' data={filteredData.length >0 ? filteredData : allClients } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
             </div>
           </div>
         </div>
@@ -169,12 +185,12 @@ function Customers() {
 
       <Modal show={ openModalUpdate } setShow={ setOpenModalUpdate } className='min-w-full sm:min-w-[1200px]'>
           <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalUpdate(false) }/></div>
-          <Update customerId={selectedCustomer?.id}/>
+          <Update customerId={selectedCustomer?.id} onUpdated={()=>{setOpenModalUpdate(false); setFlag(false)}}/>
           
       </Modal>
       <Modal show={ openModalCreate } setShow={ setOpenModalCreate } className='min-w-full sm:min-w-[1200px]'>
           <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalCreate(false) }/></div>
-          <Create/>
+          <Create onCreated={()=>{setOpenModalCreate(false);setFlag(false)}}/>
       </Modal>
 
       <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[500px]'>

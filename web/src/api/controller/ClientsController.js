@@ -48,3 +48,9 @@ export const getCustomers = async (token) => {
         return response;
     })
 }
+
+export const filterClients = async (token, filterData) => {
+    return await clientsAction.filterClients(token, filterData).then((response) => {
+        return response;
+    })
+}

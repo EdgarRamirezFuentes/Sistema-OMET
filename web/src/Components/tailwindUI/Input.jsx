@@ -7,13 +7,13 @@ function Input({ label, labelDescription, needed, leftIcon, type, name, id, plac
     return (
         <div>
             {label && (
-                <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+                <label htmlFor={id} className='font-bold'>
                     {label}
                     {labelDescription && <span className='ml-1 text-xs text-gray-400'>{labelDescription}</span>}
                     {needed && <span className='text-red-400'> *</span>}
                 </label>
             )}
-            <div className="mt-1 relative rounded-md shadow-sm">
+            <div className='mb-10 w-full flex flex-row justify-center'>
                 {leftIcon && (
                     <div className="absolute inset-y-0 max-w-[1.25rem] left-0 ml-3 flex items-center pointer-events-none overflow-hidden">
                         {leftIcon}
@@ -23,7 +23,7 @@ function Input({ label, labelDescription, needed, leftIcon, type, name, id, plac
                     type={type}
                     name={name}
                     id={id}
-                    className={`${error ? 'border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500' : 'border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login'} transition-all ${disabledInput && 'opacity-80 bg-gray-200 cursor-not-allowed'} block w-full ${leftIcon ? 'pl-10' : 'pl-4'} ${rightIcon ? 'pr-10' : 'pr-4'} sm:text-sm rounded-md`}
+                    className={'w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600'}
                     placeholder={placeholder}
                     readOnly={disabledInput}
                     disabled={disabledInput}
