@@ -7,7 +7,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, label, needed, error }) {
+function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, label, needed, error, setSelectedIds }) {
 
     const [selected, setSelected] = useState(selectedItems);
     const gridCols = horizontal ? `flex-row` : 'flex-col';
@@ -25,6 +25,8 @@ function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, lab
         }
         if (setSelectedItems) setSelectedItems(items);
         else setSelected(items);
+        const newSelectedIds = items.filter(i => items.includes(i)).map(i => i.id);
+        if (setSelectedIds) setSelectedIds(newSelectedIds);
     }
 
     useEffect(() => {
@@ -32,7 +34,7 @@ function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, lab
     }, [selectedItems])
 
     useEffect(() => {
-        const newSelected = selectedItems.filter(selected => 
+        const newSelected = selectedItems.filter(selected =>
             items.find(item => item.disabled && selected.id == item.id) == null
         );
         if (setSelectedItems) setSelectedItems(newSelected);
@@ -42,7 +44,7 @@ function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, lab
     return (
         <div className='w-full'>
             {label && (
-                <label className="block text-sm font-medium text-gray-700">
+                <label className='font-bold'>
                     {label}
                     {needed && <span className='text-red-400'> *</span>}
                 </label>
@@ -63,7 +65,7 @@ function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, lab
                                         </span>
                                     )}
                                     <span className="block text-sm font-medium text-gray-900">
-                                        {item.title}
+                                        {item.value}
                                     </span>
                                     {item.description && (
                                         <span className="mt-1 flex text-sm text-gray-500">

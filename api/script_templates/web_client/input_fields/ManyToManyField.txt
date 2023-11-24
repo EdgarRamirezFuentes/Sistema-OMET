@@ -1,0 +1,1 @@
+<CheckboxGroup items={items} selectedItems={[]} setSelectedItems={() => {}} setSelectedIds={() => {}} label="Mi Grupo de Checkbox" needed={true} error="Mensaje de error" />

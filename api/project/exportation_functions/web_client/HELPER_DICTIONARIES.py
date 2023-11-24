@@ -42,7 +42,7 @@ INPUT_FIELD_TEMPLATES = {
     'TimeField': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/TimeField.txt'),
     'BooleanField': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/BooleanField.txt'),
     'OnetoOneForeignKey': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/OneToOneField.txt'),
-    'OnetoManyForeignKey': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/ForeignKey.txt'),
+    'OnetoManyForeignKey': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/OneToManyField.txt'),
     'ManytoManyForeignKey': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/ManyToManyField.txt'),
 }
 
@@ -62,7 +62,7 @@ READ_ONLY_INPUT_FIELD_TEMPLATES = {
     'TimeField': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/read_only/TimeField.txt'),
     'BooleanField': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/read_only/BooleanField.txt'),
     'OnetoOneForeignKey': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/read_only/OneToOneField.txt'),
-    'OnetoManyForeignKey': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/read_only/ForeignKey.txt'),
+    'OnetoManyForeignKey': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/read_only/OneToManyField.txt'),
     'ManytoManyForeignKey': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/read_only/ManyToManyField.txt'),
 }
 

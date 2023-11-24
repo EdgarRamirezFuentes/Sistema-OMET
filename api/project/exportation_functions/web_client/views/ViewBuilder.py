@@ -85,7 +85,7 @@ class ViewBuilder:
         field_setters = ''
 
         for model_field in self.__model_fields:
-            if 'ForeignKey' in model_field.data_type.name and 'Many' not in model_field.data_type.name:
+            if 'ForeignKey' in model_field.data_type.name:
                 relation = ForeignKeyRelation.objects.get(model_field_origin=model_field)
                 related_model_field = relation.model_field_related
                 related_model_field_name = related_model_field.name
@@ -101,7 +101,7 @@ class ViewBuilder:
         field_setters = ''
 
         for model_field in self.__model_fields:
-            if 'ForeignKey' in model_field.data_type.name and 'Many' not in model_field.data_type.name:
+            if 'ForeignKey' in model_field.data_type.name:
                 relation = ForeignKeyRelation.objects.get(model_field_origin=model_field)
                 related_model_field = relation.model_field_related
                 related_model_field_name = related_model_field.name
@@ -170,9 +170,6 @@ class ViewBuilder:
             data_type = model_field.data_type.name
             is_required = 'false'
 
-            if 'Many' in data_type:
-                continue
-
             input_field_template = get_template_file_content(INPUT_FIELD_TEMPLATES[data_type])
 
             if ValidatorValue.objects.filter(model_field=model_field, validator__name='null').exists():
@@ -224,9 +221,6 @@ class ViewBuilder:
 
         for model_field in self.__model_fields:
             data_type = model_field.data_type.name
-
-            if 'Many' in data_type:
-                continue
 
             input_field_template = get_template_file_content(READ_ONLY_INPUT_FIELD_TEMPLATES[data_type])
 
