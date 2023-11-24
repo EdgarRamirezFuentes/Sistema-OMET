@@ -2,10 +2,11 @@ import '../../App.css'
 import React, { useState, useEffect } from 'react';
 import Alert from '../../Components/Alert/Alert'
 import { useNavigate, useLocation } from 'react-router-dom';
-import { create{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
+import * as {{MODEL_NAME_LOWER}}Controller from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
 import PropTypes from 'prop-types';
 import Input from '../../Components/tailwindUI/Input'
 import Select from '../../Components/tailwindUI/Select'
+import TextArea from '../../Components/tailwindUI/TextArea'
 
 function Create{{MODEL_NAME}}({onCreated}) {
     const history = useNavigate();
@@ -17,6 +18,14 @@ function Create{{MODEL_NAME}}({onCreated}) {
 
 {{MODEL_HOOKS}}
 
+{{FOREIGN_KEY_HOOKS}}
+
+{{FOREIGN_KEY_FLAGS}}
+
+{{FOREIGN_KEY_GET_DATA_FUNCTIONS}}
+
+{{FOREIGN_KEY_USE_EFFECTS}}
+
 
     const onCloseHandler = () => {
         setError(null)
@@ -25,17 +34,23 @@ function Create{{MODEL_NAME}}({onCreated}) {
     }
 
     const buttonHandler = async () => {
+{{NOT_NULL_VALIDATIONS}}
+
         let request = {
 {{REQUEST_FIELDS}}
         }
 
-        await create{{MODEL_NAME}}(request, session.token).then(async (response)=>{
+        await {{MODEL_NAME_LOWER}}Controller.create{{MODEL_NAME}}(request, session.token).then(async (response)=>{
             if (response.status === 201){
                 setAlertType('Success');
                 setAlertMessage('Creado correctamente.')
                 setError(true);
                 setTimeout((e) => onCreated && onCreated(true),1000);
-            }else{
+            } else if(response.status == 400) {
+                setAlertType('Warning');
+                setAlertMessage('La información enviada no cumple el formato requerido.')
+                setError(true);
+            } else{
                 setAlertType('Error');
                 setAlertMessage('Error al crear.')
                 setError(true);

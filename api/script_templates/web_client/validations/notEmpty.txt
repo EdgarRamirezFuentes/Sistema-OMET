@@ -1,0 +1,1 @@
+if({{MODEL_FIELD_NAME_LOWER}} === '' || {{MODEL_FIELD_NAME_LOWER}} === null){ setAlertType('Warning'); setAlertMessage('El campo {{MODEL_FIELD_NAME_TITLE}} no puede ser estar vacío.'); setError(true); return; }

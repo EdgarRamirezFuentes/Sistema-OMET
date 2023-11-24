@@ -80,7 +80,7 @@ class ModelSerializerBuilder():
 
             foreign_key_model_field = foreign_key_field_template.replace('{{FIELD_NAME}}', model_field_name)
             foreign_key_model_field = foreign_key_model_field.replace('{{MODEL_NAME}}', model_field_related_app_model_name)
-            foreign_key_model_field = foreign_key_model_field.replace('{{MODEL_FIELD_RELATION_NAME}}', model_field_related_name.title())
+            foreign_key_model_field = foreign_key_model_field.replace('{{MODEL_FIELD_RELATION_NAME}}', model_field_related_name)
             foreign_key_model_field = foreign_key_model_field.replace('{{MANY_VALUE}}', 'True' if  model_field_data_type == 'manytomanyforeignkey' else 'False')
             self.__foreign_key_fields.add(foreign_key_model_field)
 
@@ -97,7 +97,7 @@ class ModelSerializerBuilder():
         """
         model_field_serializer = get_template_file_content(SERIALIZERS_TEMPLATE_URLS['model_field_serializer'])
         model_field_serializer = model_field_serializer.replace('{{MODEL_NAME}}', model_name)
-        model_field_serializer = model_field_serializer.replace('{{MODEL_FIELD_NAME}}', model_field_name.title())
+        model_field_serializer = model_field_serializer.replace('{{MODEL_FIELD_NAME}}', model_field_name)
         model_field_serializer = model_field_serializer.replace('{{SERIALIZER_MODEL_FIELD}}', model_field_name)
 
         self.__foreign_key_serializers += model_field_serializer + '\n'

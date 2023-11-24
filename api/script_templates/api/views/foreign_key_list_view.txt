@@ -1,0 +1,9 @@
+class {{MODEL_NAME}}{{FOREIGN_KEY_MODEL_NAME}}{{FOREIGN_KEY_MODEL_FIELD_NAME}}ListView(generics.ListAPIView):
+    """List {{FOREIGN_KEY_MODEL_NAME}} by {{FOREIGN_KEY_MODEL_FIELD_NAME}}"""
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = [permissions.IsAuthenticated, ]
+    serializer_class = {{FOREIGN_KEY_MODEL_NAME}}{{FOREIGN_KEY_MODEL_FIELD_NAME}}FieldSerializer
+
+    def get_queryset(self):
+        """Get the queryset"""
+        return {{FOREIGN_KEY_MODEL_NAME}}.objects.all()

@@ -2,11 +2,13 @@ import '../../App.css'
 import React, { useState, useEffect } from 'react';
 import Alert from '../../Components/Alert/Alert'
 import { useNavigate, useLocation } from 'react-router-dom';
-import { create{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
+import { retrieve{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
 import PropTypes from 'prop-types';
-import Input from '../Components/tailwindUI/Input'
+import Input from '../../Components/tailwindUI/Input'
+import Select from '../../Components/tailwindUI/Select'
+import TextArea from '../../Components/tailwindUI/TextArea'
 
-function Get{{MODEL_NAME}}() {
+function Retrieve{{MODEL_NAME}}({{{MODEL_NAME_LOWER}}_id}) {
     const history = useNavigate();
     const location = useLocation();
     const session = JSON.parse(localStorage.getItem('session'));
@@ -14,26 +16,18 @@ function Get{{MODEL_NAME}}() {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
     const [selectedItem, setSelectedItem] = useState(null);
+    const [data, setData] = useState(null);
 
-    {{FIELDS_HOOKS}}
+{{MODEL_HOOKS}}
 
-
-    const onCloseHandler = () => {
-        setError(null)
-        setAlertType('Error');
-        setAlertMessage('')
-    }
-
-    useEffect(() => {
-        if (selectedItem == null) {
-
-            retrieve{{MODEL_NAME}}(id, session.token).then(async (response) => {
+    const get{{MODEL_NAME_TITLE}} = async () => {
+        if (data == null) {
+            await retrieve{{MODEL_NAME}}({{MODEL_NAME_LOWER}}_id, session.token).then(async (response) => {
                 console.log(response)
                 if (response.status === 200) {
                     let res = await response.json()
-                    setSelectedItem(res)
-                    console.log(res)
-                    setFlag(true)
+                    setData(res)
+{{FIELD_SETTERS}}
                 } else {
                     setError(response.data.message)
                     setAlertMessage(response.data.message)
@@ -45,7 +39,18 @@ function Get{{MODEL_NAME}}() {
             })
         }
 
-    },[selectedItem])
+    }
+
+    useEffect(() => {
+        get{{MODEL_NAME_TITLE}}();
+    },[data, ])
+
+
+    const onCloseHandler = () => {
+        setError(null)
+        setAlertType('Error');
+        setAlertMessage('')
+    }
 
     return (
         <div className="w-full h-full bg-slate-100">
@@ -66,7 +71,7 @@ function Get{{MODEL_NAME}}() {
                                 <div className='w-full flex flex-col items-center'>
 
                                     <div className='w-full flex flex-col justify-between'>
-{{FIELD_DATA}}
+{{INPUT_FIELDS}}
                                     </div>
                                 </div>
                             </div>
@@ -78,4 +83,8 @@ function Get{{MODEL_NAME}}() {
     )
 }
 
-export default Get{{MODEL_NAME}}
+Retrieve{{MODEL_NAME}}.propTypes = {
+    {{MODEL_NAME_LOWER}}_id: PropTypes.number
+}
+
+export default Retrieve{{MODEL_NAME}}

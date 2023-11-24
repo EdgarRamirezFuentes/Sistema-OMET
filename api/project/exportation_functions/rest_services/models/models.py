@@ -1,4 +1,7 @@
-from core.models import  AppModel
+from core.models import  (
+    AppModel,
+    ForeignKeyRelation
+)
 from project.utils import format_project_name
 from .ModelBuilder import ModelBuilder
 
@@ -21,6 +24,10 @@ def create_app_models(main_directory, project_app):
         for model in models:
             model_builder = ModelBuilder(model)
             model_script = model_builder.get_model_script()
+
+            foreign_keys = ForeignKeyRelation.objects.filter(model_field_origin__app_model=model)
+            print(model, foreign_keys)
+
 
             # Adding the imports of the models
             app_models_imports += f'from .{model.name} import {model.name}\n'

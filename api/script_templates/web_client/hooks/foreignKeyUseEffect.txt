@@ -1,0 +1,3 @@
+useEffect(() => {
+        get{{FOREIGN_KEY_MODEL_NAME_TITLE}}{{FOREIGN_KEY_MODEL_FIELD_NAME_TITLE}}s();
+    }, [{{MODEL_FIELD_NAME_LOWER}}s]);

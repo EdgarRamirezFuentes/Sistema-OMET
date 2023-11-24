@@ -2,10 +2,12 @@ import '../../App.css'
 import React, { useState, useEffect } from 'react';
 import Alert from '../../Components/Alert/Alert'
 import { useNavigate, useLocation } from 'react-router-dom';
-import { retrieve{{MODEL_NAME}}, update{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
+import * as {{MODEL_NAME_LOWER}}Controller from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
 import PropTypes from 'prop-types';
 import Input from '../../Components/tailwindUI/Input'
 import Select from '../../Components/tailwindUI/Select'
+import TextArea from '../../Components/tailwindUI/TextArea'
+
 
 function Update{{MODEL_NAME}}({onUpdated, {{MODEL_NAME_LOWER}}_id}) {
     const history = useNavigate();
@@ -18,14 +20,22 @@ function Update{{MODEL_NAME}}({onUpdated, {{MODEL_NAME_LOWER}}_id}) {
 
 {{MODEL_HOOKS}}
 
-    useEffect(() => {
+{{FOREIGN_KEY_HOOKS}}
+
+{{FOREIGN_KEY_FLAGS}}
+
+    {{FOREIGN_KEY_GET_DATA_FUNCTIONS}}
+
+    {{FOREIGN_KEY_USE_EFFECTS}}
+
+    const get{{MODEL_NAME_TITLE}} = async () => {
         if (data == null) {
-            retrieve{{MODEL_NAME}}({{MODEL_NAME_LOWER}}_id, session.token).then(async (response) => {
+            await {{MODEL_NAME_LOWER}}Controller.retrieve{{MODEL_NAME}}({{MODEL_NAME_LOWER}}_id, session.token).then(async (response) => {
                 console.log(response)
                 if (response.status === 200) {
                     let res = await response.json()
                     setData(res)
-                    console.log(res)
+{{FIELD_SETTERS}}
                 } else {
                     setError(response.data.message)
                     setAlertMessage(response.data.message)
@@ -36,9 +46,12 @@ function Update{{MODEL_NAME}}({onUpdated, {{MODEL_NAME_LOWER}}_id}) {
                 setAlertMessage(error)
             })
         }
-    },[data])
 
+    }
 
+    useEffect(() => {
+        get{{MODEL_NAME_TITLE}}();
+    },[data,])
 
     const onCloseHandler = () => {
         setError(null)
@@ -47,17 +60,13 @@ function Update{{MODEL_NAME}}({onUpdated, {{MODEL_NAME_LOWER}}_id}) {
     }
 
     const buttonHandler = async () => {
-        if(name === '' ){
-            setAlertType('Warning');
-            setAlertMessage('Ingresa los datos.')
-            setError(true);
-            return;
-        }
+{{NOT_NULL_VALIDATIONS}}
+
         let request = {
 {{REQUEST_FIELDS}}
         }
 
-        await update{{MODEL_NAME}}({{MODEL_NAME_LOWER}}_id, request, session.token).then(async (response)=>{
+        await {{MODEL_NAME_LOWER}}Controller.update{{MODEL_NAME}}({{MODEL_NAME_LOWER}}_id, request, session.token).then(async (response)=>{
             if (response.status === 200){
                 setAlertType('Success');
                 setAlertMessage('Actualizado correctamente.')

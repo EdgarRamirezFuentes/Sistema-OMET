@@ -1,0 +1,21 @@
+const get{{FOREIGN_KEY_MODEL_NAME_TITLE}}{{FOREIGN_KEY_FIELD_NAME_TITLE}}s = async () => {
+    if(!flag{{FOREIGN_KEY_MODEL_NAME}}{{FOREIGN_KEY_FIELD_NAME_TITLE}}s) {
+        await {{MODEL_NAME_LOWER}}Controller.get{{FOREIGN_KEY_MODEL_NAME_TITLE}}{{FOREIGN_KEY_FIELD_NAME_TITLE}}(session.token).then(async (response) => {
+            if (response.status === 200){
+                let res = await response.json();
+                res = res.map((item) => {
+                    return {id: item.id, value: item.nombre}
+                })
+                set{{FOREIGN_KEY_MODEL_NAME_TITLE}}{{FOREIGN_KEY_FIELD_NAME_TITLE}}s(res);
+                setFlag{{FOREIGN_KEY_MODEL_NAME_TITLE}}{{FOREIGN_KEY_FIELD_NAME_TITLE}}s(true);
+                set{{FOREIGN_KEY_MODEL_NAME_TITLE}}{{FOREIGN_KEY_FIELD_NAME_TITLE}}(res.length > 0 ? res[0].id : null)
+                console.log(res);
+
+            } else{
+                setAlertType('Error');
+                setAlertMessage('Error al cargar {{FOREIGN_KEY_MODEL_NAME}}s.')
+                setError(true);
+            }
+        });
+    }
+}

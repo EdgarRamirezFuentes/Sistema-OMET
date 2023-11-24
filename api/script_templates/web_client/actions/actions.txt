@@ -51,3 +51,5 @@ export const delete{{APP_MODEL}} = async (id, token) =>{
         console.log("Error ===>", e);
     }
 }
+
+{{FOREIGN_KEY_ACTIONS}}

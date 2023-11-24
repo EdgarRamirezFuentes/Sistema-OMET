@@ -6,12 +6,14 @@ from rest_framework import (
     viewsets,
     permissions,
     response,
-    status
+    status,
+    generics
 )
 
 from {{APP_NAME}}.models import {{MODEL_NAME}}
 from {{APP_NAME}}.serializers import {{MODEL_NAME}}Serializer
 {{FOREIGN_KEY_SERIALIZER_IMPORT}}
+{{FOREIGN_KEY_LIST_SERIALIZER_IMPORT}}
 
 {{VIEWSET}}
 

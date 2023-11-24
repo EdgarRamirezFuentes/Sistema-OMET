@@ -29,3 +29,6 @@ export const delete{{APP_MODEL}} = async (id, token) =>{
         return response;
     })
 }
+
+
+{{FOREIGN_KEY_CONTROLLERS}}

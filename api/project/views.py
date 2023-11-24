@@ -52,7 +52,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     def get_queryset(self):
         return Project.objects.all()
-    
+
     def list(self, request, *args, **kwargs):
         """List the all the projects filtered by name and customer"""
         try:
@@ -410,6 +410,23 @@ class ValidatorValueViewSet(viewsets.ModelViewSet):
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        """Delete a config value"""
+        try:
+            instance = self.get_object()
+
+            # Making the validator max_length not deletable
+            if instance.validator.name == 'max_length':
+                raise ValueError('No se puede eliminar el valor del validador max_length.')
+
+            instance.delete()
+            return response.Response(status=status.HTTP_204_NO_CONTENT)
+        except (ObjectDoesNotExist, Http404):
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print(e)
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
 
 class ProjectStructureApiView(views.APIView):

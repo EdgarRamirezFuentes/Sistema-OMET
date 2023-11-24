@@ -1,1 +1,1 @@
-<Select label='{{MODEL_FIELD_CAPTION}}' name='{{MODEL_FIELD_NAME}}' id='{{MODEL_FIELD_NAME}}' listOptions={[{id: true, title: 'True'}, {id: false, title: 'False'}]} onChange={(event) => {set{{MODEL_FIELD_NAME_TITLE}}(event.target.value)}}/>
+<Select label='{{MODEL_FIELD_CAPTION}}' name='{{MODEL_FIELD_NAME}}' id='{{MODEL_FIELD_NAME}}' listOptions={[{id: true, value: 'True'}, {id: false, value: 'False'}]} onChange={(event) => {set{{MODEL_FIELD_NAME_TITLE}}(event.target.value)}} value={{{MODEL_FIELD_NAME_LOWER}}} />

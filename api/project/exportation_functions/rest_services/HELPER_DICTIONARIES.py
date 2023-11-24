@@ -33,6 +33,7 @@ SERIALIZERS_TEMPLATE_URLS = {
 VIEWS_TEMPLATE_URLS = {
     'view': os.path.join(settings.BASE_DIR, 'script_templates/api/views/view.txt'),
     'foreign_key_view': os.path.join(settings.BASE_DIR, 'script_templates/api/views/foreign_key_view.txt'),
+    'foreign_key_list_view': os.path.join(settings.BASE_DIR, 'script_templates/api/views/foreign_key_list_view.txt'),
 }
 
 MODEL_FIELD_TEMPLATE_URLS = {

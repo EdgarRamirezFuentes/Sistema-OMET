@@ -1,0 +1,5 @@
+export const get{{FOREIGN_APP_MODEL}}{{FOREIGN_MODEL_FIELD}} = async (token) =>{
+    return await actions.get{{FOREIGN_APP_MODEL}}{{FOREIGN_MODEL_FIELD}}(token).then((response) => {
+        return response;
+    })
+}

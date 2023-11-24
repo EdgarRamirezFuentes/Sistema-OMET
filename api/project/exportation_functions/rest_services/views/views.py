@@ -21,7 +21,7 @@ def create_project_app_views(main_directory, project_app):
             model_view_builder = ModelViewBuilder(project_model)
             view_script = model_view_builder.get_view_script()
             main_directory.writestr(f'api/{project_app.name}/views/{project_model_name}.py', view_script)
-            view_imports += f'from .{project_model_name} import {project_model_name}ViewSet\n'
+            view_imports += f'from .{project_model_name} import *\n'
 
         # Adding the view imports
         main_directory.writestr(f'api/{project_app.name}/views/__init__.py', view_imports)

@@ -11,6 +11,7 @@ import ModalDelete from '../../Components/ModalDelete/ModalDelete';
 import { get{{MODEL_NAME}}, delete{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}';
 import Create{{MODEL_NAME}} from './{{MODEL_NAME}}CreateView.jsx';
 import Update{{MODEL_NAME}} from './{{MODEL_NAME}}UpdateView.jsx';
+import Retrieve{{MODEL_NAME}} from './{{MODEL_NAME}}RetrieveView.jsx';
 
 function {{MODEL_NAME}}List() {
     const history = useNavigate();
@@ -65,6 +66,7 @@ function {{MODEL_NAME}}List() {
         setOpenModalView(true)
         setSelectedItem(item)
     }
+
     const handleUpdate = item => {
         setOpenModalUpdate(true)
         setSelectedItem(item)
@@ -73,7 +75,6 @@ function {{MODEL_NAME}}List() {
     const handleDelete = async (item) => {
         setOpenModalDelete(true)
         setSelectedItem(item)
-        /**/
     }
 
     const columnActions = [
@@ -160,10 +161,11 @@ function {{MODEL_NAME}}List() {
             </Modal>
             <Modal show={ openModalView } setShow={ setOpenModalView } className='min-w-full sm:min-w-[1200px]'>
                 <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalView(false) }/></div>
+                <Retrieve{{MODEL_NAME}} {{MODEL_NAME_LOWER}}_id={selectedItem?.id} />
             </Modal>
             <Modal show={ openModalUpdate } setShow={ setOpenModalUpdate } className='min-w-full sm:min-w-[1200px]'>
                 <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalUpdate(false) }/></div>
-                <Update{{MODEL_NAME}} onUpdated={() => {setOpenModalCreate(false); setFlag(false);} {{MODEL_NAME_LOWER}_id={selectedItem?.id}}}/>
+                <Update{{MODEL_NAME}} onUpdated={() => {setOpenModalUpdate(false); setFlag(false); }} {{MODEL_NAME_LOWER}}_id={selectedItem?.id} />
             </Modal>
             <Modal show={ openModalDelete } setShow={ setOpenModalDelete } className='min-w-full sm:min-w-[1200px]'>
                 <div className='w-full text-gray-400 flex justify-end'><XMarkIcon className='w-7 h-7 cursor-pointer' onClick={ () => setOpenModalDelete(false) }/></div>
