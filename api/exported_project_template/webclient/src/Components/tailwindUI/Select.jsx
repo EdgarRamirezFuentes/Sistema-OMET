@@ -24,6 +24,7 @@ function Select({ value, setValue, listOptions, label, isDisabled, needed, error
                         value={value}
                         onChange={(e) => setValue && setValue(e.target.value)}
                         {...rest}>
+                        <option key={null} value={null}>Selecciona una opción</option>
                         {listOptions.map((option, i) => (
                             <option key={i} value={option.id}>{option.value}</option>
                         ))}

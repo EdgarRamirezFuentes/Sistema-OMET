@@ -16,7 +16,7 @@ function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, lab
         if (item.disabled) return;
         let items = selected || [];
         if (isSelected) {
-            items = items.filter(currentItem => currentItem.title != item.title);
+            items = items.filter(currentItem => currentItem.id != item.id);
         } else {
             items = [
                 ...items,
@@ -51,7 +51,7 @@ function CheckboxGroup({ items, horizontal, selectedItems, setSelectedItems, lab
             )}
             <div className={`flex gap-4 ${gridCols}`}>
                 {items.map((item) => {
-                    let isSelected = selected && selected?.find(currentItem => currentItem.title == item.title) != null;
+                    let isSelected = selected && selected?.find(currentItem => currentItem.id == item.id) != null;
                     return (
                         <div
                             key={item.id}

@@ -34,7 +34,7 @@ function {{MODEL_NAME}}List() {
 
     const tableColumns = [
       { heading: 'Id', value: 'id',align: 'center' },
-      { heading: {{FIRST_VALUE_CAPITALIZE}}, value: {{FIRST_VALUE}}, main: true},
+      {{FIRST_COLUMN}}
     ];
 
     useEffect(() => {

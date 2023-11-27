@@ -1,0 +1,1 @@
+const {{MODEL_FIELD_NAME_LOWER}}TableColumns = [ { heading: 'ID', value: 'id', align: 'center' }, { heading: '{{FOREIGN_KEY_FIELD_NAME_TITLE}}', value: '{{FOREIGN_KEY_FIELD_NAME}}', align: 'center' } ];

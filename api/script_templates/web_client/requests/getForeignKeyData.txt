@@ -4,13 +4,10 @@ const get{{FOREIGN_KEY_MODEL_NAME_TITLE}}{{FOREIGN_KEY_FIELD_NAME_TITLE}}s = asy
             if (response.status === 200){
                 let res = await response.json();
                 res = res.map((item) => {
-                    return {id: item.id, value: item.nombre}
+                    return {id: item.id, value: item.{{FOREIGN_KEY_FIELD_NAME}}}
                 })
                 set{{FOREIGN_KEY_MODEL_NAME_TITLE}}{{FOREIGN_KEY_FIELD_NAME_TITLE}}s(res);
                 setFlag{{FOREIGN_KEY_MODEL_NAME_TITLE}}{{FOREIGN_KEY_FIELD_NAME_TITLE}}s(true);
-                set{{FOREIGN_KEY_MODEL_NAME_TITLE}}{{FOREIGN_KEY_FIELD_NAME_TITLE}}(res.length > 0 ? res[0].id : null)
-                console.log(res);
-
             } else{
                 setAlertType('Error');
                 setAlertMessage('Error al cargar {{FOREIGN_KEY_MODEL_NAME}}s.')

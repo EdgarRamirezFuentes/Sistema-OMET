@@ -60,7 +60,7 @@ function Table({ title, columns, data, isLoadingData, actions }) {
                                     column={columns}
                                     actionItems={actions}
                                     isLast={i == data.length - 1} />
-                                    
+
                             )}
                         </>
                     ) : (
@@ -80,7 +80,7 @@ function Table({ title, columns, data, isLoadingData, actions }) {
                     )}
                 </tbody>
             </table>
-            
+
         </div>
     )
 }

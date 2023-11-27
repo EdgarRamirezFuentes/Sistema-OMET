@@ -53,7 +53,7 @@ function UpdateProjectModel({field, model, onUpdated}) {
         }
       })
     }
-  
+
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-screen'>
@@ -77,9 +77,9 @@ function UpdateProjectModel({field, model, onUpdated}) {
                                 </div>
                               </div>
                               <div className='w-full flex flex-col justify-between'>
-                                <p className='font-bold'>Descripción:</p>
+                                <p className='font-bold'>Etiqueta en formularios:</p>
                                 <div className='mb-10 w-full flex flex-row justify-center'>
-                                  <textarea value={description} onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="project_name" name="project_name"/><br/><br/>
+                                  <textarea value={description} onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Etiqueta' type="text" id="project_name" name="project_name"/><br/><br/>
                                 </div>
                               </div>
                               <div className='w-full flex flex-col justify-between'>

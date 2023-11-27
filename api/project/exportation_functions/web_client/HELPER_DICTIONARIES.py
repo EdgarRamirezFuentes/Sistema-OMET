@@ -64,6 +64,7 @@ READ_ONLY_INPUT_FIELD_TEMPLATES = {
     'OnetoOneForeignKey': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/read_only/OneToOneField.txt'),
     'OnetoManyForeignKey': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/read_only/OneToManyField.txt'),
     'ManytoManyForeignKey': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/read_only/ManyToManyField.txt'),
+    'table_columns': os.path.join(settings.BASE_DIR, 'script_templates/web_client/input_fields/read_only/tableColumns.txt'),
 }
 
 DEFAULT_DATA_TYPE_VALUES = {
@@ -83,5 +84,5 @@ DEFAULT_DATA_TYPE_VALUES = {
     'BooleanField': 'false',
     'OnetoOneForeignKey': 'null',
     'OnetoManyForeignKey': 'null',
-    'ManytoManyForeignKey': 'null',
+    'ManytoManyForeignKey': '[]',
 }

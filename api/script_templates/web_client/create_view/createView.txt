@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Input from '../../Components/tailwindUI/Input'
 import Select from '../../Components/tailwindUI/Select'
 import TextArea from '../../Components/tailwindUI/TextArea'
+import CheckboxGroup from '../../Components/tailwindUI/CheckboxGroup'
 
 function Create{{MODEL_NAME}}({onCreated}) {
     const history = useNavigate();
@@ -19,6 +20,8 @@ function Create{{MODEL_NAME}}({onCreated}) {
 {{MODEL_HOOKS}}
 
 {{FOREIGN_KEY_HOOKS}}
+
+{{FOREIGN_KEY_SELECTED_ITEMS}}
 
 {{FOREIGN_KEY_FLAGS}}
 

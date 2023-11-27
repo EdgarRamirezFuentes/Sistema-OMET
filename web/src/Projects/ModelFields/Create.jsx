@@ -23,7 +23,7 @@ function CreateProjectModel({modelId, onCreated}) {
     const [selectedModel, setSelectedModel] = useState(null);
     const [selectedApp, setSelectedApp] = useState(null);
     const [selectedField, setSelectedField] = useState(0);
-    
+
     const [projectApps, setProjectApps] = useState([]);
     const [projectModels, setProjectModels] = useState([]);
     const [projectFields, setProjectFields] = useState([]);
@@ -33,7 +33,7 @@ function CreateProjectModel({modelId, onCreated}) {
     const [showApps, setShowApps] = useState(false);
     const [showModels, setShowModels] = useState(false);
     const [showFields, setShowFields] = useState(false);
-    
+
 
 
     useEffect(() => {
@@ -41,7 +41,7 @@ function CreateProjectModel({modelId, onCreated}) {
       if(projectApps.length == 0){
         projectStructure()
       }
-      
+
       if(dataTypes.length == 0){
         getDataTypes(session.token).then(async (response) => {
           let res = await response.json();
@@ -143,11 +143,11 @@ function CreateProjectModel({modelId, onCreated}) {
         console.log("projectStructure",res)
         if (response.status === 200){
           setProjectApps(res)
-          
+
         }
       })
     }
-  
+
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-full'>
@@ -169,9 +169,9 @@ function CreateProjectModel({modelId, onCreated}) {
                               <div className='mb-10 w-full flex flex-row justify-center'>
                                 <input onChange={(event) => {setName(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="project_name" name="project_name"/><br/><br/>
                               </div>
-                              <p className='font-bold'>Descripción:</p>
+                              <p className='font-bold'>Etiqueta en formularios:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="project_name" name="project_name"/><br/><br/>
+                                <input onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Etiqueta' type="text" id="project_name" name="project_name"/><br/><br/>
                               </div>
                               <p className='font-bold'>Orden:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>

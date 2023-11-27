@@ -9,7 +9,7 @@ import Badge from './Badge';
 import SecondaryButton from './SecondaryButton';
 //import DateBadge from './DateBadge';
 
-function Table({ title, columns, data, isLoadingData, actions }) {
+function Table({ title, columns, data, isLoadingData, actions, label }) {
 
     const [showTooltip, setShowTooltip] = useState(true);
     const [menuItems, setMenuItems] = useState([]);
@@ -29,6 +29,11 @@ function Table({ title, columns, data, isLoadingData, actions }) {
 
     return (
         <div className="shadow ring-1 ring-black ring-opacity-5 md:mx-0 rounded-lg">
+            {label && (
+                <label className="block text-sm font-medium text-gray-700">
+                    {label}
+                </label>
+            )}
             <table className="min-w-full divide-y divide-gray-300 bg-white rounded-lg" >
                 <thead className="bg-transparent">
                     <tr className=''>
@@ -60,7 +65,7 @@ function Table({ title, columns, data, isLoadingData, actions }) {
                                     column={columns}
                                     actionItems={actions}
                                     isLast={i == data.length - 1} />
-                                    
+
                             )}
                         </>
                     ) : (
@@ -80,7 +85,7 @@ function Table({ title, columns, data, isLoadingData, actions }) {
                     )}
                 </tbody>
             </table>
-            
+
         </div>
     )
 }
@@ -308,7 +313,8 @@ TableRow.propTypes = {
 TableRowLoading.propTypes = {
     column: PropTypes.array,
     actionItems: PropTypes.array,
-    isLast: PropTypes.bool
+    isLast: PropTypes.bool,
+    label: PropTypes.string
 }
 
 Table.defaultProps = {
@@ -317,6 +323,7 @@ Table.defaultProps = {
     data: [],
     isLoadingData: false,
     actions: [],
+    label: ""
 }
 
 export default Table;

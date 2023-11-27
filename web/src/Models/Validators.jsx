@@ -57,7 +57,7 @@ function ValidatorsModel() {
             const clientsArray = await clients.json();
             setAllDataTypes(clientsArray);
         }
-        
+
     };
 
     const getModelFieldData = async () => {
@@ -92,11 +92,11 @@ function ValidatorsModel() {
             const res = await response.json();
             setValidators(res.validators);
         }
-        
+
     };
 
     const deleteUsedValidators = () => {
-        const updatedValidators = validators.filter(validator => 
+        const updatedValidators = validators.filter(validator =>
             !model.validators.some(element2 => element2.validator.id === validator.id)
         );
         setAvailableValidators(updatedValidators);
@@ -173,8 +173,8 @@ function ValidatorsModel() {
         }
       ];
 
-    
-  
+
+
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-full w-full'>
@@ -218,7 +218,7 @@ function ValidatorsModel() {
                                         <div className='mt-5'>
                                             <Table title='Validadores' data={ validatorsUsed } isLoadingData={ isLoadingData } columns={ tableColumns } actions={ columnActions }/>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>

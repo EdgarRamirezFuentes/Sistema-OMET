@@ -41,7 +41,7 @@ class ModelBuilder():
 
     def __build_model_fields(self):
         """Build the model fields for the model script."""
-        model_fields = ModelField.objects.filter(app_model=self.__app_model)
+        model_fields = ModelField.objects.filter(app_model=self.__app_model).order_by('order')
 
         if not model_fields:
             raise ValueError(f'El modelo {self.__app_model.name} debe tener al menos un campo.')
