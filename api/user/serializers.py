@@ -220,22 +220,6 @@ class UserChangePasswordSerializer(serializers.Serializer):
         trim_whitespace=False
     )
 
-    def validate(self, data):
-        """Validate and authenticate the user."""
-        user = self.context['request'].user
-
-        if not user.check_password(data.get('old_password')):
-            msg = _('La contraseña actual no es correcta.')
-            raise serializers.ValidationError(msg)
-
-        if data.get('new_password') != data.get('confirm_password'):
-            msg = _('Las contraseñas no coinciden.')
-            raise serializers.ValidationError(msg)
-
-        validate_password(data.get('new_password'))
-
-        return data
-
 
 class UserResetPasswordSerializer(serializers.Serializer):
     """Serializer for the user reset password object."""

@@ -41,6 +41,7 @@ from user.serializers import (
 
 from core.tasks import send_reset_password_email
 from core import permissions as custom_permissions
+from .utils import validate_password
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -153,7 +154,30 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        old_password = serializer.data.get('old_password')
+        new_password = serializer.data.get('new_password')
+        confirm_password = serializer.data.get('confirm_password')
         user = self.get_object()
+
+        if not user.check_password(old_password):
+            return response.Response({
+                "message": "La contraseña actual es incorrecta.",
+                },
+                status=status.HTTP_400_BAD_REQUEST)
+
+        if new_password != confirm_password:
+            return response.Response({
+                "message": "Las contraseñas no coinciden.",
+                },
+                status=status.HTTP_400_BAD_REQUEST)
+
+
+        if not validate_password(new_password):
+            return response.Response({
+                "message": "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un caracter especial.",
+                },
+                status=status.HTTP_400_BAD_REQUEST)
+
         user.set_password(serializer.data.get('new_password'))
         user.save()
 
