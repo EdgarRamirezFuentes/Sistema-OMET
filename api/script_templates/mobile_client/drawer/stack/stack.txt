@@ -1,0 +1,28 @@
+import * as React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { View, Text, TouchableOpacity} from 'react-native';
+{{STACK_ELEMENTS_IMPORT}}
+export default function FarmaciasStackApp() {
+  const Stack = createStackNavigator();
+
+  function ChooseScreen({ navigation }) {
+    return (
+        <View className={"w-full h-full flex bg-slate-100 px-4 items-center "}>
+            <View className={"w-full mt-10"}>
+                <Text className={"font-bold text-xl"}>Selecciona el modelo que deseas visualizar</Text>
+            </View>
+            <View className={"w-full items-center justify-center h-full"}>
+               {{STACK_BUTTONS}}
+            </View>
+        </View>
+    );
+  }
+
+  return (
+
+      <Stack.Navigator initialRouteName="ChooseScreen">
+        <Stack.Screen name="ChooseScreen" options={{ headerShown: false }} component={ChooseScreen} />
+        {{STACK_ELEMENTS}}
+      </Stack.Navigator>
+  );
+}

@@ -54,6 +54,7 @@ function SeeApps() {
         history(`/model/get/${item.id}`,{
             state:{
               project: location.state.project,
+              app_id: item.id,
             }
           }
         )

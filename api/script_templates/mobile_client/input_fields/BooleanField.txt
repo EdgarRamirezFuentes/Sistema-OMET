@@ -1,0 +1,1 @@
+<Select label='{{MODEL_FIELD_CAPTION}}' items={[{id: true, value: 'True'}, {id: false, value: 'False'}]} onValueChange={set{{MODEL_FIELD_NAME_TITLE}}} value={{{MODEL_FIELD_NAME_LOWER}}} />

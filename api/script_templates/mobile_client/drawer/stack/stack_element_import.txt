@@ -1,0 +1,2 @@
+import {{APP_NAME_TITLE}}{{MODEL_NAME}}StackApp from "./{{APP_NAME}}/";
+import {{MODEL_FIELD_NAME_TITLE}} from './{{MODEL_NAME}}/{{MODEL_FIELD_NAME_TITLE}}Stack';

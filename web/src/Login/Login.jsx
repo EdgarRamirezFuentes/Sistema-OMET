@@ -23,7 +23,7 @@ function Login() {
     if (session){
       history('/home')
     }
-  }, [])
+  }, [error])
   const buttonHandler = async () => {
 
     if(username === '' || password === ''){
@@ -35,9 +35,10 @@ function Login() {
 
     await loginUser(username, password).then(async (res) => {
       let response = await res.json()
-      if(response.non_field_errors){
+      console.log("response", response)
+      if(response.non_field_errors || response.email){
         setError(true);
-        setAlertMessage(response.non_field_errors[0]);
+        setAlertMessage(response.email? response.email[0]:response.non_field_errors[0]);
         setAlertType('Error');
         return;
       }

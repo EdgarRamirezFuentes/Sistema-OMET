@@ -17,13 +17,14 @@ import Update from "./Update";
 import Create from "./Create";
 
 function Models() {
-    const params = useParams();
-    const location = useLocation();
-    const history = useNavigate();
-    const session = JSON.parse(localStorage.getItem('session'));
-    const [allModels, setAllModels] = useState([])
-    const [isLoadingData, setIsLoadingData] = useState(false)
-
+  const params = useParams();
+  const location = useLocation();
+  const history = useNavigate();
+  const session = JSON.parse(localStorage.getItem('session'));
+  const [allModels, setAllModels] = useState([])
+  const [isLoadingData, setIsLoadingData] = useState(false)
+  
+  console.log("Project",location.state)
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
@@ -56,15 +57,8 @@ function Models() {
         setIsLoadingData(false)
       }else{
         setAllModels([])
-        setAlertType('Error');
-        setAlertMessage('Modelo no encontrado.')
-        setError(true);
       }
-      if(modelList.length === 0){
-        setAlertType('Error');
-        setAlertMessage('Modelo no encontrado.')
-        setError(true);
-      }
+      setFlag(true)
     })
   }
 
@@ -195,7 +189,7 @@ function Models() {
           <div>
             <div className='mt-3 ml-5 flex flex-row justify-between items-center '>
                 <p className='text-3xl font-bold'>Modelos</p>
-                {allModels.length != 0 ? <button onClick={handlerCreateApp} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear modelo</button>:null}
+                <button onClick={handlerCreateApp} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear modelo</button>
             </div>
             <div className="mt-5 w-full overflow-hidden">
               <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />

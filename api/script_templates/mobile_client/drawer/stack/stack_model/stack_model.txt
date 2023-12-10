@@ -1,0 +1,18 @@
+import * as React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+{{SCREEN_IMPORT_LIST_VIEW}}
+{{SCREEN_IMPORT_CREATE}}
+{{SCREEN_IMPORT_RETRIEVE}}
+{{SCREEN_IMPORT_UPDATE}}
+export default function Paciente() {
+    const Stack = createStackNavigator();
+    return (
+
+        <Stack.Navigator initialRouteName="{{COMPONENT_NAME}}ListView">
+            {{STACK_SCREEN_LIST_VIEW}}
+            {{STACK_SCREEN_CREATE}}
+            {{STACK_SCREEN_RETRIEVE}}
+            {{STACK_SCREEN_UPDATE}}
+        </Stack.Navigator>
+    );
+}

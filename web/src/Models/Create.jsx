@@ -39,12 +39,12 @@ function CreateModel({projectAppId, onCreated}) {
         await createProjectModel(data, session.token).then(async (response)=>{
             if (response.status === 201){
             setAlertType('Success');
-            setAlertMessage('Campo creado correctamente.')
+            setAlertMessage('Modelo creado correctamente.')
             setError(true);
             setTimeout((e) => onCreated && onCreated(true),1000);
             }else{
             setAlertType('Error');
-            setAlertMessage('Error al crear el campo.')
+            setAlertMessage('Error al crear el modelo.')
             setError(true);
             }
         });

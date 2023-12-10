@@ -1,0 +1,1 @@
+<Input type={"url"} placeholder={'{{MODEL_FIELD_NAME}}'} label={'{{MODEL_FIELD_CAPTION}}'} needed={{{REQUIRED}}} onChangeText={set{{MODEL_FIELD_NAME_TITLE}}} value={{{MODEL_FIELD_NAME_LOWER}}} />

@@ -1,0 +1,1 @@
+<Drawer.Screen name="{{MODEL_NAME_TITLE}}"component={{{MODEL_NAME_TITLE}}StackApp} options={{headerTitle: '{{MODEL_NAME_TITLE}}'}}/>

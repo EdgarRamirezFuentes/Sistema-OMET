@@ -1,0 +1,1 @@
+const [{{MODEL_FIELD_NAME_LOWER}}, set{{MODEL_FIELD_NAME_TITLE}}] = useState({{DEFAULT_VALUE}});

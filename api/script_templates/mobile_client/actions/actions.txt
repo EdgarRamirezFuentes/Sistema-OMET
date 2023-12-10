@@ -1,0 +1,55 @@
+import apiClient from '../../client';
+
+export const create{{APP_MODEL}} = async (formData, token) =>{
+    const objApi = apiClient('{{MODEL_URL}}');
+    try {
+        var response = await objApi.post(formData, token);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e);
+    }
+}
+
+export const get{{APP_MODEL}} = async (token) =>{
+    
+    const objApi = apiClient('{{MODEL_URL}}');
+    try {
+        var response = await objApi.get(undefined, token);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e);
+    }
+}
+
+export const retrieve{{APP_MODEL}} = async (id, token) =>{
+    
+    const objApi = apiClient('{{MODEL_URL}}' + id + '/');
+    try {
+        var response = await objApi.get(undefined, token);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e);
+    }
+}
+
+export const update{{APP_MODEL}} = async (id, formData, token) =>{
+    const objApi = apiClient('{{MODEL_URL}}');
+    try {
+        var response = await objApi.patch(id, formData, token);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e);
+    }
+}
+
+export const delete{{APP_MODEL}} = async (id, token) =>{
+    const objApi = apiClient('{{MODEL_URL}}');
+    try {
+        var response = await objApi.del(id, token);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e);
+    }
+}
+
+{{FOREIGN_KEY_ACTIONS}}

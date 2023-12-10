@@ -1,0 +1,10 @@
+export const get{{FOREIGN_APP_MODEL}}{{FOREIGN_MODEL_FIELD}} = async (token) =>{
+    console.log("token", token);
+    const objApi = apiClient('{{FOREIGN_MODEL_FIELD_URL}}');
+    try {
+        var response = await objApi.get(undefined, token);
+        return response;
+    } catch (e) {
+        console.log("Error ===>", e);
+    }
+}

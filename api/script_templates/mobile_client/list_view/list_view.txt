@@ -1,0 +1,113 @@
+import React from 'react';
+import { Text, View, Button, Alert, TouchableOpacity } from 'react-native';
+import SessionManager from '../../api/manager/SessionManager';
+import DynamicTable from '../../Components/Table/DynamicTable';
+import { get{{MODEL_NAME}}, delete{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}';
+import AlertCmp from '../../Components/Alert/Alert';
+const sm = SessionManager.getInstance();
+function {{MODEL_NAME}}List({navigation}) {
+
+  const [allData, setAllData] = useState([])
+  const [error, setError] = React.useState(null);
+  const [alertType, setAlertType] = React.useState(null);
+  const [alertMessage, setAlertMessage] = React.useState(null);
+  const [flag, setFlag] = React.useState(false);
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setFlag(false)
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  React.useEffect(() => {
+        get{{MODEL_NAME}}s()
+  },[allData, flag])
+
+  const get{{MODEL_NAME}}s = async () => {
+      const token = await sm.getTokenSession()
+      if (!flag) {
+      await get{{MODEL_NAME}}(token).then(async (response) => {
+        if (response.status === 200) {
+            let res = await response.json()
+            setAllData(res)
+            console.log(res)
+            setFlag(true)
+        } else {
+            setError(response.data.message)
+            setAlertMessage(response.data.message)
+        }
+    }).catch((error) => {
+        console.log(error)
+    })
+  }
+}
+
+  const handleCreate = async () => {
+      navigation.navigate('Create{{MODEL_NAME}}')
+  }
+
+  const handleView = (id) => {
+    navigation.navigate('Retrieve{{MODEL_NAME}}', {cita_id: id})
+    // Lógica de edición
+  };
+  
+  const handleUpdate = (id) => {
+    navigation.navigate('Update{{MODEL_NAME}}', {cita_id: id})
+    // Lógica de edición
+  };
+
+  const handleDeleteAlert = (id) => {
+    Alert.alert("¿Estás seguro de eliminar este elemento?", "", [
+      {
+        text: "Cancelar",
+        onPress: () => {},
+        style: "cancel"
+      },
+      { text: "Eliminar", onPress: () => {handleDelete(id)} }
+    ]);
+    // Lógica de eliminación
+  };
+
+  const handleDelete = async (id) => {
+    const token = await sm.getTokenSession()
+    await delete{{MODEL_NAME}}(id, token).then(async (response) => {
+        if (response.status === 204) {
+          setError(true);
+          setAlertType('Success');
+          setAlertMessage('Eliminado correctamente.')
+          setFlag(false);
+        }
+    }).catch((error) => {
+        setError(true);
+        setAlertType('Error');
+        setAlertMessage('Error al eliminar.')
+        console.log(error)
+    })
+  }
+
+  const onCloseHandler = () => {
+    setError(null)
+    setAlertType('Error');
+    setAlertMessage('')
+  }
+    return (
+        <View className={"bg-slate-100 h-full w-full"}>
+            <View className={"w-full h-24 justify-between flex flex-row items-center p-5"}>
+                <Text className={"text-2xl font-bold"}>Lista de {{MODEL_NAME}}</Text>
+                <TouchableOpacity className={"transition-all inline-flex items-center justify-center px-4 py-2 border shadow-sm text-base font-medium rounded-md"} onPress={() => handleCreate()}>
+                    <Text>Crear {{MODEL_NAME}}</Text>
+                </TouchableOpacity>
+            </View>
+            <View className="w-full overflow-hidden p-3">
+              <AlertCmp type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
+            </View>
+            <View className={'w-full p-1'}>
+              <DynamicTable title='Información' data={allData} onView={handleView} onDelete={handleDeleteAlert} onUpdate={handleUpdate}/>
+            </View>
+        </View>
+      );
+}
+
+export default ListCita;

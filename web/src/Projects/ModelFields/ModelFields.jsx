@@ -55,11 +55,6 @@ function Models() {
       }else{
         setAllModels([])
       }
-      if(modelList.length == 0){
-        setAlertType('Error');
-        setAlertMessage('Campos no encontrados.')
-        setError(true);
-      }
       setFlag(true)
     })
   }
@@ -189,7 +184,7 @@ function Models() {
           <div>
             <div className='mt-3 ml-5 flex flex-row justify-between items-center '>
                 <p className='text-3xl font-bold'>Campos</p>
-                {allModels.length != 0 ?<button onClick={handleCreate} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear campo</button>:null}
+                <button onClick={handleCreate} className="rounded-full text-white bg-zinc-400 hover:bg-cyan-400 mr-5">Crear campo</button>
             </div>
             <div className="mt-5 w-full overflow-hidden">
               <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />

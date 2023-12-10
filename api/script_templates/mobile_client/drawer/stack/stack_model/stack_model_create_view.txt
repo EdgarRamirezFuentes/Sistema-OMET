@@ -1,0 +1,1 @@
+<Stack.Screen name="{{COMPONENT_NAME}}Create" options={{ headerTitle:'', headerBackTitle:' ', headerStyle:{backgroundColor:"#f1f5f9"} }} component={{{COMPONENT_NAME}}Create} />

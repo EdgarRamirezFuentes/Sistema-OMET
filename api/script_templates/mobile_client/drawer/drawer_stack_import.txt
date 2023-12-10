@@ -1,0 +1,1 @@
+import {{APP_NAME_TITLE}}{{MODEL_NAME}}StackApp from "./{{APP_NAME}}/{{MODEL_NAME}}/{{MODEL_NAME}}StackApp";

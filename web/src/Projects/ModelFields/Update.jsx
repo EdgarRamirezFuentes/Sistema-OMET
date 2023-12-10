@@ -6,10 +6,7 @@ import { updateProjectField } from '../../api/controller/FieldsController'
 import PropTypes from 'prop-types';
 
 function UpdateProjectModel({field, model, onUpdated}) {
-    console.log("field ====>",field)
-    console.log("model ====>",model)
     const session = JSON.parse(localStorage.getItem('session'));
-    console.log("session ====>",session)
 
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
@@ -30,7 +27,7 @@ function UpdateProjectModel({field, model, onUpdated}) {
       setOrder(field?.order)
     }, []);
     const buttonHandler = async () => {
-      if(name === ''){
+      if(name === '' || description === '' || order === ''){
           setAlertType('Warning');
           setAlertMessage('Ingresa los datos.')
           setError(true);
@@ -44,6 +41,13 @@ function UpdateProjectModel({field, model, onUpdated}) {
       }
 
       await updateProjectField(field.id, data, session.token).then(async (response) => {
+        let res = await response.json()
+        if(res.non_field_errors){
+          setError(true);
+          setAlertMessage(res.non_field_errors[0]);
+          setAlertType('Error');
+          return;
+        }else
         if (response.status === 200){
           setAlertType('Success');
           setAlertMessage('Campo actualizado correctamente.')
