@@ -141,13 +141,16 @@ class ProjectAppViewSet(viewsets.ModelViewSet):
     queryset = ProjectApp.objects.all()
     serializer_class = ProjectAppSerializer
 
+    def get_queryset(self):
+        return ProjectApp.objects.all()
+
     def list(self, request, *args, **kwargs):
         """List the all the project apps filtered by project id and name """
         try:
             project_id = request.query_params.get('project_id', None)
             name = request.query_params.get('name', None)
 
-            queryset = self.queryset
+            queryset = self.get_queryset()
 
             if project_id:
                 queryset = queryset.filter(project=int(project_id))
@@ -229,13 +232,16 @@ class AppModelViewSet(viewsets.ModelViewSet):
     queryset = AppModel.objects.all()
     serializer_class = AppModelSerializer
 
+    def get_queryset(self):
+        return AppModel.objects.all()
+
     def list(self, request, *args, **kwargs):
         """List the all the project models filtered by project app id and model name"""
         try:
             project_app_id = request.query_params.get('project_app_id', None)
             model_name = request.query_params.get('model_name', None)
 
-            queryset = self.queryset
+            queryset = self.get_queryset()
 
             if project_app_id:
                 queryset = queryset.filter(project_app=int(project_app_id))
@@ -272,6 +278,9 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated,]
     queryset = ModelField.objects.all()
     serializer_class = ModelFieldSerializer
+
+    def get_queryset(self):
+        return ModelField.objects.all()
 
     def create(self, request, *args, **kwargs):
         """Create a list of model fields"""
@@ -315,11 +324,13 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
             app_model_id = request.query_params.get('app_model_id', None)
             name = request.query_params.get('name', None)
 
+            queryset = self.get_queryset()
+
             if app_model_id:
-                self.queryset = self.queryset.filter(app_model=int(app_model_id))
+                queryset = queryset.filter(app_model=int(app_model_id))
 
             if name:
-                self.queryset = self.queryset.filter(name__icontains=name)
+                queryset = queryset.filter(name__icontains=name)
 
             serializer = ModelFieldSerializer(self.queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
@@ -399,12 +410,15 @@ class ValidatorValueViewSet(viewsets.ModelViewSet):
     queryset = ValidatorValue.objects.all()
     serializer_class = ValidatorValueSerializer
 
+    def get_queryset(self):
+        return ValidatorValue.objects.all()
+
     def list(self, request, *args, **kwargs):
         """List the all the config values filtered by model field id and is active"""
         try:
             model_field_id = request.query_params.get('model_field_id', None)
 
-            queryset = self.queryset
+            queryset = self.get_queryset()
 
             if model_field_id:
                 queryset = queryset.filter(model_field=int(model_field_id))

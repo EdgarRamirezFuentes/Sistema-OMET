@@ -22,12 +22,16 @@ class CustomerViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication,]
     permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
 
+    def get_queryset(self):
+        """Return only active customers."""
+        return Customer.objects.all()
+
     def list(self, request, *args, **kwargs):
         """List all customers filtered by RFC and email."""
         try:
             email = request.query_params.get('email', None)
 
-            queryset = self.queryset
+            queryset = self.get_queryset()
 
             if email:
                 queryset = queryset.filter(email__icontains=email)
