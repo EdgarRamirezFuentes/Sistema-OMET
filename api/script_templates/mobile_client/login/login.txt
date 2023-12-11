@@ -65,7 +65,7 @@ function Login({navigation}){
     <View className='flex flex-row h-screen'>
       <View className='w-full'>
         <View className='w-full pt-14 flex flex-row justify-between items-center bg-sky-500'>
-          <Text className='w-full text-lg text-center font-light pb-5 font-bold text-white'>Bienvenido a Sistema Gestor de Hospitales</Text>
+          <Text className='w-full text-lg text-center font-light pb-5 font-bold text-white'>Bienvenido a {{PROJECT_NAME}}</Text>
         </View>
         <View className='flex flex-col items-center m-auto w-2/3'>
           <Image className='h-24 w-24 mb-10' source={axolote} alt="" />

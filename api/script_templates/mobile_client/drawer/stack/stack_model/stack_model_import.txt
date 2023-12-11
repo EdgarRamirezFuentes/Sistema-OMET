@@ -1,0 +1,6 @@
+import {{APP_MODEL_NAME_TITLE}}ListView from './{{APP_MODEL_NAME_TITLE}}ListView';
+import {{APP_MODEL_NAME_TITLE}}RetrieveView from './{{APP_MODEL_NAME_TITLE}}RetrieveView';
+import {{APP_MODEL_NAME_TITLE}}UpdateView from './{{APP_MODEL_NAME_TITLE}}UpdateView';
+import {{APP_MODEL_NAME_TITLE}}CreateView from './{{APP_MODEL_NAME_TITLE}}CreateView';
+
+

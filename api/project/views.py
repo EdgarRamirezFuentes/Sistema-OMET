@@ -34,6 +34,7 @@ from core import permissions as custom_permissions
 from .utils import format_project_name
 from .exportation_functions.rest_services.base import create_rest_services_directory
 from .exportation_functions.web_client.base import create_web_client_directory
+from .exportation_functions.mobile_client.base import create_mobile_client_directory
 
 from rest_framework import serializers
 from rest_framework import permissions
@@ -500,6 +501,7 @@ class ExportProjectApiView(views.APIView):
                     # Create the rest services directory
                     create_rest_services_directory(main_directory, project)
                     create_web_client_directory(main_directory, project)
+                    create_mobile_client_directory(main_directory, project)
 
                 tmp.seek(0)
 

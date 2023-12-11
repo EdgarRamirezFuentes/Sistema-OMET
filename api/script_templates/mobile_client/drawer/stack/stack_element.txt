@@ -1,1 +1,1 @@
-<Stack.Screen name={{{MODEL_FIELD_NAME_TITLE}}} options={{ headerShown: false }} component={{{MODEL_FIELD_NAME_TITLE}}s} />
+<Stack.Screen name={'{{MODEL_NAME_TITLE}}'} options={{ headerShown: false }} component={{{MODEL_NAME_TITLE}}} />

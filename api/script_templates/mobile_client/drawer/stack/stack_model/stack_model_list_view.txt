@@ -1,1 +1,1 @@
-<Stack.Screen name="{{COMPONENT_NAME}}ListView" options={{ headerTitle:'', headerBackTitle:' ', headerStyle:{backgroundColor:"#f1f5f9"} }} component={{{COMPONENT_NAME}}ListView} />
+<Stack.Screen name="{{APP_MODEL_NAME_TITLE}}ListView" options={{ headerTitle:'', headerBackTitle:' ', headerStyle:{backgroundColor:"#f1f5f9"} }} component={{{APP_MODEL_NAME_TITLE}}ListView} />

@@ -1,1 +1,1 @@
-<TimePicker mode={"time"} label={'{{MODEL_FIELD_NAME}}'} needed={{{REQUIRED}}} onValueChange={set{{MODEL_FIELD_NAME_TITLE}}} minimumDate={new Date()} disabledInput={true}/>
+<TimePicker mode={"time"} label={'{{MODEL_FIELD_NAME}}'} onValueChange={set{{MODEL_FIELD_NAME_TITLE}}} minimumDate={new Date()} disabledInput={true}/>

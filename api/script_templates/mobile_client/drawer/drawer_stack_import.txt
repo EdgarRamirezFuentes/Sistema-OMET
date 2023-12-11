@@ -1,1 +1,1 @@
-import {{APP_NAME_TITLE}}{{MODEL_NAME}}StackApp from "./{{APP_NAME}}/{{MODEL_NAME}}/{{MODEL_NAME}}StackApp";
+import {{MODEL_NAME_TITLE}}StackApp from "../{{MODEL_NAME}}/{{MODEL_NAME_TITLE}}Stack";

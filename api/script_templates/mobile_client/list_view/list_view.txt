@@ -110,4 +110,4 @@ function {{MODEL_NAME}}List({navigation}) {
       );
 }
 
-export default ListCita;
+export default {{MODEL_NAME}}List;

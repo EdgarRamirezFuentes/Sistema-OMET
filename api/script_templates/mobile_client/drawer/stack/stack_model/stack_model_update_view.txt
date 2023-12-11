@@ -1,1 +1,1 @@
-<Stack.Screen name="{{COMPONENT_NAME}}Update" options={{ headerTitle:'', headerBackTitle:' ', headerStyle:{backgroundColor:"#f1f5f9"} }} component={{{COMPONENT_NAME}}Update} />
+<Stack.Screen name="{{APP_MODEL_NAME_TITLE}}UpdateView" options={{ headerTitle:'', headerBackTitle:' ', headerStyle:{backgroundColor:"#f1f5f9"} }} component={{{APP_MODEL_NAME_TITLE}}UpdateView} />

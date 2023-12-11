@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text, TouchableOpacity} from 'react-native';
 {{STACK_ELEMENTS_IMPORT}}
-export default function FarmaciasStackApp() {
+export default function {{APP_NAME_TITLE}}StackApp() {
   const Stack = createStackNavigator();
 
   function ChooseScreen({ navigation }) {

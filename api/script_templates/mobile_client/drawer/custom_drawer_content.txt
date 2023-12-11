@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, SafeAreaView, StatusBar, TouchableOpacity} from 'react-native';
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useRoute } from "@react-navigation/native";
 import { useDrawerStatus } from '@react-navigation/drawer';
 import SessionManager from '../api/manager/SessionManager';
 const sm = SessionManager.getInstance();
@@ -20,8 +20,8 @@ const CustomDrawerContent = ({ navigation }) => {
                     <Text className={'text-white font-bold text-xl'}>Home</Text>
                 </View>
             </TouchableOpacity>
-
             
+            {{DRAWER_ITEMS}}
 
             <TouchableOpacity className={'w-full ml-5 mt-5 h-10'}
                 onPress={async () => { await sm.logOut(); navigation.navigate('Login');}}>

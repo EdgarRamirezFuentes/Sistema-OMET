@@ -1,0 +1,100 @@
+import React, {useState, useEffect} from 'react';
+import { Text, View, TouchableOpacity, Image } from 'react-native';
+import SessionManager from '../../api/manager/SessionManager';
+import * as {{MODEL_NAME_LOWER}}Controller from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
+import PropTypes from 'prop-types';
+
+import Alert from '../../Components/Alert/Alert';
+import Input from '../../Components/Input/Input';
+import Select from '../../Components/Select/Select';
+import CheckboxGroup from '../../Components/CheckboxGroup/CheckboxGroup'
+const sm = SessionManager.getInstance();
+
+function Create{{MODEL_NAME}}({navigation}) {
+    const [error, setError] = useState(null);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('Error');
+
+{{MODEL_HOOKS}}
+
+{{FOREIGN_KEY_HOOKS}}
+
+{{FOREIGN_KEY_SELECTED_ITEMS}}
+
+{{FOREIGN_KEY_FLAGS}}
+
+{{FOREIGN_KEY_GET_DATA_FUNCTIONS}}
+
+{{FOREIGN_KEY_USE_EFFECTS}}
+
+
+    const onCloseHandler = () => {
+        setError(null)
+        setAlertType('Error');
+        setAlertMessage('')
+    }
+
+    const buttonHandler = async () => {
+{{NOT_NULL_VALIDATIONS}}
+
+        let request = {
+{{REQUEST_FIELDS}}
+        }
+        const token = await sm.getTokenSession()
+
+        await {{MODEL_NAME_LOWER}}Controller.create{{MODEL_NAME}}(request, token).then(async (response)=>{
+            if (response.status === 201){
+                setAlertType('Success');
+                setAlertMessage('Creado correctamente.')
+                setError(true);
+                setTimeout((e) => {navigation.goBack()},1000);
+            } else if(response.status == 400) {
+                setAlertType('Warning');
+                setAlertMessage('La información enviada no cumple el formato requerido.')
+                setError(true);
+            } else{
+                setAlertType('Error');
+                setAlertMessage('Error al crear.')
+                setError(true);
+            }
+        });
+    }
+
+    return (
+        <View className="w-full h-full bg-slate-100">
+            <View className='flex flex-row h-full'>
+                <View className='w-full'>
+                    <View className='mt-3 ml-5 flex justify-center'>
+                        <Text className='text-3xl font-bold'>Crear {{MODEL_NAME}}</Text>
+                    </View>
+                    <View className='flex flex-col justify-between'>
+                        <View className='mt-5 p-5 flex flex-col items-center m-auto w-full rounded-2xl bg-white'>
+
+                            <View className="w-full overflow-hidden">
+                                <Alert type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
+                            </View>
+
+                            <View className='mt-5 w-full items-center flex flex-row'>
+
+                                <View className='w-full flex flex-col items-center'>
+
+                                    <View className='w-full flex flex-col justify-between'>
+{{INPUT_FIELDS}}
+                                    </View>
+
+                                </View>
+                            </View>
+                            <View className='w-1/2'>
+                                <TouchableOpacity onPress={buttonHandler} className=' text-white w-full py-4 px-4 rounded-full bg-zinc-400' >
+                                    <Text className='text-center text-white font-bold'>Crear</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </View>
+        </View>
+    )
+}
+
+export default Create{{MODEL_NAME}}

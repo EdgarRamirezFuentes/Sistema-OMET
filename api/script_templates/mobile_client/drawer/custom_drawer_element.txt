@@ -1,0 +1,5 @@
+<TouchableOpacity className={'w-full ml-5 mt-5 h-10'} onPress={() => {navigation.navigate('{{MODEL_NAME_TITLE}}')}}>
+    <View >
+        <Text className={'text-white font-bold text-xl'}>{{MODEL_NAME_TITLE}}</Text>
+    </View>
+</TouchableOpacity>
