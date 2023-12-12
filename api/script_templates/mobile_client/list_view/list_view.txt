@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Text, View, Button, Alert, TouchableOpacity } from 'react-native';
 import SessionManager from '../../api/manager/SessionManager';
 import DynamicTable from '../../Components/Table/DynamicTable';
@@ -45,16 +45,16 @@ function {{MODEL_NAME}}List({navigation}) {
 }
 
   const handleCreate = async () => {
-      navigation.navigate('Create{{MODEL_NAME}}')
+      navigation.navigate('{{MODEL_NAME}}CreateView')
   }
 
   const handleView = (id) => {
-    navigation.navigate('Retrieve{{MODEL_NAME}}', {cita_id: id})
+    navigation.navigate('{{MODEL_NAME}}RetrieveView', {{{MODEL_NAME_LOWER}}_id: id})
     // Lógica de edición
   };
   
   const handleUpdate = (id) => {
-    navigation.navigate('Update{{MODEL_NAME}}', {cita_id: id})
+    navigation.navigate('{{MODEL_NAME}}UpdateView', {{{MODEL_NAME_LOWER}}_id: id})
     // Lógica de edición
   };
 

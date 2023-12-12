@@ -12,7 +12,7 @@ const Draw = () => {
     return (
         <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props}/>}>
             <Drawer.Screen name="Dashboard" component={HomeScreen} options={{headerTitle: ''}}/>
-            {{STACK_APP_VIEWS}}
+{{STACK_APP_VIEWS}}
         </Drawer.Navigator>
     );
 }

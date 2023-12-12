@@ -22,7 +22,7 @@ function Retrieve{{MODEL_NAME}}({route, navigation}) {
     const get{{MODEL_NAME_TITLE}} = async () => {
         const token = await sm.getTokenSession();
         if (data == null) {
-            await retrieve{{MODEL_NAME}}({{MODEL_NAME_LOWER}}_id, session.token).then(async (response) => {
+            await retrieve{{MODEL_NAME}}({{MODEL_NAME_LOWER}}_id, token).then(async (response) => {
                 console.log(response)
                 if (response.status === 200) {
                     let res = await response.json()
