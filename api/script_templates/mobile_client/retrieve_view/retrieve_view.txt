@@ -52,8 +52,6 @@ function Retrieve{{MODEL_NAME}}({route, navigation}) {
         setAlertMessage('')
     }
 
-{{TABLES_COLUMNS}}
-
     return (
         <View className="w-full h-full bg-slate-100">
             <View className='flex flex-row h-full'>

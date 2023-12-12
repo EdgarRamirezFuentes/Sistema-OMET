@@ -247,6 +247,21 @@ class ViewBuilder:
             input_field_template = input_field_template.replace('{{MODEL_FIELD_NAME}}', model_field.name)
             input_field_template = input_field_template.replace('{{MODEL_FIELD_NAME_TITLE}}', model_field.name.title())
             input_field_template = input_field_template.replace('{{MODEL_FIELD_NAME_LOWER}}', model_field.name.lower())
+
+            if 'ForeignKey' in data_type:
+                relation = ForeignKeyRelation.objects.get(model_field_origin=model_field)
+
+                related_model_field = relation.model_field_related
+
+                related_model_name = related_model_field.app_model.name
+                related_model_field_name = related_model_field.name
+
+                input_field_template = input_field_template.replace('{{FOREIGN_KEY_MODEL_NAME}}', related_model_name)
+                input_field_template = input_field_template.replace('{{FOREIGN_KEY_MODEL_NAME_TITLE}}', related_model_name.title())
+                input_field_template = input_field_template.replace('{{FOREIGN_KEY_MODEL_NAME_LOWER}}', related_model_name.lower())
+                input_field_template = input_field_template.replace('{{FOREIGN_KEY_MODEL_FIELD_NAME}}', related_model_field_name)
+                input_field_template = input_field_template.replace('{{FOREIGN_KEY_MODEL_FIELD_NAME_TITLE}}', related_model_field_name.title())
+
             read_only_fields += ('\t' * 10) + input_field_template
 
         return read_only_fields

@@ -46,6 +46,20 @@ services:
       - './web:/web'
     depends_on:
       - api
+  mobile:
+    container_name: {{PROJECT_NAME}}-mobile
+    build:
+      context: ./mobile
+      args:
+        - DEV=true
+    ports:
+      - '8081:8081'
+    command: sh -c "npm install --dev --silent && npx expo start"
+    stdin_open: true
+    volumes:
+      - './mobile:/mobile'
+    depends_on:
+      - api
 volumes:
   dev-db-data:
   dev-static-data:
