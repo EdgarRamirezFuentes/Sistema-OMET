@@ -32,7 +32,6 @@ def customer_insertion_signal(sender, instance, created, **kwargs):
             field.name: getattr(instance, field.name)
             for field in instance._meta.fields
         }
-        updated_customer.set_updated_data(update_data)
 
         customer_update_log.delay(updated_customer.get_json())
 

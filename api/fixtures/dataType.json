@@ -77,7 +77,7 @@
         "fields": {
             "name": "FloatField",
             "description": "Tipo de dato utilizado para almacenar números decimales.",
-            "validators": [1, 2, 3, 4, 7, 8, 11, 12]
+            "validators": [1, 2, 3, 4, 7, 8]
         }
     },
     {

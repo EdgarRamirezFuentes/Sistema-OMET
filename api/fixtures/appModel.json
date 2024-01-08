@@ -70,5 +70,140 @@
             "project_app": 5,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 9,
+        "fields": {
+            "name": "Sucursal",
+            "project_app": 6,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 10,
+        "fields": {
+            "name": "Almacen",
+            "project_app": 6,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 11,
+        "fields": {
+            "name": "Proveedor",
+            "project_app": 7,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 12,
+        "fields": {
+            "name": "Categoria",
+            "project_app": 7,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 13,
+        "fields": {
+            "name": "Vehiculo",
+            "project_app": 8,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 14,
+        "fields": {
+            "name": "Mantenimiento",
+            "project_app": 8,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 15,
+        "fields": {
+            "name": "Marca",
+            "project_app": 8,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 16,
+        "fields": {
+            "name": "Servicio",
+            "project_app": 8,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 17,
+        "fields": {
+            "name": "Trabajador",
+            "project_app": 9,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 18,
+        "fields": {
+            "name": "Categoria",
+            "project_app": 9,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 19,
+        "fields": {
+            "name": "Cliente",
+            "project_app": 10,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 20,
+        "fields": {
+            "name": "Membresia",
+            "project_app": 10,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 21,
+        "fields": {
+            "name": "Suscripcion",
+            "project_app": 10,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 22,
+        "fields": {
+            "name": "Producto",
+            "project_app": 11,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.AppModel",
+        "pk": 23,
+        "fields": {
+            "name": "Categoria",
+            "project_app": 11,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
     }
 ]

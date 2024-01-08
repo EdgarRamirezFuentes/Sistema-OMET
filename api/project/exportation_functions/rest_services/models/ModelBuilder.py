@@ -132,6 +132,10 @@ class ModelBuilder():
         elif validator_name in VALIDATORS.keys():
             self.__validator_imports.add(VALIDATOR_IMPORTS[validator_name])
             validator_method = VALIDATORS[validator_name]
+
+            if validator_name == 'regex':
+                validator_value = f"'{validator_value}'"
+
             validator_method = validator_method.replace('{{VALUE}}', validator_value)
             model_field_body = model_field_body.replace('{{VALIDATORS}}, ', f'{validator_method}, ' + '{{VALIDATORS}}, ')
 

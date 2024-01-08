@@ -313,6 +313,23 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
                 value_validator_serializer.is_valid(raise_exception=True)
                 value_validator_serializer.save()
 
+            # Adding a required validator for the DecimalField data type
+            if saved_model_field.data_type.name == 'DecimalField':
+                value_validator_serializer = ValidatorValueSerializer(data=[
+                    {
+                    'model_field': saved_model_field.id,
+                    'validator': 11,
+                    'value': 10
+                    },
+                    {
+                        'model_field': saved_model_field.id,
+                        'validator': 12,
+                        'value': 2
+                    }
+                ], many=True)
+
+                value_validator_serializer.is_valid(raise_exception=True)
+                value_validator_serializer.save()
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
         except serializers.ValidationError as e:
             return response.Response(status=status.HTTP_400_BAD_REQUEST, data=e.detail)
