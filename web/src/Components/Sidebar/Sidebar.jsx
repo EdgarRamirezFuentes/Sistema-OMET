@@ -4,6 +4,7 @@ import { Disclosure } from '@headlessui/react';
 import { HomeIcon, ArrowRightOnRectangleIcon, ChevronDownIcon, MinusSmallIcon } from '@heroicons/react/24/outline';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { getClient } from '../../api/controller/ClientsController'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -14,6 +15,21 @@ function SideBar({ user }) {
     user = session.user;
     const history = useNavigate();
     const location = useLocation();
+    const [image, setImage] = useState(user?.profile_image || axolote);
+    const [name, setName] = useState(user?.name);
+
+    const getClientData = async ()=>{
+        console.log(session.token, user.id)
+        await getClient(session.token, user.id).then(async (client)=>{
+          let c = await client.json()
+          setName(c.name)
+          setImage("http://localhost:8001"+c.profile_image)
+        })
+      }
+
+      useEffect(() => {
+        getClientData()
+      }, [])
 
     const [navigation, setNavigation] = useState([
         {
@@ -182,11 +198,11 @@ function SideBar({ user }) {
                         <div className='flex items-center justify-center h-12 w-12 rounded-full border border-white/30'>
                             <img
                                 className="inline-block h-full w-full rounded-full"
-                                src={user?.profile_image || axolote}
+                                src={image || axolote}
                             />
                         </div>
                         <div className="ml-3">
-                            <Link to={'/profile'}>  <p className="text-sm font-medium text-white group-hover:text-white">{user?.name}</p></Link>
+                            <Link to={'/profile'}>  <p className="text-sm font-medium text-white group-hover:text-white">{name}</p></Link>
                             <p className="text-xs font-medium text-white group-hover:text-white pt-1 -ml-[3px] cursor-pointer flex items-center gap-1 underline" onClick={handlerLogout}><ArrowRightOnRectangleIcon className='w-5 h-5' /> Cerrar sesión</p>
                         </div>
                     </div>

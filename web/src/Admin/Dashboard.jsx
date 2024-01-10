@@ -3,8 +3,7 @@ import '../App.css'
 import Timer from '../Components/Timer/Timer'
 import SideBar from '../Components/Sidebar/Sidebar'
 import Table from '../Components/tailwindUI/Table'
-import { TrashIcon, ClipboardIcon, EyeIcon, PaperAirplaneIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { getCustomerCreateLogs, getProjectCreateLogs, getUserCreateLogs, getCustomerUpdateLogs} from '../api/controller/LogsController'
+import { getCustomerUpdateLogs} from '../api/controller/LogsController'
 import { getProjectUpdateLogs, getUserUpdateLogs } from '../api/actions/logs'
 function Dashboard() {
   const session = JSON.parse(localStorage.getItem('session'));
@@ -56,32 +55,6 @@ function Dashboard() {
     { heading: 'Descripción Actualizada', value: 'updated_description' },
     { heading: 'Fecha de actualización', value: 'updated_date' },
   ];
-
-  const handleView = item => {
-    /*history(`/clients/view/${item.id}`,{
-            client: item,
-        }
-    )*/
-  }
-  const handleUpdate = item => {
-
-    /*history(`/clients/update/${item.id}`,{
-            client: item,
-        }
-    )*/
-  }
-  
-  const handleReset = item => {
-
-
-    /*history(`/clients/update/${item.id}`,{
-            client: item,
-        }
-    )*/
-  }
-
-  const handleDeleteModal = item => {
-  }
 
   const columnActions = [
   ];

@@ -92,7 +92,10 @@ function Profile() {
       setEmail(c.email)
       setPhone(c.phone)
       setRfc(c.rfc)
+      console.log("profile_image",c.profile_image);
+      setImage("http://localhost:8001"+c.profile_image)
       setUserData(client);
+
     })
   }
 
