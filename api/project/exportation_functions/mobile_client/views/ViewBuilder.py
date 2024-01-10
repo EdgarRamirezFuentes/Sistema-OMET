@@ -228,10 +228,20 @@ class ViewBuilder:
         not_null_fields = ValidatorValue.objects.filter(model_field__app_model=self.__app_model, validator__name='null', value='False')
 
         for not_null_field in not_null_fields:
-            validation_template = get_template_file_content(SCRIPT_TEMPLATE_URLS['mobile_client_not_null_validation'])
-            validation_template = validation_template.replace('{{MODEL_FIELD_NAME_LOWER}}', not_null_field.model_field.name.lower())
-            validation_template = validation_template.replace('{{MODEL_FIELD_NAME_TITLE}}', not_null_field.model_field.name.title())
-            validators += ('\t' * 2) + validation_template
+            if 'ForeignKey' in not_null_field.model_field.data_type.name:
+                validation_template = get_template_file_content(SCRIPT_TEMPLATE_URLS['mobile_client_not_null_validation'])
+                validation_template = validation_template.replace('{{MODEL_FIELD_NAME_LOWER}}', not_null_field.model_field.name.lower())
+                validation_template = validation_template.replace('{{MODEL_FIELD_NAME_TITLE}}', not_null_field.model_field.name.title())
+                validators += ('\t' * 2) + validation_template
+            else:
+                relation = ForeignKeyRelation.objects.get(model_field_origin=not_null_field.model_field)
+                related_model_field = relation.model_field_related
+                related_model_name = related_model_field.app_model.name
+                related_model_field_name = related_model_field.name
+                validation_template = get_template_file_content(SCRIPT_TEMPLATE_URLS['web_client_not_null_validation'])
+                validation_template = validation_template.replace('{{MODEL_FIELD_NAME_LOWER}}', not_null_field.model_field.name.lower() + related_model_name.title() + related_model_field_name.title())
+                validation_template = validation_template.replace('{{MODEL_FIELD_NAME_TITLE}}', not_null_field.model_field.name.title() + related_model_name.title() + related_model_field_name.title())
+                validators += ('\t' * 2) + validation_template
 
         return validators
 
