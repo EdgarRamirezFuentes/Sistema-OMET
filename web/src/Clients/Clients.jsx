@@ -42,6 +42,7 @@ function Clients() {
     if (deletedUser == null || deletedUser == true || !flag){
       clients()
       setDeletedUser(false);
+      setFlag(true);
     }
   }, [deletedUser, flag, allClients, filteredClients]);
 
@@ -170,11 +171,17 @@ function Clients() {
   ];
 
   const filterClient = async (value)=>{
+    console.log("value", value)
     setFilterText(value)
     await filterClients(session.token, value).then(async (response)=>{
       let res = await response.json()
-      setFilteredClients(res)
-      console.log(res)
+      if(res.length > 0) {
+        setFilteredClients(res)
+      }else{
+        setError(true)
+        setAlertType('Warning');
+        setAlertMessage('No se encontraron resultados.')
+      }
     })
   }
 

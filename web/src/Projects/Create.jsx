@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import {createProject} from '../api/controller/ProjectsController'
 import { getCustomers } from '../api/controller/CustomersController';
 import PropTypes from 'prop-types';
-import CheckboxGroup from '../Components/tailwindUI/CheckboxGroup';
-import Select from '../Components/tailwindUI/Select';
 
 
 function CreateProject({onCreated}) {
@@ -21,9 +19,6 @@ function CreateProject({onCreated}) {
     const [description, setDescription] = useState('');
     const [selectedUser, setSelectedUser] = useState('');
     const [allClients, setAllClients] = useState([])
-    const [selectedItems, setSelectedItems] = useState([])
-    const [items, setItems] = useState([{id:1,title:"Titulo1",description:"Description"},{id:2,title:"Titulo2",description:"Description"},{id:3,title:"Titulo3",description:"Description"}])
-    const [selectedIds, setSelectedIds] = useState([])
     const handleChange = (event) => {
       setSelectedUser(event.target.value);
       console.log("===selectedUser===");
@@ -33,11 +28,6 @@ function CreateProject({onCreated}) {
     useEffect(() => {
       getActiveCustomers();
     }, []);
-
-    useEffect(() => {
-      console.log("===setSelectedIds===");
-      console.log(selectedIds);
-    },[selectedItems, selectedIds])
 
     const onCloseHandler = () => {
         setError(null)
@@ -119,15 +109,6 @@ function CreateProject({onCreated}) {
                                   </select>
                                 </div>
                               </div>
-                              <CheckboxGroup
-                                items={items}
-                                selectedItems={selectedItems}
-                                setSelectedItems={setSelectedItems}
-                                setSelectedIds={setSelectedIds}
-                                label="Mi Grupo de Checkbox"
-                                needed={true} // o false, dependiendo de tus necesidades
-                                // error="Mensaje de error" // Descomenta si necesitas mostrar un error
-                              />
                             </div>
 
                           </div>

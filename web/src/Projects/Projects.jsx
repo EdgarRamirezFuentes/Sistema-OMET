@@ -64,8 +64,13 @@ function Projects() {
     setFilterText(value)
     await filterProjects(session.token, value).then(async (response)=>{
       let res = await response.json()
-      setFilteredProjects(res)
-      console.log(res)
+      if (res.length > 0){
+        setFilteredProjects(res)
+      }else{
+        setError(true)
+        setAlertType('Warning');
+        setAlertMessage('No se encontraron resultados.')
+      }
     })
   }
 

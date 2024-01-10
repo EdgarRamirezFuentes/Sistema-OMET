@@ -46,10 +46,13 @@ from .utils import validate_password
 
 class UserViewSet(viewsets.ModelViewSet):
     """Viewset for users."""
-    authentication_classes = [TokenAuthentication,]
+    authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated, custom_permissions.isAdminUser]
     serializer_class = UserSerializer
     queryset = get_user_model().objects.all()
+
+    def get_queryset(self):
+        return get_user_model().objects.all()
 
     def list(self, request, *args, **kwargs):
         """List all users filtered by is_staff, email, and is_superuser."""
@@ -58,7 +61,7 @@ class UserViewSet(viewsets.ModelViewSet):
             email = request.query_params.get('email', None)
             is_superuser = request.query_params.get('is_superuser', None)
 
-            queryset = self.queryset
+            queryset = self.get_queryset()
 
             if is_staff is not None:
                 is_staff = False if is_staff.lower().strip() != 'true' else True

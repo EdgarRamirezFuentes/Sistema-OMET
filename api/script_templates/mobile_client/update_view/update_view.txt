@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Button, Alert, TouchableOpacity } from 'react-native';
 import AlertCmp from '../../Components/Alert/Alert'
-import TimePicker from '../../Components/TimePicker/TimePicker';
+import Input from '../../Components/Input/Input';
+import Table from '../../Components/Table/DynamicTable';
+import Select from '../../Components/Select/Select';
+import TimePicker from '../../Components/TimePicker/TimePicker'
+import CheckboxGroup from '../../Components/CheckboxGroup/CheckboxGroup'
 import Select from '../../Components/Select/Select';
 import * as {{MODEL_NAME_LOWER}}Controller from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
 import SessionManager from '../../api/manager/SessionManager';

@@ -350,7 +350,7 @@ class ModelFieldViewSet(viewsets.ModelViewSet):
             if name:
                 queryset = queryset.filter(name__icontains=name)
 
-            serializer = ModelFieldSerializer(self.queryset, many=True)
+            serializer = ModelFieldSerializer(queryset, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except (ObjectDoesNotExist, Http404):
             return response.Response(status=status.HTTP_404_NOT_FOUND)

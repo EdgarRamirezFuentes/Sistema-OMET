@@ -143,8 +143,14 @@ function SeeApps() {
     const filterData = async (value)=>{
         setFilterText(value)
         await filterApps(session.token, value, location.state.project.id).then(async (response)=>{
-          let res = await response.json()
-          setFilteredData(res)
+            let res = await response.json()
+            if(res.length > 0) {
+                setFilteredData(res)
+            }else{
+                setError(true);
+                setAlertType('Warning');
+                setAlertMessage('No se encontraron resultados.')
+            }
         })
       }
 

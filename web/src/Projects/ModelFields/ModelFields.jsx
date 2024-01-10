@@ -47,8 +47,11 @@ function Models() {
   }, [selectedModel, deletedProject, flag, allModels]);
 
   const getModels = async ()=>{
+    console.log("token",session.token)
+    console.log("id",params.id)
     await getModelFields(params.id, session.token).then(async (models)=>{
       let modelList = await models.json()
+      console.log("===>",modelList)
       if (modelList.length != 0 || !flag){
         setAllModels(modelList)
         setIsLoadingData(false)
@@ -120,10 +123,16 @@ function Models() {
 
   const filterData = async (value)=>{
     setFilterText(value)
-    console.log("params.id",params.id);
     await filterModelFields(session.token, value, params.id).then(async (response)=>{
       let res = await response.json()
-      setFilteredData(res)
+      if (res.length > 0){
+
+        setFilteredData(res)
+      }else{
+        setError(true)
+        setAlertType('Warning');
+        setAlertMessage('No se encontraron resultados.')
+      }
     })
   }
 

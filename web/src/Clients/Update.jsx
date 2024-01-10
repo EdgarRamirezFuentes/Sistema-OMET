@@ -106,18 +106,16 @@ function Update({userId, onUpdate}) {
         return;
         }
         let userData = {
-            nombre: name,
-            apellido_paterno: first_last_name,
-            apellido_materno: second_last_name,
+            name: name,
+            first_last_name: first_last_name,
+            second_last_name: second_last_name,
             email: email,
-            telefono: phone,
-            imagen: profileImage
+            phone: phone,
+            profile_image: profileImage
         }
 
         await updateClient(userData, session.token, user.id).then(async (response)=>{
             let res = await response.json();
-            console.log("====RESPONSE====");
-            console.log(res);
             if(res.non_field_errors){
                 setError(true);
                 setAlertMessage(res.non_field_errors[0]);

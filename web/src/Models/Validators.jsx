@@ -64,6 +64,7 @@ function ValidatorsModel() {
         if (model == null || !flag) {
             const model = await getModelField(params.id, session.token);
             const modelList = await model.json();
+            console.log("modelList",modelList)
             console.log("===validators used===", modelList)
             setValidatorsUsed(modelList.validators);
             setModel(modelList);
