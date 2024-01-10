@@ -13,7 +13,7 @@ function SeeApp({appId}) {
     const [caption, setCaption] = useState('');
     const [appData, setAppData] = useState(null);
     const [flag, setFlag] = useState(false);
-    
+
 
 
     const onCloseHandler = () => {
@@ -38,7 +38,7 @@ function SeeApp({appId}) {
     useEffect(() => {
         getAppData();
     },[])
-  
+
     return (
         <div className="w-full h-full bg-slate-100">
             <div className='flex flex-row h-screen'>
@@ -60,18 +60,18 @@ function SeeApp({appId}) {
                             <div className='w-full flex flex-col justify-between'>
                               <p className='font-bold'>Nombre:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input value ={name} onChange={(event) => {setName(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="project_name" name="project_name"/><br/><br/>
+                                <input disabled value ={name} onChange={(event) => {setName(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Nombre' type="text" id="project_name" name="project_name"/><br/><br/>
                               </div>
-                              
+
                               <p className='font-bold'>Descripción:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input value ={caption} onChange={(event) => {setCaption(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="caption" name="caption"/><br/><br/>
+                                <input disabled value ={caption} onChange={(event) => {setCaption(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="caption" name="caption"/><br/><br/>
                               </div>
                           </div>
 
                         </div>
                         </div>
-                        
+
                     </div>
                     </div>
                 </div>
@@ -82,6 +82,6 @@ function SeeApp({appId}) {
 SeeApp.propTypes = {
     appId : PropTypes.number
 }
-  
+
 
 export default SeeApp

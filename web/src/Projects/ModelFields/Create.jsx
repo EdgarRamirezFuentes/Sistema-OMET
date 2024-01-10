@@ -57,6 +57,11 @@ function CreateProjectModel({modelId, onCreated}) {
               setShowApps(true)
             }else{
               setShowApps(false)
+              setSelectedModel(null)
+              setSelectedApp(null)
+              setSelectedField(0)
+              setShowModels(false)
+              setShowFields(false)
             }
           }
         })
@@ -143,7 +148,6 @@ function CreateProjectModel({modelId, onCreated}) {
         console.log("projectStructure",res)
         if (response.status === 200){
           setProjectApps(res)
-
         }
       })
     }

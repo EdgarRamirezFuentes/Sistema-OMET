@@ -706,7 +706,7 @@
             "validator": 6,
             "model_field": 42,
             "value": "^[A-Z]{1}\\d{2}-[A-Z]{3}$",
-            "created_at": "202-07-23T20:00:00.000Z"
+            "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
     {
