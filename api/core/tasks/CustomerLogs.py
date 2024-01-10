@@ -11,8 +11,11 @@ def customer_insertion_log(customer):
         db = client['sistemaOmetLogs']
         collection = db['customerInsertionLogs']
         collection.insert_one(customer)
+        print('Customer inserted')
+        print(customer)
         client.close()
     except Exception as e:
+        print(e)
         return False
 
     return True

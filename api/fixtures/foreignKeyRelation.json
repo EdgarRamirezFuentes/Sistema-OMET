@@ -61,5 +61,122 @@
             "model_field_related": 20,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 8,
+        "fields": {
+            "model_field_origin": 30,
+            "model_field_related": 53,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 9,
+        "fields": {
+            "model_field_origin": 35,
+            "model_field_related": 53,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 10,
+        "fields": {
+            "model_field_origin": 40,
+            "model_field_related": 41,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 11,
+        "fields": {
+            "model_field_origin": 45,
+            "model_field_related": 48,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 12,
+        "fields": {
+            "model_field_origin": 46,
+            "model_field_related": 53,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 13,
+        "fields": {
+            "model_field_origin": 47,
+            "model_field_related": 31,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 14,
+        "fields": {
+            "model_field_origin": 50,
+            "model_field_related": 42,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 15,
+        "fields": {
+            "model_field_origin": 51,
+            "model_field_related": 49,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 16,
+        "fields": {
+            "model_field_origin": 61,
+            "model_field_related": 62,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 17,
+        "fields": {
+            "model_field_origin": 73,
+            "model_field_related": 63,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 18,
+        "fields": {
+            "model_field_origin": 74,
+            "model_field_related": 72,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 19,
+        "fields": {
+            "model_field_origin": 80,
+            "model_field_related": 31,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ForeignKeyRelation",
+        "pk": 20,
+        "fields": {
+            "model_field_origin": 81,
+            "model_field_related": 82,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
     }
 ]

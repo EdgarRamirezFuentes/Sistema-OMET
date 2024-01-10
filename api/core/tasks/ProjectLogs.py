@@ -11,6 +11,8 @@ def project_insertion_log(project):
         db = client['sistemaOmetLogs']
         collection = db['projectInsertionLogs']
         collection.insert_one(project)
+        print('Project inserted')
+        print(project)
         client.close()
     except Exception as e:
         return False

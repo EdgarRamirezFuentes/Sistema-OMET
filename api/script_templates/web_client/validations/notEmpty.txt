@@ -1,1 +1,1 @@
-if({{MODEL_FIELD_NAME_LOWER}} === '' || {{MODEL_FIELD_NAME_LOWER}} === null || {{MODEL_FIELD_NAME_LOWER}} === []){ setAlertType('Warning'); setAlertMessage('El campo {{MODEL_FIELD_NAME_TITLE}} es un campo obligatorio.'); setError(true); return; }
+if({{MODEL_FIELD_NAME_LOWER}} === '' || {{MODEL_FIELD_NAME_LOWER}} === null || {{MODEL_FIELD_NAME_LOWER}} == []){ setAlertType('Warning'); setAlertMessage('El campo {{MODEL_FIELD_NAME_TITLE}} es un campo obligatorio.'); setError(true); return; }

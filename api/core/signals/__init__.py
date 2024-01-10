@@ -12,8 +12,3 @@ from .ProjectSignals import (
     project_insertion_signal,
     project_pre_insertion_signal,
 )
-
-from .ProjectModelSignals import (
-    project_model_insertion_signal,
-    project_model_pre_insertion_signal,
-)

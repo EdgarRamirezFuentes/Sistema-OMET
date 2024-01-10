@@ -14,7 +14,7 @@ class GetCustomerCreateLogsView(APIView):
             client = pymongo.MongoClient(MONGO_URI)
             db = client['sistemaOmetLogs']
             collection = db['customerInsertionLogs']
-            logs = collection.find().limit(10)
+            logs = collection.find({}, {"_id": False}).limit(10)
             logs = list(logs)
             print(logs)
             client.close()
@@ -31,7 +31,7 @@ class GetCustomerUpdateLogsView(APIView):
             client = pymongo.MongoClient(MONGO_URI)
             db = client['sistemaOmetLogs']
             collection = db['customerUpdateLogs']
-            logs = collection.find().limit(10)
+            logs = collection.find({}, {"_id": False}).limit(10)
             logs = list(logs)
             client.close()
             return Response(logs, status=status.HTTP_200_OK)
@@ -48,7 +48,7 @@ class GetUserCreateLogsView(APIView):
             client = pymongo.MongoClient(MONGO_URI)
             db = client['sistemaOmetLogs']
             collection = db['userInsertionLogs']
-            logs = collection.find().limit(10)
+            logs = collection.find({}, {"_id": False}).limit(10)
             logs = list(logs)
             client.close()
             return Response(logs, status=status.HTTP_200_OK)
@@ -64,7 +64,39 @@ class GetUserUpdateLogsView(APIView):
             client = pymongo.MongoClient(MONGO_URI)
             db = client['sistemaOmetLogs']
             collection = db['userUpdateLogs']
-            logs = collection.find().limit(10)
+            logs = collection.find({}, {"_id": False}).limit(10)
+            logs = list(logs)
+            client.close()
+            return Response(logs, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Get project create logs from mongodb
+class GetProjectCreateLogsView(APIView):
+    """Get project create logs from mongodb"""
+    def get(self, request):
+        try:
+            MONGO_URI = f'mongodb://mongodb:27017'
+            client = pymongo.MongoClient(MONGO_URI)
+            db = client['sistemaOmetLogs']
+            collection = db['projectInsertionLogs']
+            logs = collection.find({}, {"_id": False}).limit(10)
+            logs = list(logs)
+            client.close()
+            return Response(logs, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Get project update logs from mongodb
+class GetProjectUpdateLogsView(APIView):
+    """Get project update logs from mongodb"""
+    def get(self, request):
+        try:
+            MONGO_URI = f'mongodb://mongodb:27017'
+            client = pymongo.MongoClient(MONGO_URI)
+            db = client['sistemaOmetLogs']
+            collection = db['projectUpdateLogs']
+            logs = collection.find({}, {"_id": False}).limit(10)
             logs = list(logs)
             client.close()
             return Response(logs, status=status.HTTP_200_OK)

@@ -2,7 +2,7 @@ import datetime
 
 class CustomerInsertionLog:
     def __init__(self, rfc, name,
-                 phone, email, is_active):
+                 phone, email):
         self.rfc = rfc
         self.name = name
         self.phone = phone

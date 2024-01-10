@@ -10,8 +10,6 @@ from .classes import (
     ProjectUpdateLog,
 )
 
-import datetime
-
 from core.models import Project
 
 

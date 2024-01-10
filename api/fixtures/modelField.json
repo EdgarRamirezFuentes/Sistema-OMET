@@ -147,7 +147,7 @@
         "model": "core.ModelField",
         "pk": 13,
         "fields": {
-            "name": "fecha_nacimiento",
+            "name": "fechaNacimiento",
             "caption": "Ingresa la fecha de nacimiento del paciente",
             "order": 2,
             "data_type": 12,
@@ -183,7 +183,7 @@
         "model": "core.ModelField",
         "pk": 16,
         "fields": {
-            "name": "telefono_emergencia",
+            "name": "telefonoEmergencia",
             "caption": "Ingresa el teléfono de emergencia del paciente",
             "order": 5,
             "data_type": 1,
@@ -359,7 +359,6 @@
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
-
     {
         "model": "core.ModelField",
         "pk": 31,
@@ -450,7 +449,7 @@
         "fields": {
             "name": "correoElectronico",
             "caption": "Ingresa el correo electrónico del proveedor:",
-            "order": 2,
+            "order": 3,
             "data_type": 3,
             "app_model": 11,
             "created_at": "2023-07-23T20:00:00.000Z"
@@ -458,11 +457,11 @@
     },
     {
         "model": "core.ModelField",
-        "pk": 38,
+        "pk": 83,
         "fields": {
             "name": "telefono",
             "caption": "Ingresa el teléfono del proveedor:",
-            "order": 3,
+            "order": 4,
             "data_type": 1,
             "app_model": 11,
             "created_at": "2023-07-23T20:00:00.000Z"
@@ -474,7 +473,7 @@
         "fields": {
             "name": "direccion",
             "caption": "Ingresa la dirección del proveedor:",
-            "order": 4,
+            "order": 5,
             "data_type": 1,
             "app_model": 11,
             "created_at": "2023-07-23T20:00:00.000Z"
@@ -486,7 +485,7 @@
         "fields": {
             "name": "categoria",
             "caption": "Ingresa la categoría del proveedor:",
-            "order": 2,
+            "order": 6,
             "data_type": 16,
             "app_model": 11,
             "created_at": "2023-07-23T20:00:00.000Z"
@@ -756,7 +755,6 @@
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
-
     {
         "model": "core.ModelField",
         "pk": 63,
@@ -819,7 +817,7 @@
     },
     {
         "model": "core.ModelField",
-        "pk": 68,
+        "pk": 69,
         "fields": {
             "name": "direccion",
             "caption": "Ingresa la dirección del cliente:",
@@ -831,7 +829,7 @@
     },
     {
         "model": "core.ModelField",
-        "pk": 68,
+        "pk": 70,
         "fields": {
             "name": "telefono",
             "caption": "Ingresa el teléfono del cliente:",
@@ -843,15 +841,146 @@
     },
     {
         "model": "core.ModelField",
-        "pk": 69,
+        "pk": 71,
         "fields": {
             "name": "correoElectronico",
             "caption": "Ingresa el correo electrónico del cliente:",
-            "order": 7,
+            "order": 8,
             "data_type": 3,
             "app_model": 19,
             "created_at": "2023-07-23T20:00:00.000Z"
         }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 72,
+        "fields": {
+            "name": "nombre",
+            "caption": "Ingresa el nombre de la membresía:",
+            "order": 1,
+            "data_type": 1,
+            "app_model": 20,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 73,
+        "fields": {
+            "name": "cliente",
+            "caption": "Ingresa el cliente de la suscripción:",
+            "order": 1,
+            "data_type": 15,
+            "app_model": 21,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 74,
+        "fields": {
+            "name": "membresia",
+            "caption": "Ingresa la membresía de la suscripción:",
+            "order": 2,
+            "data_type": 16,
+            "app_model": 21,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 75,
+        "fields": {
+            "name": "fechaInicio",
+            "caption": "Ingresa la fecha del inicio de la suscripción:",
+            "order": 3,
+            "data_type": 12,
+            "app_model": 21,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 76,
+        "fields": {
+            "name": "nombre",
+            "caption": "Ingresa el nombre del producto:",
+            "order": 1,
+            "data_type": 1,
+            "app_model": 22,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 77,
+        "fields": {
+            "name": "descripcion",
+            "caption": "Ingresa la descripción del producto:",
+            "order": 2,
+            "data_type": 2,
+            "app_model": 22,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 78,
+        "fields": {
+            "name": "cantidad",
+            "caption": "Ingresa la cantidad del producto:",
+            "order": 3,
+            "data_type": 7,
+            "app_model": 22,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 79,
+        "fields": {
+            "name": "precio",
+            "caption": "Ingresa el precio del producto:",
+            "order": 4,
+            "data_type": 10,
+            "app_model": 22,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 80,
+        "fields": {
+            "name": "almacen",
+            "caption": "Ingresa el almacen al que pertenece este producto:",
+            "order": 5,
+            "data_type": 16,
+            "app_model": 22,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 81,
+        "fields": {
+            "name": "categoria",
+            "caption": "Ingresa la categoría del producto:",
+            "order": 6,
+            "data_type": 16,
+            "app_model": 22,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ModelField",
+        "pk": 82,
+        "fields": {
+            "name": "nombre",
+            "caption": "Ingresa el nombre la categoría:",
+            "order": 1,
+            "data_type": 1,
+            "app_model": 23,
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
     }
-
 ]

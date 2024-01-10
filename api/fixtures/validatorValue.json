@@ -195,7 +195,7 @@
         "fields": {
             "validator": 6,
             "model_field": 11,
-            "value": "\"^[A-Z]{4}\\d{6}[HM][A-Z]{2}[A-Z0-9]{5}$\"",
+            "value": "^[A-Z&Ña-z]{3,4}(\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01]))([A-Z0-9]{3})$",
             "created_at": "2023-07-23T20:00:00.000Z"
         }
     },
@@ -305,6 +305,1056 @@
         "fields": {
             "validator": 5,
             "model_field": 20,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 32,
+        "fields": {
+            "validator": 2,
+            "model_field": 26,
+            "value": "True",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 33,
+        "fields": {
+            "validator": 5,
+            "model_field": 26,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 34,
+        "fields": {
+            "validator": 6,
+            "model_field": 26,
+            "value": "^SUC-[0-9]+$",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 35,
+        "fields": {
+            "validator": 1,
+            "model_field": 26,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 36,
+        "fields": {
+            "validator": 1,
+            "model_field": 27,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 37,
+        "fields": {
+            "validator": 5,
+            "model_field": 27,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 38,
+        "fields": {
+            "validator": 1,
+            "model_field": 28,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 39,
+        "fields": {
+            "validator": 5,
+            "model_field": 28,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 40,
+        "fields": {
+            "validator": 1,
+            "model_field": 29,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 41,
+        "fields": {
+            "validator": 5,
+            "model_field": 29,
+            "value": "10",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 42,
+        "fields": {
+            "validator": 1,
+            "model_field": 30,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 43,
+        "fields": {
+            "validator": 1,
+            "model_field": 31,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 43,
+        "fields": {
+            "validator": 2,
+            "model_field": 31,
+            "value": "True",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 44,
+        "fields": {
+            "validator": 5,
+            "model_field": 31,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 45,
+        "fields": {
+            "validator": 6,
+            "model_field": 31,
+            "value": "^ALM-[0-9]+$",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 46,
+        "fields": {
+            "validator": 1,
+            "model_field": 32,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 47,
+        "fields": {
+            "validator": 5,
+            "model_field": 32,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 48,
+        "fields": {
+            "validator": 1,
+            "model_field": 33,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 49,
+        "fields": {
+            "validator": 5,
+            "model_field": 33,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 50,
+        "fields": {
+            "validator": 1,
+            "model_field": 34,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 51,
+        "fields": {
+            "validator": 5,
+            "model_field": 34,
+            "value": "10",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 52,
+        "fields": {
+            "validator": 1,
+            "model_field": 35,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 53,
+        "fields": {
+            "validator": 1,
+            "model_field": 36,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 54,
+        "fields": {
+            "validator": 2,
+            "model_field": 36,
+            "value": "True",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 55,
+        "fields": {
+            "validator": 5,
+            "model_field": 36,
+            "value": "19",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 56,
+        "fields": {
+            "validator": 6,
+            "model_field": 36,
+            "value": "^[A-Z&Ña-z]{3,4}(\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01]))([A-Z0-9]{3})$",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 57,
+        "fields": {
+            "validator": 1,
+            "model_field": 37,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 58,
+        "fields": {
+            "validator": 5,
+            "model_field": 37,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 59,
+        "fields": {
+            "validator": 1,
+            "model_field": 38,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 60,
+        "fields": {
+            "validator": 1,
+            "model_field": 83,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 61,
+        "fields": {
+            "validator": 5,
+            "model_field": 83,
+            "value": "10",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 62,
+        "fields": {
+            "validator": 1,
+            "model_field": 39,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 63,
+        "fields": {
+            "validator": 5,
+            "model_field": 39,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 64,
+        "fields": {
+            "validator": 1,
+            "model_field": 40,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 65,
+        "fields": {
+            "validator": 1,
+            "model_field": 41,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 66,
+        "fields": {
+            "validator": 5,
+            "model_field": 41,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 67,
+        "fields": {
+            "validator": 1,
+            "model_field": 42,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 68,
+        "fields": {
+            "validator": 5,
+            "model_field": 42,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 69,
+        "fields": {
+            "validator": 2,
+            "model_field": 42,
+            "value": "True",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 70,
+        "fields": {
+            "validator": 6,
+            "model_field": 42,
+            "value": "^[A-Z]{1}\\d{2}-[A-Z]{3}$",
+            "created_at": "202-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 71,
+        "fields": {
+            "validator": 1,
+            "model_field": 43,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 72,
+        "fields": {
+            "validator": 1,
+            "model_field": 44,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 73,
+        "fields": {
+            "validator": 1,
+            "model_field": 45,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 74,
+        "fields": {
+            "validator": 1,
+            "model_field": 46,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 75,
+        "fields": {
+            "validator": 1,
+            "model_field": 47,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 76,
+        "fields": {
+            "validator": 1,
+            "model_field": 48,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 77,
+        "fields": {
+            "validator": 5,
+            "model_field": 48,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 78,
+        "fields": {
+            "validator": 2,
+            "model_field": 48,
+            "value": "True",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 79,
+        "fields": {
+            "validator": 1,
+            "model_field": 49,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 80,
+        "fields": {
+            "validator": 5,
+            "model_field": 49,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 81,
+        "fields": {
+            "validator": 1,
+            "model_field": 50,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 82,
+        "fields": {
+            "validator": 1,
+            "model_field": 51,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 83,
+        "fields": {
+            "validator": 1,
+            "model_field": 52,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 84,
+        "fields": {
+            "validator": 6,
+            "model_field": 53,
+            "value": "^[A-Z&Ña-z]{3,4}(\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01]))([A-Z0-9]{3})$",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 85,
+        "fields": {
+            "validator": 1,
+            "model_field": 53,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 86,
+        "fields": {
+            "validator": 2,
+            "model_field": 53,
+            "value": "True",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 87,
+        "fields": {
+            "validator": 5,
+            "model_field": 53,
+            "value": "19",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 88,
+        "fields": {
+            "validator": 1,
+            "model_field": 54,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 89,
+        "fields": {
+            "validator": 5,
+            "model_field": 54,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 90,
+        "fields": {
+            "validator": 1,
+            "model_field": 55,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 91,
+        "fields": {
+            "validator": 5,
+            "model_field": 55,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 92,
+        "fields": {
+            "validator": 1,
+            "model_field": 56,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 93,
+        "fields": {
+            "validator": 5,
+            "model_field": 56,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 94,
+        "fields": {
+            "validator": 1,
+            "model_field": 57,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 95,
+        "fields": {
+            "validator": 1,
+            "model_field": 58,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 96,
+        "fields": {
+            "validator": 1,
+            "model_field": 59,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 97,
+        "fields": {
+            "validator": 5,
+            "model_field": 59,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 98,
+        "fields": {
+            "validator": 1,
+            "model_field": 60,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 99,
+        "fields": {
+            "validator": 5,
+            "model_field": 60,
+            "value": "20",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 100,
+        "fields": {
+            "validator": 1,
+            "model_field": 61,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 101,
+        "fields": {
+            "validator": 1,
+            "model_field": 62,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 102,
+        "fields": {
+            "validator": 5,
+            "model_field": 62,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 103,
+        "fields": {
+            "validator": 6,
+            "model_field": 63,
+            "value": "^[A-Z&Ña-z]{3,4}(\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01]))([A-Z0-9]{3})$",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 104,
+        "fields": {
+            "validator": 1,
+            "model_field": 63,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 105,
+        "fields": {
+            "validator": 2,
+            "model_field": 63,
+            "value": "True",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 106,
+        "fields": {
+            "validator": 5,
+            "model_field": 63,
+            "value": "19",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 107,
+        "fields": {
+            "validator": 1,
+            "model_field": 64,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 108,
+        "fields": {
+            "validator": 5,
+            "model_field": 64,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 109,
+        "fields": {
+            "validator": 1,
+            "model_field": 65,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 110,
+        "fields": {
+            "validator": 5,
+            "model_field": 65,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 111,
+        "fields": {
+            "validator": 1,
+            "model_field": 66,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 112,
+        "fields": {
+            "validator": 5,
+            "model_field": 66,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 113,
+        "fields": {
+            "validator": 1,
+            "model_field": 67,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 114,
+        "fields": {
+            "validator": 1,
+            "model_field": 69,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 115,
+        "fields": {
+            "validator": 5,
+            "model_field": 69,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 116,
+        "fields": {
+            "validator": 1,
+            "model_field": 70,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 117,
+        "fields": {
+            "validator": 5,
+            "model_field": 70,
+            "value": "10",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 118,
+        "fields": {
+            "validator": 1,
+            "model_field": 71,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 119,
+        "fields": {
+            "validator": 1,
+            "model_field": 72,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 119,
+        "fields": {
+            "validator": 5,
+            "model_field": 72,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 120,
+        "fields": {
+            "validator": 1,
+            "model_field": 73,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 121,
+        "fields": {
+            "validator": 1,
+            "model_field": 74,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 122,
+        "fields": {
+            "validator": 1,
+            "model_field": 75,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 123,
+        "fields": {
+            "validator": 1,
+            "model_field": 76,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 124,
+        "fields": {
+            "validator": 5,
+            "model_field": 76,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 125,
+        "fields": {
+            "validator": 1,
+            "model_field": 77,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 126,
+        "fields": {
+            "validator": 1,
+            "model_field": 78,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 127,
+        "fields": {
+            "validator": 1,
+            "model_field": 79,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 128,
+        "fields": {
+            "validator": 1,
+            "model_field": 80,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 129,
+        "fields": {
+            "validator": 1,
+            "model_field": 81,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 130,
+        "fields": {
+            "validator": 1,
+            "model_field": 82,
+            "value": "False",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 131,
+        "fields": {
+            "validator": 5,
+            "model_field": 82,
+            "value": "100",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 132,
+        "fields": {
+            "validator": 11,
+            "model_field": 79,
+            "value": "10",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 133,
+        "fields": {
+            "validator": 12,
+            "model_field": 79,
+            "value": "2",
+            "created_at": "2023-07-23T20:00:00.000Z"
+        }
+    },
+    {
+        "model": "core.ValidatorValue",
+        "pk": 134,
+        "fields": {
+            "validator": 5,
+            "model_field": 43,
             "value": "100",
             "created_at": "2023-07-23T20:00:00.000Z"
         }

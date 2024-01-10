@@ -71,5 +71,5 @@ VALIDATORS = {
     'min_value': 'MinValueValidator({{VALUE}})',
     'max_value': 'MaxValueValidator({{VALUE}})',
     'min_length': 'MinLengthValidator({{VALUE}})',
-    'regex': 'RegexValidator({{VALUE}})',
+    'regex': 'RegexValidator("{{VALUE}}")',
 }
