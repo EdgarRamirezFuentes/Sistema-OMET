@@ -147,7 +147,7 @@ function Update({userId, onUpdate}) {
     
     return (
         <div className="w-full h-full bg-slate-100">
-            <div className='flex flex-row h-screen'>
+            <div className='flex flex-row h-full'>
                 <div className='w-full'>
                     <div className='mt-3 ml-5 flex flex-row items-center justify-center'>
                         <p className='text-3xl font-bold'>Actualizar Perfil</p>

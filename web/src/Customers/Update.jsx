@@ -77,7 +77,7 @@ function UpdateCustomer({customerId, onUpdated}) {
         email: email
       }
 
-      await updateCustomer(customerData, session.token, params.id).then(async (response) => {
+      await updateCustomer(customerData, session.token, customerId).then(async (response) => {
         console.log("Response");
         console.log(response);
         let res = await response.json();
@@ -85,7 +85,7 @@ function UpdateCustomer({customerId, onUpdated}) {
         console.log(res);
         if (response.status === 200){
           setAlertType('Success');
-          setAlertMessage('Customer actualizado correctamente.')
+          setAlertMessage('Cliente actualizado correctamente.')
           setTimeout((e) => {onUpdated && onUpdated(true)},1000)
           setError(true);
           return;

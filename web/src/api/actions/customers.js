@@ -33,6 +33,7 @@ export const getCustomer = async (token, customerId) => {
 export const updateCustomer = async (formData, token, customerId) => {
     const objApi = apiClient('customer');
     try {
+        console.log("customerId",customerId)
         var response = await objApi.patch(customerId, formData, token)
         return response;
     } catch (e) {

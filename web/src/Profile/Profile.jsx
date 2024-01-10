@@ -84,7 +84,14 @@ function Profile() {
   }
 
   const getClientData = async ()=>{
-    await getClient(session.token, user.id).then((client)=>{
+    await getClient(session.token, user.id).then(async (client)=>{
+      let c = await client.json()
+      setName(c.name)
+      setFirstLastName(c.first_last_name)
+      setSecondLastName(c.second_last_name)
+      setEmail(c.email)
+      setPhone(c.phone)
+      setRfc(c.rfc)
       setUserData(client);
     })
   }
@@ -144,7 +151,7 @@ function Profile() {
         setAlertType('Error');
         return;
       }
-      if(res.id){
+      if(res.name){
         setError(true);
         setAlertMessage('Datos actualizados con éxito.');
         setAlertType('Success');

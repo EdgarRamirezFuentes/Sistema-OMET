@@ -97,7 +97,7 @@ function CreateProject({onCreated}) {
                                 <input onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="description" name="description"/><br/><br/>
                               </div>
 
-                              <p className='font-bold'>Customer:</p>
+                              <p className='font-bold'>Cliente:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
                                 <div className="mt-1 relative rounded-md shadow-sm">
                                   <select className='border-gray-300 text-gray-800 placeholder:text-gray-300 focus:ring-v2-blue-text-login focus:border-v2-blue-text-login block w-full sm:text-sm rounded-md'
