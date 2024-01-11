@@ -11,7 +11,7 @@ import Select from '../../Components/Select/Select';
 import TimePicker from '../../Components/TimePicker/TimePicker'
 import CheckboxGroup from '../../Components/CheckboxGroup/CheckboxGroup'
 const sm = SessionManager.getInstance();
-
+import { ScrollView } from 'react-native-gesture-handler';
 function Create{{MODEL_NAME}}({navigation}) {
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
@@ -69,7 +69,7 @@ function Create{{MODEL_NAME}}({navigation}) {
                     <View className='mt-3 ml-5 flex justify-center'>
                         <Text className='text-3xl font-bold'>Crear {{MODEL_NAME}}</Text>
                     </View>
-                    <View className='flex flex-col justify-between'>
+                    <ScrollView className='flex flex-col'>
                         <View className='mt-5 p-5 flex flex-col items-center m-auto w-full rounded-2xl bg-white'>
 
                             <View className="w-full overflow-hidden">
@@ -92,7 +92,7 @@ function Create{{MODEL_NAME}}({navigation}) {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    </View>
+                    </ScrollView>
                 </View>
             </View>
         </View>

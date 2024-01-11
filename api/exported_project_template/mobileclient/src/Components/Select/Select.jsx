@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { ChevronDownIcon } from 'react-native-heroicons/outline';
 import PropTypes from 'prop-types';
-function Select({label, items, needed, labelDescription, title, ...rest}){
+function Select({label, items, needed, labelDescription, title, disabledInput,  ...rest}){
 
     return (
         <View>
@@ -14,7 +14,7 @@ function Select({label, items, needed, labelDescription, title, ...rest}){
                     {needed && <Text className='text-red-400'> *</Text>}
                 </Text>
             )}
-            <View className={'w-full mb-5 items-center'}>
+            <View pointerEvents={disabledInput ? 'none':'auto'} className={`${disabledInput ? 'w-full mb-5 items-center bg-slate-100 text-gray-500' : 'w-full mb-5 items-center' }`}>
                 <View className='w-64 my-2 text-gray-400 py-2 px-4 rounded-full bg-white border'>
                     <RNPickerSelect
                         placeholder={{ label: 'Selecciona un valor', value: 'Selecciona un valor' }}
@@ -39,6 +39,7 @@ Select.propTypes = {
     needed: PropTypes.bool,
     labelDescription : PropTypes.string,
     placeholder: PropTypes.string,
+    disabledInput : PropTypes.bool,
 }
 
 Select.defaultProps = {

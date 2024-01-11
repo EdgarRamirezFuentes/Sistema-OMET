@@ -6,11 +6,10 @@ import Table from '../../Components/Table/DynamicTable';
 import Select from '../../Components/Select/Select';
 import TimePicker from '../../Components/TimePicker/TimePicker'
 import CheckboxGroup from '../../Components/CheckboxGroup/CheckboxGroup'
-import Select from '../../Components/Select/Select';
 import * as {{MODEL_NAME_LOWER}}Controller from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
 import SessionManager from '../../api/manager/SessionManager';
 const sm = SessionManager.getInstance();
-
+import { ScrollView } from 'react-native-gesture-handler';
 
 function Update{{MODEL_NAME}}({route, navigation}) {
     const { {{MODEL_NAME_LOWER}}_id } = route.params;
@@ -62,6 +61,13 @@ function Update{{MODEL_NAME}}({route, navigation}) {
         setAlertType('Error');
         setAlertMessage('')
     }
+    const transformData = (data) => {
+
+        data = data.map((item) => {
+            return item.id
+        })
+        return data
+    }
 
     const buttonHandler = async () => {
 {{NOT_NULL_VALIDATIONS}}
@@ -92,8 +98,8 @@ function Update{{MODEL_NAME}}({route, navigation}) {
                     <View className='mt-3 ml-5 flex justify-center'>
                         <Text className='text-3xl font-bold'>Actualizar {{MODEL_NAME}}</Text>
                     </View>
-                    <View className='flex flex-col justify-between'>
-                    <View className='mt-5 p-5 flex flex-col items-center m-auto w-full rounded-2xl bg-white'>
+                    <ScrollView className='flex flex-col'>
+                        <View className='mt-5 p-5 flex flex-col items-center m-auto w-full rounded-2xl bg-white'>
 
                             <View className="w-full overflow-hidden">
                                 <AlertCmp type={alertType} show={error != null} title={alertMessage} onClose={onCloseHandler} />
@@ -115,7 +121,7 @@ function Update{{MODEL_NAME}}({route, navigation}) {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    </View>
+                    </ScrollView>
                 </View>
             </View>
         </View>

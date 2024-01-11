@@ -37,6 +37,7 @@ SCRIPT_TEMPLATE_URLS = {
     'mobile_client_not_null_validation': os.path.join(settings.BASE_DIR, 'script_templates/mobile_client/validations/notEmpty.txt'),
 
     'mobile_client_foreign_key_get_data': os.path.join(settings.BASE_DIR, 'script_templates/mobile_client/requests/getforeignKeyData.txt'),
+    'mobile_client_foreign_key_many_get_data': os.path.join(settings.BASE_DIR, 'script_templates/mobile_client/requests/manyGetForeignKeyData.txt'),
     'mobile_client_foreign_key_use_effect': os.path.join(settings.BASE_DIR, 'script_templates/mobile_client/hooks/foreignKeyUseEffect.txt'),
 
     #Login

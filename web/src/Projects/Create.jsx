@@ -94,7 +94,7 @@ function CreateProject({onCreated}) {
                               
                               <p className='font-bold'>Descripción:</p>
                               <div className='mb-10 w-full flex flex-row justify-center'>
-                                <input onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="description" name="description"/><br/><br/>
+                                <textarea onChange={(event) => {setDescription(event.target.value)}} className='w-1/2 text-black py-2 px-4 rounded-full bg-white border border-zinc-600' placeholder='Descripción' type="text" id="description" name="description"/><br/><br/>
                               </div>
 
                               <p className='font-bold'>Cliente:</p>

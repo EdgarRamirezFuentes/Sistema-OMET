@@ -92,8 +92,8 @@ def create_project_controllers(main_directory, project):
     try:
         project_apps = ProjectApp.objects.filter(project=project)
 
-        for project_app in project_apps:
-            create_app_controllers(main_directory, project_app)
+        #for project_app in project_apps:
+        #    create_app_controllers(main_directory, project_app)
     except ValueError as e:
         raise e
 
@@ -106,8 +106,8 @@ def create_project_actions(main_directory, project):
     try:
         project_apps = ProjectApp.objects.filter(project=project)
 
-        for project_app in project_apps:
-            create_app_actions(main_directory, project_app)
+        #for project_app in project_apps:
+        #    create_app_actions(main_directory, project_app)
     except ValueError as e:
         raise e
 

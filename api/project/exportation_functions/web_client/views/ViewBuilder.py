@@ -127,9 +127,8 @@ class ViewBuilder:
                 related_model_name = related_model_field.app_model.name
                 related_model_field_name = related_model_field.name
                 field_setter = f'\t\t\t\t\tset{model_field.name.title()}{related_model_name.title()}{related_model_field_name.title()}'
-                field_setter += f'(res.{model_field.name}.id);\n' if 'ManytoManyForeignKey' not in model_field.data_type.name else f'(res.{model_field.name});\n'
-                if 'ManytoManyForeignKey' in model_field.data_type.name:
-                    field_setter += f'\t\t\t\t\tset{model_field.name.title()}{related_model_name.title()}{related_model_field_name.title()}SelectedItems(res.{model_field.name});\n'
+                field_setter += f'(res.{model_field.name}.id);\n' if 'ManytoManyForeignKey' not in model_field.data_type.name else f'(transformData(res.{model_field.name}));\n'+\
+                    f'\t\t\t\t\tset{model_field.name.title()}{related_model_name.title()}{related_model_field_name.title()}SelectedItems(res.{model_field.name});\n'
             else:
                 field_setter = f'\t\t\t\t\tset{model_field.name.title()}(res.{model_field.name});\n'
             field_setters += field_setter
@@ -291,7 +290,7 @@ class ViewBuilder:
             related_model_field = foreign_key_relation.model_field_related
             related_model_name = related_model_field.app_model.name
             related_model_field_name = related_model_field.name
-            foreign_key_function = foreign_key_function.replace('{{FOREIGN_KEY_MODEL_NAME}}', related_model_name)
+            foreign_key_function = foreign_key_function.replace('{{FOREIGN_KEY_MODEL_NAME}}', related_model_name.title())
             foreign_key_function = foreign_key_function.replace('{{FOREIGN_KEY_MODEL_NAME_TITLE}}', related_model_name.title())
             foreign_key_function = foreign_key_function.replace('{{MODEL_NAME_LOWER}}', self.__app_model.name.lower())
             foreign_key_function = foreign_key_function.replace('{{FOREIGN_KEY_FIELD_NAME}}', related_model_field_name)

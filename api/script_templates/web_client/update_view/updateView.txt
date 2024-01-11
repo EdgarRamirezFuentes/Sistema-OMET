@@ -51,6 +51,13 @@ function Update{{MODEL_NAME}}({onUpdated, {{MODEL_NAME_LOWER}}_id}) {
         }
 
     }
+    const transformData = (data) => {
+
+        data = data.map((item) => {
+            return item.id
+        })
+        return data
+    }
 
     useEffect(() => {
         get{{MODEL_NAME_TITLE}}();

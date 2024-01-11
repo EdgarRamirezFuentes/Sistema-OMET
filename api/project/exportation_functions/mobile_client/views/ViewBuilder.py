@@ -92,9 +92,29 @@ class ViewBuilder:
         self.__retrieve_view_script = self.__retrieve_view_script.replace('{{MODEL_NAME_LOWER}}', self.__model_name.lower())
         self.__retrieve_view_script = self.__retrieve_view_script.replace('{{MODEL_NAME_TITLE}}', self.__model_name.title())
         self.__retrieve_view_script = self.__retrieve_view_script.replace('{{APP_NAME}}', self.__app_name)
-        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{MODEL_HOOKS}}', self.__build_retrieve_field_hooks())
-        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{INPUT_FIELDS}}', self.__build_read_only_fields())
-        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FIELD_SETTERS}}', self.__build_retrieve_field_setters())
+        self.__retrieve_view_script= self.__retrieve_view_script.replace('{{REQUEST_FIELDS}}', self.__build_request_body())
+        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{MODEL_HOOKS}}', self.__build_field_hooks())
+        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{INPUT_FIELDS}}', self.__build_input_field_retrieve())
+        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FIELD_SETTERS}}', self.__build_field_setters())
+        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{NOT_NULL_VALIDATIONS}}', self.__build_not_null_field_validations())
+        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FOREIGN_KEY_HOOKS}}', self.__build_foreign_key_hooks())
+        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FOREIGN_KEY_GET_DATA_FUNCTIONS}}', self.__build_foreign_key_get_functions())
+        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FOREIGN_KEY_USE_EFFECTS}}', self.__build_foreign_key_use_effects())
+        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FOREIGN_KEY_FLAGS}}', self.__build_foreign_key_flags())
+        self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FOREIGN_KEY_SELECTED_ITEMS}}', self.__build_foreign_key_selected_item_hooks())
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{MODEL_NAME}}', self.__model_name)
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{MODEL_NAME_LOWER}}', self.__model_name.lower())
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{MODEL_NAME_TITLE}}', self.__model_name.title())
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{APP_NAME}}', self.__app_name)
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{MODEL_HOOKS}}', self.__build_retrieve_field_hooks())
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{INPUT_FIELDS}}', self.__build_read_only_fields())
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FIELD_SETTERS}}', self.__build_field_setters())
+        ##self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FIELD_SETTERS}}', self.__build_retrieve_field_setters())
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FOREIGN_KEY_HOOKS}}', self.__build_foreign_key_hooks())
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FOREIGN_KEY_GET_DATA_FUNCTIONS}}', self.__build_foreign_key_get_functions())
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FOREIGN_KEY_USE_EFFECTS}}', self.__build_foreign_key_use_effects())
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FOREIGN_KEY_FLAGS}}', self.__build_foreign_key_flags())
+        #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{FOREIGN_KEY_SELECTED_ITEMS}}', self.__build_foreign_key_selected_item_hooks())
         #self.__retrieve_view_script = self.__retrieve_view_script.replace('{{TABLES_COLUMNS}}', self._build_foreign_key_table_columns())
 
         return self.__retrieve_view_script
@@ -106,9 +126,12 @@ class ViewBuilder:
             if 'ForeignKey' in model_field.data_type.name:
                 relation = ForeignKeyRelation.objects.get(model_field_origin=model_field)
                 related_model_field = relation.model_field_related
+                related_model_name = related_model_field.app_model.name
                 related_model_field_name = related_model_field.name
-                field_setter = f'\t\t\t\t\tset{model_field.name.title()}'
-                field_setter += f'(res.{model_field.name}.{related_model_field_name});\n' if 'ManytoManyForeignKey' not in model_field.data_type.name else f'(res.{model_field.name});\n'
+                field_setter = f'\t\t\t\t\tset{model_field.name.title()}{related_model_name.title()}{related_model_field_name.title()}'
+                field_setter += f'(res.{model_field.name}.{related_model_field_name});\n' if 'ManytoManyForeignKey' not in model_field.data_type.name else f'(transformData(res.{model_field.name}));\n'
+                if 'ManytoManyForeignKey' in model_field.data_type.name:
+                    field_setter += f'\t\t\t\t\tset{model_field.name.title()}{related_model_name.title()}{related_model_field_name.title()}SelectedItems(res.{model_field.name});\n'
 
             else:
                 field_setter = f'\t\t\t\t\tset{model_field.name.title()}(res.{model_field.name});\n'
@@ -127,7 +150,7 @@ class ViewBuilder:
                 related_model_name = related_model_field.app_model.name
                 related_model_field_name = related_model_field.name
                 field_setter = f'\t\t\t\t\tset{model_field.name.title()}{related_model_name.title()}{related_model_field_name.title()}'
-                field_setter += f'(res.{model_field.name}.id);\n' if 'ManytoManyForeignKey' not in model_field.data_type.name else f'(res.{model_field.name});\n'
+                field_setter += f'(res.{model_field.name}.id);\n' if 'ManytoManyForeignKey' not in model_field.data_type.name else f'(transformData(res.{model_field.name}));\n'
                 if 'ManytoManyForeignKey' in model_field.data_type.name:
                     field_setter += f'\t\t\t\t\tset{model_field.name.title()}{related_model_name.title()}{related_model_field_name.title()}SelectedItems(res.{model_field.name});\n'
             else:
@@ -148,7 +171,7 @@ class ViewBuilder:
                 related_model_field_name = related_model_field.name
                 request_field = f'\t\t\t{model_field.name}: {model_field.name.lower() + related_model_name.title() + related_model_field_name.title()}, \n'
             else:
-                request_field = f'\t\t\t{model_field.name}: {model_field.name}, \n'
+                request_field = f'\t\t\t{model_field.name}: {model_field.name.lower()}, \n'
             request_body += request_field
 
         return request_body
@@ -178,6 +201,13 @@ class ViewBuilder:
         model_hooks = set()
         for model_field in self.__model_fields:
             use_state_template = get_template_file_content(SCRIPT_TEMPLATE_URLS['mobile_client_use_state_hook'])
+            if 'ForeignKey' in model_field.data_type.name:
+                relation = ForeignKeyRelation.objects.get(model_field_origin=model_field)
+                related_model_field = relation.model_field_related
+                related_model_name = related_model_field.app_model.name
+                related_model_field_name = related_model_field.name
+                use_state_template = use_state_template.replace('{{MODEL_FIELD_NAME_LOWER}}', model_field.name.lower() + related_model_name.title() + related_model_field_name.title())
+                use_state_template = use_state_template.replace('{{MODEL_FIELD_NAME_TITLE}}', model_field.name.title() + related_model_name.title() + related_model_field_name.title())
             use_state_template = use_state_template.replace('{{MODEL_FIELD_NAME_LOWER}}', model_field.name.lower())
             use_state_template = use_state_template.replace('{{MODEL_FIELD_NAME_TITLE}}', model_field.name.title())
             use_state_template = use_state_template.replace('{{DEFAULT_VALUE}}', DEFAULT_DATA_TYPE_VALUES[model_field.data_type.name])
@@ -222,13 +252,50 @@ class ViewBuilder:
             input_fields += ('\t' * 10) + input_field_template
 
         return input_fields
+    
+    def __build_input_field_retrieve(self):
+        input_fields = ''
+
+        for model_field in self.__model_fields:
+            data_type = model_field.data_type.name
+            is_required = 'false'
+
+            input_field_template = get_template_file_content(READ_ONLY_INPUT_FIELD_TEMPLATES[data_type])
+
+            if ValidatorValue.objects.filter(model_field=model_field, validator__name='null').exists():
+                required_validator = ValidatorValue.objects.get(model_field=model_field, validator__name='null')
+                is_required = 'true' if required_validator.value.lower() == 'false' else 'false'
+
+            input_field_template = input_field_template.replace('{{MODEL_FIELD_NAME}}', model_field.name)
+            input_field_template = input_field_template.replace('{{MODEL_FIELD_NAME_TITLE}}', model_field.name.title())
+            input_field_template = input_field_template.replace('{{MODEL_FIELD_NAME_LOWER}}', model_field.name.lower())
+            input_field_template = input_field_template.replace('{{REQUIRED}}', is_required)
+            input_field_template = input_field_template.replace('{{MODEL_FIELD_CAPTION}}', model_field.caption)
+
+            if 'ForeignKey' in data_type:
+                relation = ForeignKeyRelation.objects.get(model_field_origin=model_field)
+
+                related_model_field = relation.model_field_related
+
+                related_model_name = related_model_field.app_model.name
+                related_model_field_name = related_model_field.name
+
+                input_field_template = input_field_template.replace('{{FOREIGN_KEY_MODEL_NAME}}', related_model_name)
+                input_field_template = input_field_template.replace('{{FOREIGN_KEY_MODEL_NAME_TITLE}}', related_model_name.title())
+                input_field_template = input_field_template.replace('{{FOREIGN_KEY_MODEL_NAME_LOWER}}', related_model_name.lower())
+                input_field_template = input_field_template.replace('{{FOREIGN_KEY_MODEL_FIELD_NAME}}', related_model_field_name)
+                input_field_template = input_field_template.replace('{{FOREIGN_KEY_MODEL_FIELD_NAME_TITLE}}', related_model_field_name.title())
+
+            input_fields += ('\t' * 10) + input_field_template
+
+        return input_fields
 
     def __build_not_null_field_validations(self):
         validators = ''
         not_null_fields = ValidatorValue.objects.filter(model_field__app_model=self.__app_model, validator__name='null', value='False')
 
         for not_null_field in not_null_fields:
-            if 'ForeignKey' in not_null_field.model_field.data_type.name:
+            if 'ForeignKey' not in not_null_field.model_field.data_type.name:
                 validation_template = get_template_file_content(SCRIPT_TEMPLATE_URLS['mobile_client_not_null_validation'])
                 validation_template = validation_template.replace('{{MODEL_FIELD_NAME_LOWER}}', not_null_field.model_field.name.lower())
                 validation_template = validation_template.replace('{{MODEL_FIELD_NAME_TITLE}}', not_null_field.model_field.name.title())
@@ -300,13 +367,13 @@ class ViewBuilder:
         relation = ForeignKeyRelation.objects.filter(model_field_origin__app_model=self.__app_model)
 
         for foreign_key_relation in relation:
-            foreign_key_function = get_template_file_content(SCRIPT_TEMPLATE_URLS['mobile_client_foreign_key_get_data'])
+            foreign_key_function = get_template_file_content(SCRIPT_TEMPLATE_URLS['mobile_client_foreign_key_get_data' if 'ManytoManyForeignKey' not in foreign_key_relation.model_field_origin.data_type.name else 'mobile_client_foreign_key_many_get_data' ]) 
             origin_model_field = foreign_key_relation.model_field_origin
             origin_model_field_name = origin_model_field.name
             related_model_field = foreign_key_relation.model_field_related
             related_model_name = related_model_field.app_model.name
             related_model_field_name = related_model_field.name
-            foreign_key_function = foreign_key_function.replace('{{FOREIGN_KEY_MODEL_NAME}}', related_model_name)
+            foreign_key_function = foreign_key_function.replace('{{FOREIGN_KEY_MODEL_NAME}}', related_model_name.title())
             foreign_key_function = foreign_key_function.replace('{{FOREIGN_KEY_MODEL_NAME_TITLE}}', related_model_name.title())
             foreign_key_function = foreign_key_function.replace('{{MODEL_NAME_LOWER}}', self.__app_model.name.lower())
             foreign_key_function = foreign_key_function.replace('{{FOREIGN_KEY_FIELD_NAME}}', related_model_field_name)
@@ -394,15 +461,3 @@ class ViewBuilder:
             table_columns += '\t' + field_columns
 
         return table_columns
-
-
-
-
-
-
-
-
-
-
-
-

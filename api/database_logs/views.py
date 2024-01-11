@@ -14,7 +14,7 @@ class GetCustomerCreateLogsView(APIView):
             client = pymongo.MongoClient(MONGO_URI)
             db = client['sistemaOmetLogs']
             collection = db['customerInsertionLogs']
-            logs = collection.find({}, {"_id": False}).limit(10)
+            logs = collection.find({}, {"_id": False}).sort("updated_date", -1).limit(10)
             logs = list(logs)
             print(logs)
             client.close()
@@ -31,7 +31,7 @@ class GetCustomerUpdateLogsView(APIView):
             client = pymongo.MongoClient(MONGO_URI)
             db = client['sistemaOmetLogs']
             collection = db['customerUpdateLogs']
-            logs = collection.find({}, {"_id": False}).limit(10)
+            logs = collection.find({}, {"_id": False}).sort("updated_date",-1).limit(10)
             logs = list(logs)
             client.close()
             return Response(logs, status=status.HTTP_200_OK)
@@ -48,7 +48,7 @@ class GetUserCreateLogsView(APIView):
             client = pymongo.MongoClient(MONGO_URI)
             db = client['sistemaOmetLogs']
             collection = db['userInsertionLogs']
-            logs = collection.find({}, {"_id": False}).limit(10)
+            logs = collection.find({}, {"_id": False}).sort("updated_date",-1).limit(10)
             logs = list(logs)
             client.close()
             return Response(logs, status=status.HTTP_200_OK)
@@ -64,7 +64,7 @@ class GetUserUpdateLogsView(APIView):
             client = pymongo.MongoClient(MONGO_URI)
             db = client['sistemaOmetLogs']
             collection = db['userUpdateLogs']
-            logs = collection.find({}, {"_id": False}).limit(10)
+            logs = collection.find({}, {"_id": False}).sort("updated_date",-1).limit(10)
             logs = list(logs)
             client.close()
             return Response(logs, status=status.HTTP_200_OK)
@@ -80,7 +80,7 @@ class GetProjectCreateLogsView(APIView):
             client = pymongo.MongoClient(MONGO_URI)
             db = client['sistemaOmetLogs']
             collection = db['projectInsertionLogs']
-            logs = collection.find({}, {"_id": False}).limit(10)
+            logs = collection.find({}, {"_id": False}).sort("updated_date",-1).limit(10)
             logs = list(logs)
             client.close()
             return Response(logs, status=status.HTTP_200_OK)
@@ -96,7 +96,7 @@ class GetProjectUpdateLogsView(APIView):
             client = pymongo.MongoClient(MONGO_URI)
             db = client['sistemaOmetLogs']
             collection = db['projectUpdateLogs']
-            logs = collection.find({}, {"_id": False}).limit(10)
+            logs = collection.find({}, {"_id": False}).sort("updated_date",-1).limit(10)
             logs = list(logs)
             client.close()
             return Response(logs, status=status.HTTP_200_OK)

@@ -117,7 +117,9 @@ function Projects() {
   }
 
   const handleDownloadProject = async(item) => {
-    console.log(item)
+    setError(true)
+    setAlertType('Info');
+    setAlertMessage('Descargando proyecto...')
     await exportProject(item.id, session.token).then(async (response)=>{
       if(response.status === 200){
         const blob = await response.blob();

@@ -1,30 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Button, Alert, TouchableOpacity } from 'react-native';
 import AlertCmp from '../../Components/Alert/Alert'
 import Input from '../../Components/Input/Input';
 import Table from '../../Components/Table/DynamicTable';
 import Select from '../../Components/Select/Select';
 import TimePicker from '../../Components/TimePicker/TimePicker'
 import CheckboxGroup from '../../Components/CheckboxGroup/CheckboxGroup'
-import { retrieve{{MODEL_NAME}} } from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
+import * as {{MODEL_NAME_LOWER}}Controller from '../../api/controller/{{APP_NAME}}/{{MODEL_NAME}}'
 import SessionManager from '../../api/manager/SessionManager';
 const sm = SessionManager.getInstance();
-
+import { ScrollView } from 'react-native-gesture-handler';
 
 function Retrieve{{MODEL_NAME}}({route, navigation}) {
     const { {{MODEL_NAME_LOWER}}_id } = route.params;
     const [error, setError] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('Error');
-    const [selectedItem, setSelectedItem] = useState(null);
     const [data, setData] = useState(null);
 
 {{MODEL_HOOKS}}
 
+{{FOREIGN_KEY_HOOKS}}
+
+{{FOREIGN_KEY_SELECTED_ITEMS}}
+
+{{FOREIGN_KEY_FLAGS}}
+
+    {{FOREIGN_KEY_GET_DATA_FUNCTIONS}}
+
+    {{FOREIGN_KEY_USE_EFFECTS}}
+
     const get{{MODEL_NAME_TITLE}} = async () => {
         const token = await sm.getTokenSession();
         if (data == null) {
-            await retrieve{{MODEL_NAME}}({{MODEL_NAME_LOWER}}_id, token).then(async (response) => {
+            await {{MODEL_NAME_LOWER}}Controller.retrieve{{MODEL_NAME}}({{MODEL_NAME_LOWER}}_id, token).then(async (response) => {
                 console.log(response)
                 if (response.status === 200) {
                     let res = await response.json()
@@ -45,13 +54,19 @@ function Retrieve{{MODEL_NAME}}({route, navigation}) {
 
     useEffect(() => {
         get{{MODEL_NAME_TITLE}}();
-    },[data, ])
-
+    },[data,])
 
     const onCloseHandler = () => {
         setError(null)
         setAlertType('Error');
         setAlertMessage('')
+    }
+    const transformData = (data) => {
+
+        data = data.map((item) => {
+            return item.id
+        })
+        return data
     }
 
     return (
@@ -61,7 +76,7 @@ function Retrieve{{MODEL_NAME}}({route, navigation}) {
                     <View className='mt-3 ml-5 flex justify-center'>
                         <Text className='text-3xl font-bold'>Visualizar {{MODEL_NAME}}</Text>
                     </View>
-                    <View className='flex flex-col justify-between'>
+                    <ScrollView className='flex flex-col'>
                         <View className='mt-5 p-5 flex flex-col items-center m-auto w-full rounded-2xl bg-white'>
 
                             <View className="w-full overflow-hidden">
@@ -75,10 +90,11 @@ function Retrieve{{MODEL_NAME}}({route, navigation}) {
                                     <View className='w-full flex flex-col justify-between'>
 {{INPUT_FIELDS}}
                                     </View>
+
                                 </View>
                             </View>
                         </View>
-                    </View>
+                    </ScrollView>
                 </View>
             </View>
         </View>
